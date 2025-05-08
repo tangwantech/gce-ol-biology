@@ -14,6 +14,7 @@ import com.example.gceolmcqs.adapters.SubjectContentTableViewPagerAdapter
 
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.fragments.ExamTypeFragment
+//import com.example.gceolmcqs.repository.AppDataLocalRepository
 import com.example.gceolmcqs.viewmodels.SubjectContentTableViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -37,12 +38,9 @@ class SubjectContentTableActivity : AppCompatActivity(),
 //        setAlertDialog()
         initActivityViews()
         initViewModel()
-        setupActivityViewListeners()
-        setupViewObservers()
-        loadSubjectPackageDataFromRemoteRepo()
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        checkIfGraceExtensionAvailable()
+//        checkIfGraceExtensionAvailable()
 
 
     }
@@ -54,6 +52,7 @@ class SubjectContentTableActivity : AppCompatActivity(),
     private fun initViewModel(){
 
         viewModel = ViewModelProvider(this)[SubjectContentTableViewModel::class.java]
+
         viewModel.setSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
 //        viewModel.setSubjectName(subjectTitle!!)
 
@@ -141,10 +140,6 @@ class SubjectContentTableActivity : AppCompatActivity(),
         })
     }
 
-    private fun loadSubjectPackageDataFromRemoteRepo(){
-        viewModel.loadSubjectPackageDataFromRemoteRepoAtIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
@@ -162,8 +157,9 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-        title = viewModel.getSubjectName()
+
 //       loadSubjectPackageDataFromRemoteRepo()
+        beginSetup()
     }
 
     override fun onDestroy() {
@@ -197,6 +193,14 @@ class SubjectContentTableActivity : AppCompatActivity(),
         }.apply()
     }
 
+
+
+    companion object{
+        private const val SUBJECT_CONTENT_TABLE = "subject content table"
+        private const val TAB_INDEX = "tab index"
+    }
+
+
     private fun activateGraceExtension(){
         val temp = viewModel.getGraceExtension()
         pref.edit().apply{
@@ -223,16 +227,44 @@ class SubjectContentTableActivity : AppCompatActivity(),
         return isExpired
     }
 
-    companion object{
-        private const val SUBJECT_CONTENT_TABLE = "subject content table"
-        private const val TAB_INDEX = "tab index"
+
+    private fun beginSetup(){
+        val id = UtilityFunctions().getDeviceId(this)
+        if (!viewModel.isUserInitialised()){
+            viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
+                override fun onSetupSuccessful() {
+                    runOnUiThread {
+                        title = viewModel.getSubjectName()
+                        viewModel.loadSubjectPackageDataFromSubscriptionRepository()
+                        setupActivityViewListeners()
+                        setupViewObservers()
+                    }
+
+                }
+
+                override fun onSetupFailed() {
+
+                }
+            })
+        }else{
+            title = viewModel.getSubjectName()
+            viewModel.loadSubjectPackageDataFromSubscriptionRepository()
+            setupActivityViewListeners()
+            setupViewObservers()
+        }
+
     }
 
     override fun onGotoPaperActivity(intent: Intent) {
         val packageStatus = viewModel.getPackageStatus()
-        val graceExtensionStatus = isGraceExtensionExpired()
-//        println("Package status: $packageStatus, GraceExtension: $graceExtensionStatus")
-        if (packageStatus || graceExtensionStatus){
+//        val graceExtensionStatus = isGraceExtensionExpired()
+////        println("Package status: $packageStatus, GraceExtension: $graceExtensionStatus")
+//        if (packageStatus || graceExtensionStatus){
+//            startActivity(intent)
+//        }else{
+//            showAlertDialog()
+//        }
+        if (packageStatus){
             startActivity(intent)
         }else{
             showAlertDialog()

@@ -29,11 +29,19 @@ class SubjectPackageActivator {
             }
             return packageDataList
         }
+        fun activateTrialPackage(): SubjectPackageData{
+            val activationExpiryDates =
+                ActivationExpiryDatesGenerator.generateActivationExpiryDates(
+                    MCQConstants.MINUTES,
+                    MCQConstants.TRIAL_DURATION
+                )
+            return SubjectPackageData(0, MCQConstants.SUBJECTS_AVAILABLE[0], "TRIAL", activationExpiryDates.activatedOn, activationExpiryDates.expiresOn, isPackageActive = true)
+        }
 
         fun activateSubjectPackage(tempSubjectName: String, tempSubjectIndex: Int, packageType: String, packageDuration: Int): SubjectPackageData {
             val activationExpiryDates =
                 ActivationExpiryDatesGenerator.generateActivationExpiryDates(
-                    MCQConstants.HOURS,
+                    MCQConstants.MINUTES,
                     packageDuration
                 )
 

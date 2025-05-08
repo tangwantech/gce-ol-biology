@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.gceolmcqs"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.gceolmcqs"
@@ -41,11 +41,19 @@ android {
 
 dependencies {
 
+//    implementation(libs.androidx.room.ktx)
+//    implementation(libs.androidx.room.runtime)
+//    implementation(libs.androidx.room.compiler)
     val room_version = "2.6.0"
+    implementation("androidx.room:room-runtime:$room_version")
+//    annotationProcessor("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
 //    implementation (libs.androidx.room.runtime)
 //    kapt(libs.androidx.room.compiler)
 //    implementation (libs.androidx.room.ktx)
-    implementation(libs.parse)
+//    implementation(libs.parse)
     implementation(libs.androidx.cardview)
     implementation (libs.android.sdk)
     implementation (libs.rxjava)

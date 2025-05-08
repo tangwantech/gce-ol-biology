@@ -6,23 +6,25 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.gceolmcqs.viewmodels.SplashActivityViewModel
 import com.example.gceolmcqs.databinding.ActivitySplashBinding
 import com.example.gceolmcqs.databinding.TermsOfUseLayoutBinding
-import com.example.gceolmcqs.repository.RemoteRepoManager
-import com.parse.ParseException
+import com.example.gceolmcqs.datamodels.SubjectPackageData
+import com.example.gceolmcqs.repository.RestRepository
+import com.google.gson.Gson
+//import com.parse.ParseException
 import kotlinx.coroutines.*
 
 class GCEFirstActivity : AppCompatActivity() {
     private val serverRetryLimit = 2
     private lateinit var viewModel: SplashActivityViewModel
     private lateinit var pref: SharedPreferences
-    private var termsOfServiceDialog: AlertDialog? = null
+//    private var termsOfServiceDialog: AlertDialog? = null
     private var initializingAppDialog: AlertDialog? = null
+    private var dialog: AlertDialog? = null
     private lateinit var binding: ActivitySplashBinding
 
 
@@ -33,73 +35,75 @@ class GCEFirstActivity : AppCompatActivity() {
         pref = getSharedPreferences(resources.getString(R.string.app_name), MODE_PRIVATE)
 
         setupViewModel()
-        setupObservers()
-        val termsAccepted = pref.getBoolean(MCQConstants.TERMS_ACCEPTED, false)
-        if(!termsAccepted){
-            binding.loProgressBar.visibility = View.GONE
-            displayTermsOfServiceDialog()
-        }else{
-            verifyDeviceIdInAppDatabase()
-        }
+        checkTerms()
 
     }
 
-    private fun verifyDeviceIdInAppDatabase(){
+    private fun checkTerms(){
+        val termsAccepted = pref.getBoolean(MCQConstants.TERMS_ACCEPTED, false)
+        if(!termsAccepted){
+            hideProgressBar()
+            displayTermsOfServiceDialog()
+        }else{
+            beginSetup()
+        }
+    }
+
+    private fun hideProgressBar(){
+        binding.loProgressBar.visibility = View.GONE
+    }
+
+
+
+    private fun beginNetworkCheckTimeoutCount(){
+        println("Network timeout check started...")
         NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
             override fun onNetworkTimeout() {
                 displayErrorDialog(getString(R.string.network_timeout))
             }
         })
-        viewModel.verifyDeviceIdInAppDatabase(object: RemoteRepoManager.OnDeviceDataExistsListener{
-            override fun onDeviceDataExists() {
-                val isAvailable = viewModel.verifyAppDataAvailability()
-//                gotoMainActivity()
-                if (isAvailable){
-                    NetworkTimeout.stopTimer()
+    }
+
+    private fun stopNetworkTimer(){
+        NetworkTimeout.stopTimer()
+    }
+
+    private fun beginSetup(){
+        beginNetworkCheckTimeoutCount()
+        val id = UtilityFunctions().getDeviceId(this)
+        viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
+            override fun onSetupSuccessful() {
+                runOnUiThread{
+                    stopNetworkTimer()
+                    println("Setup complete...Navigating to Main Activity")
                     gotoMainActivity()
-                }else{
-                    viewModel.getAppData(object: RemoteRepoManager.OnAppDataAvailableListener{
-                        override fun onAppDataAvailable() {
-                            NetworkTimeout.stopTimer()
-                            gotoMainActivity()
-                        }
-
-                        override fun onError(e: ParseException) {
-//                            println("exception raised: ${e.localizedMessage}")
-                            e.localizedMessage?.let { displayErrorDialog(it)}
-                        }
-
-                    })
                 }
             }
 
-            override fun onError(e: ParseException) {
-//                e.localizedMessage?.let { displayErrorDialog(it)}
+            override fun onSetupFailed() {
+                runOnUiThread{
+                    displayInternetConnectionDialog()
+                }
             }
-        })
 
+        })
     }
 
-    fun displayErrorDialog(error: String){
-        val alertDialog = AlertDialog.Builder(this).apply {
+    fun displayErrorDialog(error: String?){
+        dialog?.dismiss()
+        dialog = AlertDialog.Builder(this).apply {
             setMessage(error)
             setNegativeButton("Exit"){_, _ ->
                 finish()
             }
 
         }.create()
-        alertDialog.show()
+        dialog?.show()
     }
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[SplashActivityViewModel::class.java]
     }
-
-
-    private fun setupObservers(){
-
-    }
-
 
     private fun displayInternetConnectionDialog(){
         displayTermsOfServiceDialog()
@@ -116,20 +120,24 @@ class GCEFirstActivity : AppCompatActivity() {
             gotoPrivacyPolicy()
         }
 
-
-        termsOfServiceDialog = AlertDialog.Builder(this).create()
-        termsOfServiceDialog?.setTitle(resources.getString(R.string.agreement))
-        termsOfServiceDialog?.setView(dialogBinding.root)
-        termsOfServiceDialog?.setButton(AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.accept)) { _, _ ->
+        if(dialog!=null){
+            dialog?.dismiss()
+        }
+        dialog = AlertDialog.Builder(this).create()
+        dialog?.setTitle(resources.getString(R.string.agreement))
+        dialog?.setView(dialogBinding.root)
+        dialog?.setButton(AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.accept)) { _, _ ->
             binding.loProgressBar.visibility = View.VISIBLE
             saveTermsOfServiceAcceptedStatus()
-            verifyDeviceIdInAppDatabase()
+//            verifyDeviceIdInRemoteDatabase()
+
+            beginSetup()
         }
-        termsOfServiceDialog?.setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.decline)) { _, _ ->
+        dialog?.setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.decline)) { _, _ ->
             finish()
         }
-        termsOfServiceDialog?.setCancelable(false)
-        termsOfServiceDialog?.show()
+        dialog?.setCancelable(false)
+        dialog?.show()
     }
 
     private fun gotoTermsOfServiceActivity(){
@@ -151,7 +159,7 @@ class GCEFirstActivity : AppCompatActivity() {
         }
     }
 
-    private fun errorDialog(errorMessage: String){
+    private fun errorDialog(errorMessage: String?){
         val timeoutDialog = AlertDialog.Builder(this).apply {
             setMessage(errorMessage)
             setNegativeButton("Exit"){_, _ ->

@@ -359,7 +359,7 @@ class SubscriptionActivity: AppCompatActivity(),
     }
 
     private fun activateUserPackage() {
-        viewModel.activateSubjectPackage()
+        viewModel.activateSubjectPackage(UtilityFunctions().getDeviceId(this))
     }
 
     override fun onPackageDialogNextButtonClicked() {

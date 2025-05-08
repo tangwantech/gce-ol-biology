@@ -1,29 +1,29 @@
 package com.example.gceolmcqs
 
 import android.content.pm.PackageManager
-import com.parse.ParseObject
-import com.parse.ParseQuery
+import com.example.gceolmcqs.repository.RestRepository
+
+//import com.parse.ParseObject
+//import com.parse.ParseQuery
 
 class VersionChecker {
-    fun getLatestVersion(onCheckVersionListener: OnCheckVersionListener){
-        val parseQuery = ParseQuery.getQuery<ParseObject>(MCQConstants.VERSION_CLASS)
-        parseQuery.getInBackground(MCQConstants.APP_VERSION_KEY){parseObject, e ->
-            if (e == null){
-                val version = parseObject.getString(MCQConstants.VERSION_STR)
-                version?.let {
-                    onCheckVersionListener.onResult(version)
-                }
+    fun getLatestVersion(id: String, onCheckVersionListener: OnCheckVersionListener){
 
-            }else{
-                onCheckVersionListener.onError(e.localizedMessage)
-//                    println(e.localizedMessage)
+        val params = hashMapOf("username" to id, "password" to id)
+        RestRepository().query(RestRepository.GET_APP_VERSION, params, object: RestRepository.OnQueryListener{
+            override fun onSuccess(result: String) {
+                onCheckVersionListener.onResult(result)
             }
-        }
+
+            override fun onError(error: String?) {
+
+            }
+        })
     }
 
     fun getInstalledVersion(packageManager: PackageManager, packageName: String): String{
         return try {
-            packageManager.getPackageInfo(packageName, 0).versionName
+            packageManager.getPackageInfo(packageName, 0).versionName!!
         } catch (e: PackageManager.NameNotFoundException){
             "Unknown"
         }

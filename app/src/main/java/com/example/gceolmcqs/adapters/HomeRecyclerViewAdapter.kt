@@ -109,6 +109,7 @@ class HomeRecyclerViewAdapter(
                     holder.binding.tvSubjectStatus.text = context.resources.getString(R.string.active)
                     holder.binding.tvSubjectStatus.setTextColor(context.resources.getColor(R.color.color_green))
                     holder.binding.btnSubscribe.isEnabled = false
+                    println("subscription status ${subjectPackageDataList[holder.adapterPosition].isPackageActive}")
                     val timeLeft = ActivationExpiryDatesGenerator.getTimeRemaining(
                         subjectPackageDataList[holder.adapterPosition].activatedOn!!,
                         subjectPackageDataList[holder.adapterPosition].expiresOn!!
@@ -136,12 +137,15 @@ class HomeRecyclerViewAdapter(
                     holder.binding.expireInLo.visibility = View.GONE
                     holder.binding.tvSubjectStatus.text = context.resources.getString(R.string.expired)
                     holder.binding.tvSubjectStatus.setTextColor(context.resources.getColor(R.color.color_red))
+//                    println("subscription status ${subjectPackageDataList[holder.adapterPosition].isPackageActive}")
                     holder.binding.btnSubscribe.isEnabled = true
                 }
             }else{
                 holder.binding.tvSubjectStatus.text = MCQConstants.NA
                 holder.binding.btnSubscribe.isEnabled = false
             }
+
+
             if(subjectPackageDataList[holder.adapterPosition].packageName == context.resources.getString(R.string.trial)){
                 holder.binding.btnSubscribe.isEnabled = !subjectPackageDataList[holder.adapterPosition].isPackageActive!!
 

@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.example.gceolmcqs.adapters.HomeRecyclerViewAdapter
 import com.example.gceolmcqs.databinding.ActivityMainBinding
+import com.example.gceolmcqs.datamodels.SubjectPackageData
+import com.example.gceolmcqs.repository.SubscriptionDataRepository
 
-import com.example.gceolmcqs.repository.RemoteRepoManager
+//import com.example.gceolmcqs.repository.RemoteRepoManager
 import com.example.gceolmcqs.viewmodels.MainActivityViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +45,8 @@ class MainActivity : AppCompatActivity(),
         pref = getSharedPreferences("Main", MODE_PRIVATE)
         this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         setupViewModel()
-        setupRecyclerView()
         setupObservers()
+
 //        checkInternetConnectivity()
 //        setupAppUsageReminderSharedPreference()
 //        startReminderService()
@@ -55,7 +57,7 @@ class MainActivity : AppCompatActivity(),
 
 
     private  fun checkInternetConnectivity(){
-        val internetAvailable = CheckInternetConnectivity().isInternetAvailable(this)
+//        val internetAvailable = CheckInternetConnectivity().isInternetAvailable(this)
         CoroutineScope(Dispatchers.IO).launch {
             val isConnected = CheckInternetConnectivity().hasRealInternetAccess()
             println("isConnected: $isConnected")
@@ -78,15 +80,19 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun checkForLatestAppVersion(){
+        val id = UtilityFunctions().getDeviceId(this)
         val installedVersion = VersionChecker().getInstalledVersion(packageManager, packageName)
-        viewModel.checkForLatestVersionAvailable(object: VersionChecker.OnCheckVersionListener{
+        viewModel.checkForLatestVersionAvailable(id, object: VersionChecker.OnCheckVersionListener{
             override fun onResult(version: String) {
                 saveVersionToSharedPref(version)
                 if (installedVersion != version){
-                    displayUpdateAppDialog(version)
+                    runOnUiThread {
+                        displayUpdateAppDialog(version)
+                    }
+
                 }else{
 //                    updateAppData()
-                    startUpdateToAppData()
+//                    startUpdateToAppData()
 
                 }
             }
@@ -107,28 +113,15 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-    private fun startReminderService(){
-        val serviceIntent = Intent(this, AppReminderService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent)
-        } else {
-            startService(serviceIntent)
-        }
-
-    }
-
-    private fun setupAppUsageReminderSharedPreference(){
-        val sharedPreferences: SharedPreferences =
-            getSharedPreferences(MCQConstants.APP_USAGE_PREFS, MODE_PRIVATE)
-        sharedPreferences.edit().putLong(MCQConstants.LAST_USED, System.currentTimeMillis()).apply()
-    }
-
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-        viewModel.updateSubjectPackageDataList()
-        viewModel.initAppData()
+
+//        initSubjectPackages()
+//        viewModel.initAppData()
 //
     }
+
+
 
     private fun setupRecyclerView(){
 //        Displays list of subject packages available
@@ -188,44 +181,14 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    private fun startUpdateToAppData(){
-        val appDataUpdateStatus = pref.getBoolean(MCQConstants.APP_DATA_UPDATE_STATUS, false)
-        if (!appDataUpdateStatus){
-            updateAppData()
-        }
-    }
+//    private fun startUpdateToAppData(){
+//        val appDataUpdateStatus = pref.getBoolean(MCQConstants.APP_DATA_UPDATE_STATUS, false)
+//        if (!appDataUpdateStatus){
+//            updateAppData()
+//        }
+//    }
 
-    private fun updateAppData(){
 
-        checkingForUpdateToAppDataDialog()
-        viewModel.updateAppData(object: AppDataUpdater.AppDataUpdateListener{
-            override fun onAppDataUpdated() {
-                saveAppDataUpdateStatusToSharedPref(true)
-//                NetworkTimeout.stopTimer()
-//                checkingDialog.dismiss()
-                displayAppDataUpDatedDialog()
-            }
-
-            override fun onError() {
-//                NetworkTimeout.stopTimer()
-                displayErrorDialog(getString(R.string.network_timeout))
-            }
-
-            override fun onAppDataUpToDate() {
-//                NetworkTimeout.stopTimer()
-//                checkingDialog.dismiss()
-                saveAppDataUpdateStatusToSharedPref(true)
-                displayAppDataIsUpToDateDialog()
-            }
-        })
-
-//        NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
-//            override fun onNetworkTimeout() {
-////                checkingDialog.dismiss()
-//                displayErrorDialog(getString(R.string.network_timeout))
-//            }
-//        })
-    }
 
     private fun displayErrorDialog(message: String){
         if (dialog != null){
@@ -296,10 +259,38 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         setTitle()
-        viewModel.updateSubjectPackageDataList()
-        updateUsageBonusTime()
-        homeRecyclerViewAdapter.notifyDataSetChanged()
-        checkInternetConnectivity()
+        beginSetup()
+//        initSubjectPackages()
+
+//        setupRecyclerView()
+//        updateUsageBonusTime()
+
+
+    }
+
+    private fun beginSetup(){
+        val id = UtilityFunctions().getDeviceId(this)
+        if (!viewModel.isUserInitialised()){
+            viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
+                override fun onSetupSuccessful() {
+                    runOnUiThread {
+                        viewModel.updateSubjectPackageDataList()
+                        setupRecyclerView()
+                        updateUsageBonusTime()
+                    }
+
+                }
+
+                override fun onSetupFailed() {
+
+                }
+            })
+        }else{
+            viewModel.updateSubjectPackageDataList()
+            setupRecyclerView()
+            updateUsageBonusTime()
+            checkInternetConnectivity()
+        }
 
     }
 
@@ -324,9 +315,9 @@ class MainActivity : AppCompatActivity(),
             R.id.about -> {
                 gotoAboutUs()
             }
-            R.id.updateAppData -> {
-                updateAppData()
-            }
+//            R.id.updateAppData -> {
+////                updateAppData()
+//            }
             R.id.exit -> {
                 showExitDialog()
             }
@@ -339,6 +330,62 @@ class MainActivity : AppCompatActivity(),
         showExitDialog()
 
     }
+//    private fun initSubjectPackages(){
+//        viewModel.initSubjectPackages(this, object: SubjectPackageDataRepository.OnQueryCallBackListener{
+//            override fun onResult(subjectPackageData: SubjectPackageData?) {
+//                setupRecyclerView(viewModel.getSubjectPackageDataList())
+////                setupObservers()
+//            }
+//
+//            override fun onError() {
+//
+//            }
+//
+//        })
+//    }
+//    private fun updateAppData(){
+//
+//        checkingForUpdateToAppDataDialog()
+//        viewModel.updateAppData(object: AppDataUpdater.AppDataUpdateListener{
+//            override fun onAppDataUpdated() {
+//                saveAppDataUpdateStatusToSharedPref(true)
+////                NetworkTimeout.stopTimer()
+////                checkingDialog.dismiss()
+//                displayAppDataUpDatedDialog()
+//            }
+//
+//            override fun onError() {
+////                NetworkTimeout.stopTimer()
+//                displayErrorDialog(getString(R.string.network_timeout))
+//            }
+//
+//            override fun onAppDataUpToDate() {
+////                NetworkTimeout.stopTimer()
+////                checkingDialog.dismiss()
+//                saveAppDataUpdateStatusToSharedPref(true)
+//                displayAppDataIsUpToDateDialog()
+//            }
+//        })
+//
+////        NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
+////            override fun onNetworkTimeout() {
+//////                checkingDialog.dismiss()
+////                displayErrorDialog(getString(R.string.network_timeout))
+////            }
+////        })
+//    }
+    override fun onPackageExpired(index: Int) {
+        viewModel.updatePackageStatusAt(index, object : SubscriptionDataRepository.SubscriptionListener{
+            override fun onSubscriptionUpdated() {
+//                homeRecyclerViewAdapter.notifyDataSetChanged()
+
+            }
+
+
+        })
+
+    }
+
 
 
     override fun onSubjectItemClicked(position: Int, isPackageActive: Boolean?, packageName: String?) {
@@ -383,6 +430,19 @@ class MainActivity : AppCompatActivity(),
         startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName))
     }
 
+    private fun activateBonus(subjectIndex: Int, isActive: Boolean){
+        val bonusTime = pref.getLong("$subjectIndex", 0)
+        viewModel.extentSubjectPackageAt(subjectIndex, bonusTime, isActive, object: SubscriptionDataRepository.SubscriptionListener{
+
+            override fun onSubscriptionUpdated() {
+                runOnUiThread {
+                    displayDialogBonusActivated(subjectIndex)
+                }
+            }
+
+        })
+    }
+
 
     private fun showExitDialog() {
         val dialogExit = AlertDialog.Builder(this)
@@ -398,19 +458,7 @@ class MainActivity : AppCompatActivity(),
         }.create().show()
     }
 
-    override fun onPackageExpired(index: Int) {
-        viewModel.updatePackageStatusAt(index, object : RemoteRepoManager.OnUpdatePackageListener{
-            override fun onUpDateSuccessful(index: Int) {
-                homeRecyclerViewAdapter.notifyItemChanged(index)
-            }
 
-            override fun onError() {
-
-            }
-
-        })
-
-    }
 
 
     override fun onUsageBonusAvailable(subjectIndex: Int): Long {
@@ -460,21 +508,7 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    private fun activateBonus(subjectIndex: Int, isActive: Boolean){
-        val bonusTime = pref.getLong("$subjectIndex", 0)
-        viewModel.extentSubjectPackageAt(subjectIndex, bonusTime, isActive, object: RemoteRepoManager.OnUpdatePackageListener{
-            override fun onUpDateSuccessful(index: Int) {
-                displayDialogBonusActivated(index)
-            }
 
-            override fun onError() {
-//
-                displayDialogFailToActivateBonus()
-
-            }
-
-        })
-    }
 
     private fun displayDialogActivatingBonus(){
         if (dialog != null){

@@ -109,6 +109,8 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
     }
 
     private fun setupAdapters(){
+
+        println("setting up section navigation fragment adapter")
         val sectionNameBundleList = viewModel.getSectionNameBundleList()
         val rvLayoutMan = LinearLayoutManager(requireContext())
         rvLayoutMan.orientation = LinearLayoutManager.VERTICAL

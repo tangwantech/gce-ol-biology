@@ -54,15 +54,19 @@ class PaperActivity : AppCompatActivity(),
         setContentView(R.layout.activity_paper)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupViewModel()
-        setActivityTitle()
+        beginSetup()
+
 //        displayPaperInstructionDialog()
-        loadFragment()
+
 
     }
 
     private fun setupViewModel(){
 
         _viewModel = ViewModelProvider(this)[PaperActivityViewModel::class.java]
+    }
+
+    private fun initPaper1Data(){
         subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
         examTypeIndex = intent.getIntExtra(MCQConstants.EXAM_TYPE_INDEX, 0)
         examItemIndex = intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0)
@@ -74,7 +78,7 @@ class PaperActivity : AppCompatActivity(),
         _viewModel.setCurrentFragmentIndex(0)
 
         subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)
-
+        setActivityTitle()
     }
 
     private fun setActivityTitle(){
@@ -176,7 +180,7 @@ class PaperActivity : AppCompatActivity(),
     private fun checkPackageExpiry(position: Int){
         resetCurrentSectionFragment()
         _viewModel.setCurrentSectionIndex(position)
-        val isActive = _viewModel.isPackageActive(subjectIndex)
+        val isActive = _viewModel.isPackageActive()
         if (!isActive) {
             showPackageExpiredDialog()
         }else{
@@ -184,10 +188,6 @@ class PaperActivity : AppCompatActivity(),
         }
 //        gotoSection(position)
     }
-
-
-
-
 
 
     @Deprecated("Deprecated in Java")
@@ -225,7 +225,7 @@ class PaperActivity : AppCompatActivity(),
     }
 
     override fun onRequestToGoToResult(sectionResultData: SectionResultData) {
-        val isActive = _viewModel.isPackageActive(subjectIndex)
+        val isActive = _viewModel.isPackageActive()
         if (!isActive) {
             showPackageExpiredDialog()
         }else{
@@ -371,15 +371,39 @@ class PaperActivity : AppCompatActivity(),
     }
 
     private fun startUsageTimer(){
-        val isActive = _viewModel.isPackageActive(subjectIndex)
+        val isActive = _viewModel.isPackageActive()
         if (isActive) {
-            _viewModel.startUsageTime(subjectIndex)
+            _viewModel.startUsageTime(0)
         }
 
     }
 
     private fun stopUsageTimer(){
         _viewModel.stopUsageTimer()
+    }
+
+
+
+    private fun beginSetup(){
+        val id = UtilityFunctions().getDeviceId(this)
+        if (_viewModel.isUserInitialised()){
+            _viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
+                override fun onSetupSuccessful() {
+                    runOnUiThread {
+                        initPaper1Data()
+                        loadFragment()
+                    }
+                }
+
+                override fun onSetupFailed() {
+
+                }
+            })
+        }else{
+            initPaper1Data()
+            loadFragment()
+        }
+
     }
 }
 

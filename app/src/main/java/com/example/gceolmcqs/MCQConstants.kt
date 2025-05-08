@@ -71,7 +71,7 @@ class MCQConstants{
         const val APP_URL = "https://gce-ol-mcqs.en.uptodown.com/android/download"
         const val PRIVACY_POLICY = "https://gceolmcqs.w3spaces.com/Privacy_Policy_GCE_OL_MCQS.pdf"
 
-        const val TRANSACTION_STATUS_URL = "https://demo.campay.net/api/transaction/"
+        const val TRANSACTION_STATUS_URL = "https://www.campay.net/api/transaction/"
 
         const val AUTHORIZATION = "Authorization"
         const val CONTENT_TYPE = "Content-Type"
@@ -101,7 +101,7 @@ class MCQConstants{
         const val COUNT_DOWN_INTERVAL = 1000L
         const val TIME_TO_ANIMATE_TIMER = 60000L
 
-        const val TRIAL_DURATION = 5000
+        const val TRIAL_DURATION = 2
         const val GRACE_DURATION_DISCOUNT = 0.2
         const val BONUS_TIME_DISCOUNT = 0.165
         const val DELAY_DURATION = 3000
@@ -134,5 +134,10 @@ class MCQConstants{
         const val APP_USAGE_PREFS = "AppUsagePrefs"
         const val APP_PACKAGE_NAME = "com.example.gceolmcqs"
         const val LAST_USED = "last_used_gceolmcqs"
+
+        const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"
+        const val CLIENT_KEY = "wPNTqR18DRbZr7UK8jfaIQItw7t7q9xiUX96AWMe"
+       const val OBJECT_ID = "objectId"
+
     }
 }

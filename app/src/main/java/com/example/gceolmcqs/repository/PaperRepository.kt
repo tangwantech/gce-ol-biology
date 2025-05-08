@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.datamodels.PaperData
-import com.example.gceolmcqs.datamodels.QuestionData
 import com.example.gceolmcqs.datamodels.SectionData
 import com.example.gceolmcqs.datamodels.SectionResultData
 import com.example.gceolmcqs.datamodels.UserMarkedAnswersSheetData
@@ -28,7 +27,7 @@ class PaperRepository {
         private val areAllSectionsAnswered = MutableLiveData(false)
 
         fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int) {
-            paperData = AppDataRepository.getPaperData(subjectIndex, examTypeIndex, examItemIndex)
+            paperData = Paper1DataRepository.getPaperData(subjectIndex, examTypeIndex, examItemIndex)
             paperData?.let {
                 sectionsScores.value = MutableList(it.numberOfSections) { 0 }
                 sectionsAnsweredData.clear()

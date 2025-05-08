@@ -1,21 +1,27 @@
 package com.example.gceolmcqs.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
+import com.example.gceolmcqs.AppSetupManager
 import com.example.gceolmcqs.UsageTimer
 import com.example.gceolmcqs.datamodels.*
-import com.example.gceolmcqs.repository.AppDataRepository
+import com.example.gceolmcqs.repository.Paper1DataRepository
 import com.example.gceolmcqs.repository.PaperRepository
-import com.example.gceolmcqs.repository.RemoteRepoManager
+import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
+
+//import com.example.gceolmcqs.repository.RemoteRepoManager
 
 class PaperActivityViewModel:ViewModel() {
     private var currentFragmentIndex: Int? = null
     private lateinit var subjectName: String
     private var subjectIndex: Int = 0
 
+    private val appSetupManager = AppSetupManager()
+
     fun getExamItemTitle(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
-        return AppDataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+        return Paper1DataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
     }
 
     fun setCurrentFragmentIndex(index: Int){
@@ -109,17 +115,16 @@ class PaperActivityViewModel:ViewModel() {
         PaperRepository.resetPaperRepo()
     }
 
-    fun isPackageActive(subjectIndex: Int): Boolean{
-
-        val activatedOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).activatedOn
-        val expiresOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).expiresOn
-        return ActivationExpiryDatesGenerator().checkExpiry(activatedOn!!, expiresOn!!)
-    }
+//    fun isPackageActive(subjectIndex: Int): Boolean{
+//
+//        val activatedOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).activatedOn
+//        val expiresOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).expiresOn
+//        return ActivationExpiryDatesGenerator().checkExpiry(activatedOn!!, expiresOn!!)
+//    }
 
     fun startUsageTime(subjectIndex: Int) {
-        val activatedOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).activatedOn
-        val expiresOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).expiresOn
-        val timeRemaining = ActivationExpiryDatesGenerator.getTimeRemaining(activatedOn!!, expiresOn!!)
+
+        val timeRemaining = appSetupManager.getSubscriptionTimeRemaining()
         UsageTimer.startUsageTimer(timeRemaining)
     }
 
@@ -129,6 +134,24 @@ class PaperActivityViewModel:ViewModel() {
 
     fun resetUsageTimerData() {
         UsageTimer.resetUsageTimerData()
+    }
+
+    fun beginSetup(id: String, context: Context, listener: AppSetupManager.AppSetupListener){
+        val userDataDao = GceOLMcqDatabase.getDatabase(context).userDataDao()
+        appSetupManager.apply {
+            initRepositories(id, userDataDao)
+            start(listener)
+        }
+//        appSetupManager.start(listener)
+
+    }
+
+    fun isUserInitialised(): Boolean{
+        return appSetupManager.isUserDataInitialised()
+    }
+
+    fun isPackageActive(): Boolean{
+        return appSetupManager.isSubscriptionActive()
     }
 
 }
