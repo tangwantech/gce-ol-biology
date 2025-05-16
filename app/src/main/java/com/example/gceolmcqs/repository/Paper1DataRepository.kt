@@ -12,9 +12,9 @@ class Paper1DataRepository {
 ////            paper1Data = RemoteRepoManager.getOLMCQDataFromParseUser()
 ////            callBack.onAppDataInitialised()
 //        }
-        fun initPaper1Data(paperDataString: String){
-//            println("Initialising paper1 data: $paperDataString")
-            paper1Data = Gson().fromJson(paperDataString, Paper1Data::class.java)
+        fun initPaper1Data(paper1Data: Paper1Data){
+            Paper1DataRepository.paper1Data = paper1Data
+//            println("Paper1Data within initPaper1Data: $paper1Data")
         }
 
         fun getSubjectNames(): List<String>{
@@ -52,6 +52,10 @@ class Paper1DataRepository {
 
         fun getPaperData(subjectIndex: Int, contentIndex: Int, examItemIndex: Int): PaperData{
             return paper1Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].paperData
+        }
+
+        fun isPaper1DataInitialised(): Boolean{
+            return paper1Data != null
         }
 
     }

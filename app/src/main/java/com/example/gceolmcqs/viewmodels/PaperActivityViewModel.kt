@@ -3,8 +3,7 @@ package com.example.gceolmcqs.viewmodels
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.gceolmcqs.ActivationExpiryDatesGenerator
-import com.example.gceolmcqs.AppSetupManager
+import com.example.gceolmcqs.UserDataManager
 import com.example.gceolmcqs.UsageTimer
 import com.example.gceolmcqs.datamodels.*
 import com.example.gceolmcqs.repository.Paper1DataRepository
@@ -16,11 +15,33 @@ import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
 class PaperActivityViewModel:ViewModel() {
     private var currentFragmentIndex: Int? = null
     private lateinit var subjectName: String
-    private var subjectIndex: Int = 0
+    private var subjectIndex = 0
+    private var examTypeIndex = 0
+    private var examItemIndex = 0
 
-    private val appSetupManager = AppSetupManager()
+    private val userDataManager = UserDataManager()
 
-    fun getExamItemTitle(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
+    fun updateSubjectIndex(index: Int){
+        subjectIndex = index
+    }
+
+    fun getSubjectName(): String{
+        return subjectName
+    }
+
+    fun getSubjectIndex(): Int{
+        return subjectIndex
+    }
+
+    fun updateExamTypeIndex(index: Int){
+        examTypeIndex = index
+    }
+
+    fun updateExamItemIndex(index: Int){
+        examItemIndex = index
+    }
+
+    fun getExamItemTitle(): String{
         return Paper1DataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
     }
 
@@ -34,11 +55,6 @@ class PaperActivityViewModel:ViewModel() {
 
     fun setSubjectName(subjectName: String) {
         this.subjectName = subjectName
-    }
-
-    fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int){
-        PaperRepository.initPaperData(subjectIndex, examTypeIndex, examItemIndex)
-
     }
 
     fun getUnAnsweredSectionIndexes(): List<Int>{
@@ -124,7 +140,7 @@ class PaperActivityViewModel:ViewModel() {
 
     fun startUsageTime(subjectIndex: Int) {
 
-        val timeRemaining = appSetupManager.getSubscriptionTimeRemaining()
+        val timeRemaining = userDataManager.getSubscriptionTimeRemaining()
         UsageTimer.startUsageTimer(timeRemaining)
     }
 
@@ -136,22 +152,44 @@ class PaperActivityViewModel:ViewModel() {
         UsageTimer.resetUsageTimerData()
     }
 
-    fun beginSetup(id: String, context: Context, listener: AppSetupManager.AppSetupListener){
-        val userDataDao = GceOLMcqDatabase.getDatabase(context).userDataDao()
-        appSetupManager.apply {
-            initRepositories(id, userDataDao)
+    fun isPackageActive(): Boolean{
+        return userDataManager.isSubscriptionActive()
+    }
+
+    private fun initPaper1DataRepository(){
+        Paper1DataRepository.initPaper1Data(userDataManager.getPaper1Data())
+    }
+
+    private fun initPaperData(){
+        val paperData = Paper1DataRepository.getPaperData(subjectIndex, examTypeIndex, examItemIndex)
+        PaperRepository.initPaperData(subjectIndex, examTypeIndex, examItemIndex, paperData)
+
+    }
+
+    fun isPaperDataInitialised(): Boolean{
+        return PaperRepository.isPaperDataInitialised()
+    }
+
+    fun isPaper1DataInitialised(): Boolean{
+        return Paper1DataRepository.isPaper1DataInitialised()
+    }
+
+    fun isUserDataInitialised():Boolean{
+        return userDataManager.isUserDataInitialised()
+    }
+
+    fun beginSetup(id: String, context: Context, listener: UserDataManager.UserDataManagerListener){
+        userDataManager.apply {
+            initUserDataDao(context)
+            initID(id)
             start(listener)
         }
-//        appSetupManager.start(listener)
 
     }
 
-    fun isUserInitialised(): Boolean{
-        return appSetupManager.isUserDataInitialised()
-    }
-
-    fun isPackageActive(): Boolean{
-        return appSetupManager.isSubscriptionActive()
+    fun initRepositories(){
+        initPaper1DataRepository()
+        initPaperData()
     }
 
 }

@@ -3,7 +3,7 @@ package com.example.gceolmcqs.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.gceolmcqs.AppSetupManager
+import com.example.gceolmcqs.UserDataManager
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.MomoPayService
 
@@ -11,10 +11,9 @@ import com.example.gceolmcqs.SubjectPackageActivator
 import com.example.gceolmcqs.datamodels.PackageFormData
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.SubscriptionFormData
+import com.example.gceolmcqs.repository.RemoteDatabaseManager
 //import com.example.gceolmcqs.repository.RemoteRepoManager
-import com.example.gceolmcqs.repository.RestRepository
-import com.example.gceolmcqs.repository.SubscriptionDataRepository
-import com.google.gson.Gson
+//import com.example.gceolmcqs.repository.SubscriptionDataRepository
 
 class SubscriptionActivityViewModel: ViewModel() {
     private lateinit var momoPay: MomoPayService
@@ -32,7 +31,7 @@ class SubscriptionActivityViewModel: ViewModel() {
     private val _momoPartner = MutableLiveData<String>()
     val momoPartner: LiveData<String> = _momoPartner
 
-    val appSetupManager = AppSetupManager()
+    private val userDataManager = UserDataManager()
 
     fun initSubscriptionFormData(subjectIndex: Int, subjectName: String){
         _subscriptionData.subjectPosition = subjectIndex
@@ -59,13 +58,13 @@ class SubscriptionActivityViewModel: ViewModel() {
 
     }
 
-    fun activateSubjectPackage(id:String) {
+    fun activateSubjectPackage(id:String, listener: RemoteDatabaseManager.OnUpdateListener) {
         val subjectIndex = _subscriptionData.subjectPosition!!
         val subjectName = _subscriptionData.subject!!
         val packageType = _subscriptionData.packageType!!
         val packageDuration = _subscriptionData.packageDuration!!
         val activatedSubjectPackageData = SubjectPackageActivator.activateSubjectPackage(subjectName, subjectIndex, packageType, packageDuration)
-        updateActivatedPackageInRemoteRepo(id, activatedSubjectPackageData)
+        updateSubscriptionDataInRemoteRepo(id, activatedSubjectPackageData, listener)
     }
 
     fun getSubjectPackageType(): String{
@@ -139,7 +138,7 @@ class SubscriptionActivityViewModel: ViewModel() {
 //        return momoPay.isPaymentSystemAvailable
 //    }
 
-    private fun updateActivatedPackageInRemoteRepo(id: String, activatedSubjectPackageData: SubjectPackageData){
+    private fun updateSubscriptionDataInRemoteRepo(id: String, activatedSubjectPackageData: SubjectPackageData, listener: RemoteDatabaseManager.OnUpdateListener){
 
 //        val subscription = Gson().toJson(activatedSubjectPackageData)
 //        val params = hashMapOf<String, String>(MCQConstants.USER_NAME to id, MCQConstants.PASS_WORD to id, MCQConstants.SUBSCRIPTION to subscription)
@@ -154,12 +153,7 @@ class SubscriptionActivityViewModel: ViewModel() {
 //            }
 //        })
 
-        appSetupManager.updateSubscriptionDataInRemoteRepo(activatedSubjectPackageData, object: SubscriptionDataRepository.SubscriptionListener{
-            override fun onSubscriptionUpdated() {
-                appSetupManager.updateSubscriptionDataInLocaldb(activatedSubjectPackageData)
-                _packageUpdateStatus.postValue(true)
-            }
-        })
+        userDataManager.updateSubscriptionDataInRemoteRepo(activatedSubjectPackageData, listener)
     }
 
 

@@ -32,6 +32,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/subscriptionPackageLo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_round"
@@ -45,7 +46,15 @@
             android:id="@+id/homeRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/subject_item_card"/>
+            tools:listitem="@layout/subject_item_card"
+            android:visibility="gone"/>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.example.gceolmcqs.fragments.SubscriptionPackageFragment"
+            tools:layout="@layout/fragment_subscription_package"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 

@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,12 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 
-import com.example.gceolmcqs.adapters.HomeRecyclerViewAdapter
 import com.example.gceolmcqs.databinding.ActivityMainBinding
 import com.example.gceolmcqs.datamodels.SubjectPackageData
-import com.example.gceolmcqs.repository.SubscriptionDataRepository
+import com.example.gceolmcqs.fragments.SubscriptionPackageFragment
+import com.example.gceolmcqs.repository.LocalUserDataRepository
+//import com.example.gceolmcqs.repository.SubscriptionDataRepository
 
 //import com.example.gceolmcqs.repository.RemoteRepoManager
 import com.example.gceolmcqs.viewmodels.MainActivityViewModel
@@ -28,14 +27,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(),
-    HomeRecyclerViewAdapter.OnHomeRecyclerItemListener
+    SubscriptionPackageFragment.SubscriptionPackageListener
 {
 
     private lateinit var viewModel: MainActivityViewModel
 
     private lateinit var pref: SharedPreferences
     private lateinit var binding: ActivityMainBinding
-    private lateinit var homeRecyclerViewAdapter: HomeRecyclerViewAdapter
+//    private lateinit var homeRecyclerViewAdapter: HomeRecyclerViewAdapter
     private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity(),
         pref = getSharedPreferences("Main", MODE_PRIVATE)
         this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         setupViewModel()
-        setupObservers()
 
 //        checkInternetConnectivity()
 //        setupAppUsageReminderSharedPreference()
@@ -115,36 +113,8 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-
-//        initSubjectPackages()
-//        viewModel.initAppData()
-//
     }
 
-
-
-    private fun setupRecyclerView(){
-//        Displays list of subject packages available
-        val loMan = LinearLayoutManager(this).apply {
-            orientation = LinearLayoutManager.VERTICAL
-        }
-
-        binding.homeRecyclerView.layoutManager = loMan
-        binding.homeRecyclerView.setHasFixedSize(true)
-
-        homeRecyclerViewAdapter = HomeRecyclerViewAdapter(
-            this,
-            viewModel.getSubjectPackageDataList(),
-            this)
-        binding.homeRecyclerView.adapter = homeRecyclerViewAdapter
-    }
-
-    private fun setupObservers(){
-        viewModel.usageTimeBonus.observe(this){
-            val subjectIndex = viewModel.getIndexOfCurrentSubject()
-            saveUsageBonusTime(it, subjectIndex)
-        }
-    }
 
     private fun gotoSubjectContentTableActivity(position: Int) {
         val intent = Intent(this, SubjectContentTableActivity::class.java)
@@ -259,38 +229,30 @@ class MainActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         setTitle()
-        beginSetup()
-//        initSubjectPackages()
-
-//        setupRecyclerView()
-//        updateUsageBonusTime()
-
+        if (!viewModel.isUserDataInitialised()){
+            beginSetup()
+        }else{
+            setupSubscriptionFragmentStatusView()
+            checkInternetConnectivity()
+        }
 
     }
 
     private fun beginSetup(){
         val id = UtilityFunctions().getDeviceId(this)
-        if (!viewModel.isUserInitialised()){
-            viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
-                override fun onSetupSuccessful() {
-                    runOnUiThread {
-                        viewModel.updateSubjectPackageDataList()
-                        setupRecyclerView()
-                        updateUsageBonusTime()
-                    }
-
+        viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
+            override fun onSuccess() {
+                runOnUiThread {
+//                        viewModel.setSubjectPackageData()
+                    setupSubscriptionFragmentStatusView()
                 }
 
-                override fun onSetupFailed() {
+            }
 
-                }
-            })
-        }else{
-            viewModel.updateSubjectPackageDataList()
-            setupRecyclerView()
-            updateUsageBonusTime()
-            checkInternetConnectivity()
-        }
+            override fun onUserDataUnavailable() {
+
+            }
+        })
 
     }
 
@@ -330,19 +292,9 @@ class MainActivity : AppCompatActivity(),
         showExitDialog()
 
     }
-//    private fun initSubjectPackages(){
-//        viewModel.initSubjectPackages(this, object: SubjectPackageDataRepository.OnQueryCallBackListener{
-//            override fun onResult(subjectPackageData: SubjectPackageData?) {
-//                setupRecyclerView(viewModel.getSubjectPackageDataList())
-////                setupObservers()
-//            }
-//
-//            override fun onError() {
-//
-//            }
-//
-//        })
-//    }
+
+
+
 //    private fun updateAppData(){
 //
 //        checkingForUpdateToAppDataDialog()
@@ -374,39 +326,24 @@ class MainActivity : AppCompatActivity(),
 ////            }
 ////        })
 //    }
-    override fun onPackageExpired(index: Int) {
-        viewModel.updatePackageStatusAt(index, object : SubscriptionDataRepository.SubscriptionListener{
-            override fun onSubscriptionUpdated() {
-//                homeRecyclerViewAdapter.notifyDataSetChanged()
+    override fun onPackageExpired(subjectPackageData: SubjectPackageData) {
+        viewModel.updateSubscriptionData(subjectPackageData, object : LocalUserDataRepository.OnUpdateUserDataListener{
+
+            override fun onUpdateSuccessful() {
 
             }
-
-
         })
-
     }
 
 
 
-    override fun onSubjectItemClicked(position: Int, isPackageActive: Boolean?, packageName: String?) {
+    override fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?) {
         setIndexOfCurrentSubject(position)
         if(packageName == MCQConstants.NA){
 //            Toast.makeText(this, "Please activate your Trial Package", Toast.LENGTH_LONG).show()
         }else{
             isPackageActive?.let{
                 gotoSubjectContentTableActivity(position)
-//                if (it) {
-//                    gotoSubjectContentTableActivity(position)
-//
-//                } else {
-//                    val alertDialog = AlertDialog.Builder(this)
-//                    alertDialog.apply {
-//                        setMessage(resources.getString(R.string.package_expired_message))
-//                        setPositiveButton("Ok") { _, _ ->
-//
-//                        }
-//                    }.create().show()
-//                }
             }
 
         }
@@ -418,29 +355,8 @@ class MainActivity : AppCompatActivity(),
         gotoSubscriptionActivity(position, subjectName)
     }
 
-    override fun onActivateBonusButtonClicked(position: Int, subjectName: String, isActive: Boolean) {
-//        println("Subject index: $position, Subject: $subjectName")
-
-        activateBonus(position, isActive)
-        displayDialogActivatingBonus()
-    }
-
-
     private fun gotoSubscriptionActivity(subjectIndex: Int, subjectName: String){
         startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName))
-    }
-
-    private fun activateBonus(subjectIndex: Int, isActive: Boolean){
-        val bonusTime = pref.getLong("$subjectIndex", 0)
-        viewModel.extentSubjectPackageAt(subjectIndex, bonusTime, isActive, object: SubscriptionDataRepository.SubscriptionListener{
-
-            override fun onSubscriptionUpdated() {
-                runOnUiThread {
-                    displayDialogBonusActivated(subjectIndex)
-                }
-            }
-
-        })
     }
 
 
@@ -459,97 +375,20 @@ class MainActivity : AppCompatActivity(),
     }
 
 
+    override fun onNotesButtonClicked() {
+        println("Navigating to Notes activity")
+    }
 
+    override fun onPaper2ButtonClick() {
+        println("Navigating to Paper2 Activity")
+    }
 
-    override fun onUsageBonusAvailable(subjectIndex: Int): Long {
-        val temp = pref.getLong("$subjectIndex", 0)
-        return temp
+    override fun onDictionaryButtonClick() {
+        startActivity(DictionaryActivity.getIntent(this))
     }
 
     private fun setIndexOfCurrentSubject(position: Int){
         viewModel.setIndexOfCurrentSubject(position)
-        viewModel.resetUsageTimer()
-    }
-
-
-    
-
-    private fun updateUsageBonusTime(){
-        val subjectIndex = viewModel.getIndexOfCurrentSubject()
-        subjectIndex?.let{
-            val oldBonus = pref.getLong("$it", 0)
-            viewModel.calculateNewBonusTime(oldBonus, MCQConstants.BONUS_TIME_DISCOUNT)
-            updateBonusTimeInRecyclerAdapter(oldBonus, subjectIndex)
-        }
-
-
-    }
-
-    private fun saveUsageBonusTime(bonusTime: Long, subjectIndex: Int?){
-        subjectIndex?.let {
-            pref.edit().apply {
-                putLong("$it", bonusTime)
-            }.apply()
-            updateBonusTimeInRecyclerAdapter(bonusTime, it)
-        }
-
-
-
-    }
-
-    private fun updateBonusTimeInRecyclerAdapter(bonusTime: Long, subjectIndex: Int){
-        homeRecyclerViewAdapter.updateBonusTime(bonusTime)
-        homeRecyclerViewAdapter.notifyItemChanged(subjectIndex)
-    }
-
-    private fun consumeBonusTime(subjectIndex: Int){
-        saveUsageBonusTime(0L, subjectIndex)
-        viewModel.resetUsageTimer()
-
-    }
-
-
-
-    private fun displayDialogActivatingBonus(){
-        if (dialog != null){
-            dialog?.dismiss()
-        }
-        val view = LayoutInflater.from(this).inflate(R.layout.circular_progress_bar, null)
-        dialog = AlertDialog.Builder(this).apply {
-            setMessage(getString(R.string.activating_bonus))
-            setView(view)
-            setCancelable(false)
-        }.create()
-        dialog?.show()
-    }
-    private fun displayDialogBonusActivated(subjectIndex: Int){
-        if (dialog != null){
-            dialog?.dismiss()
-        }
-
-        dialog = AlertDialog.Builder(this).apply {
-            setMessage(getString(R.string.bonus_activated))
-            setPositiveButton(getString(R.string.ok)){_, _ ->
-                consumeBonusTime(subjectIndex)
-            }
-            setCancelable(false)
-        }.create()
-        dialog?.show()
-    }
-
-    private fun displayDialogFailToActivateBonus(){
-        if (dialog != null){
-            dialog?.dismiss()
-        }
-
-        dialog = AlertDialog.Builder(this).apply {
-            setMessage(getString(R.string.failed_to_activate_bonus))
-            setPositiveButton(getString(R.string.ok)){_, _ ->
-
-            }
-            setCancelable(false)
-        }.create()
-        dialog?.show()
     }
 
     private fun displayUpdateAppDialog(latestVersion: String){
@@ -563,6 +402,13 @@ class MainActivity : AppCompatActivity(),
             }
             setCancelable(false)
         }.create().show()
+    }
+
+    private fun setupSubscriptionFragmentStatusView(){
+
+        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as SubscriptionPackageFragment
+        fragmentContainer.setSubscriptionFragment(viewModel.getSubjectPackageData())
+
     }
 
 }

@@ -159,7 +159,16 @@ class SubjectContentTableActivity : AppCompatActivity(),
         super.onResume()
 
 //       loadSubjectPackageDataFromRemoteRepo()
-        beginSetup()
+        if (!viewModel.isPaper1DataInitialised() && !viewModel.isUserDataInitialised()){
+            beginSetup()
+        }else{
+            viewModel.initPaper1DataRepository()
+            title = viewModel.getSubjectName()
+            viewModel.loadSubjectPackageDataFromUserDataRepository()
+            setupActivityViewListeners()
+            setupViewObservers()
+        }
+
     }
 
     override fun onDestroy() {
@@ -230,35 +239,29 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     private fun beginSetup(){
         val id = UtilityFunctions().getDeviceId(this)
-        if (!viewModel.isUserInitialised()){
-            viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
-                override fun onSetupSuccessful() {
-                    runOnUiThread {
-                        title = viewModel.getSubjectName()
-                        viewModel.loadSubjectPackageDataFromSubscriptionRepository()
-                        setupActivityViewListeners()
-                        setupViewObservers()
-                    }
-
+        viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
+            override fun onSuccess() {
+                runOnUiThread {
+                    title = viewModel.getSubjectName()
+                    viewModel.loadSubjectPackageDataFromUserDataRepository()
+                    setupActivityViewListeners()
+                    setupViewObservers()
                 }
 
-                override fun onSetupFailed() {
+            }
 
-                }
-            })
-        }else{
-            title = viewModel.getSubjectName()
-            viewModel.loadSubjectPackageDataFromSubscriptionRepository()
-            setupActivityViewListeners()
-            setupViewObservers()
-        }
+            override fun onUserDataUnavailable() {
+
+            }
+        })
+
 
     }
 
     override fun onGotoPaperActivity(intent: Intent) {
         val packageStatus = viewModel.getPackageStatus()
 //        val graceExtensionStatus = isGraceExtensionExpired()
-////        println("Package status: $packageStatus, GraceExtension: $graceExtensionStatus")
+//        println("Package status: $packageStatus, GraceExtension: $graceExtensionStatus")
 //        if (packageStatus || graceExtensionStatus){
 //            startActivity(intent)
 //        }else{
@@ -269,6 +272,7 @@ class SubjectContentTableActivity : AppCompatActivity(),
         }else{
             showAlertDialog()
         }
+
     }
 }
 

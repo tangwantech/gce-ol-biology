@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginStart="@dimen/margin_14"
-    android:layout_marginEnd="@dimen/margin_14"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:layout_marginTop="@dimen/margin_8"
     android:layout_marginBottom="@dimen/margin_12"
     app:cardCornerRadius="@dimen/margin_8"
@@ -13,8 +13,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?android:selectableItemBackground">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/titleLo"
             android:orientation="horizontal"
@@ -22,7 +21,8 @@
             android:layout_height="36dp"
             android:paddingStart="@dimen/margin_14"
             android:paddingEnd="@dimen/margin_14"
-            android:background="@drawable/drawable_background_biology">
+            android:background="@drawable/drawable_background_biology"
+            android:visibility="gone">
             <TextView
                 android:id="@+id/subjectTitleTv"
                 android:layout_width="match_parent"
@@ -65,48 +65,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="MCQ 1H"
-                        android:paddingTop="@dimen/margin_4"
-                        android:paddingBottom="@dimen/margin_4" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/activate_on"
-                        android:paddingTop="@dimen/margin_4"
-                        android:paddingBottom="@dimen/margin_4"
-                        android:layout_marginEnd="@dimen/margin_8"/>
-                    <TextView
-                        android:id="@+id/activatedOnTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/activated_on_value"
-                        android:paddingTop="@dimen/margin_4"
-                        android:paddingBottom="@dimen/margin_4"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/expires_on"
-                        android:paddingTop="@dimen/margin_4"
-                        android:paddingBottom="@dimen/margin_4"
-                        android:layout_marginEnd="@dimen/margin_8"/>
-                    <TextView
-                        android:id="@+id/expiresOnTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/activated_on_value"
                         android:paddingTop="@dimen/margin_4"
                         android:paddingBottom="@dimen/margin_4" />
                 </LinearLayout>
@@ -164,10 +122,10 @@
 
         </RelativeLayout>
 
-        <include
-            android:id="@+id/loBonuses"
-            layout="@layout/bonuses"
-            android:visibility="visible"/>
+<!--        <include-->
+<!--            android:id="@+id/loBonuses"-->
+<!--            layout="@layout/bonuses"-->
+<!--            android:visibility="visible"/>-->
 
         <LinearLayout
             android:orientation="horizontal"
@@ -177,12 +135,15 @@
             android:gravity="end"
             android:paddingStart="@dimen/margin_14"
             android:paddingEnd="@dimen/margin_14">
+
             <Button
                 android:id="@+id/btnSubscribe"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/subscribe"
+                android:textSize="12sp"
+                android:layout_marginStart="2dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 />
         </LinearLayout>
     </LinearLayout>

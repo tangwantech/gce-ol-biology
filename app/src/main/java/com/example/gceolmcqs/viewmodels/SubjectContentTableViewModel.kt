@@ -5,13 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
-import com.example.gceolmcqs.AppSetupManager
+import com.example.gceolmcqs.UserDataManager
 import com.example.gceolmcqs.datamodels.ActivationExpiryDates
 
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 //import com.example.gceolmcqs.repository.AppDataLocalRepository
 import com.example.gceolmcqs.repository.Paper1DataRepository
-import com.example.gceolmcqs.repository.SubscriptionDataRepository
 //import com.example.gceolmcqs.repository.RemoteRepoManager
 import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
 
@@ -24,28 +23,11 @@ class SubjectContentTableViewModel : ViewModel() {
     private val _subjectPackageData = MutableLiveData<SubjectPackageData>()
     val subjectPackageData: LiveData<SubjectPackageData> = _subjectPackageData
 
-    private val appSetupManager = AppSetupManager()
+    private val userDataManager = UserDataManager()
 
-    fun loadSubjectPackageDataFromSubscriptionRepository(){
-        _subjectPackageData.value = SubscriptionDataRepository().getSubscription()
+    fun loadSubjectPackageDataFromUserDataRepository(){
+        _subjectPackageData.value = userDataManager.getSubscriptionData()
     }
-
-//    fun loadSubjectPackageFromLocaldb(context: Context){
-//        val subjectPackageDao = GceOLMcqDatabase.getDatabase(context).subjectPackageDao()
-//        val subjectPackageDataRepository = SubjectPackageDataRepository(subjectPackageDao)
-//        subjectPackageDataRepository.getSubjectPackageDataFromLocaldb(object : SubjectPackageDataRepository.OnQueryCallBackListener{
-//            override fun onResult(subjectPackageData: SubjectPackageData?) {
-//                _subjectPackageData.value = subjectPackageData!!
-//            }
-//
-//            override fun onError() {
-//
-//            }
-//
-//        })
-//    }
-
-
 
     fun getExamTitles(): List<String?> {
 
@@ -61,7 +43,8 @@ class SubjectContentTableViewModel : ViewModel() {
     }
 
     fun getPackageStatus(): Boolean{
-        return ActivationExpiryDatesGenerator().checkExpiry(_subjectPackageData.value!!.activatedOn!!, _subjectPackageData.value!!.expiresOn!!)
+        return userDataManager.isSubscriptionActive()
+//        return ActivationExpiryDatesGenerator().checkExpiry(_subjectPackageData.value!!.activatedOn!!, _subjectPackageData.value!!.expiresOn!!)
     }
 
     fun setSubjectIndex(index: Int) {
@@ -77,19 +60,25 @@ class SubjectContentTableViewModel : ViewModel() {
         return ActivationExpiryDatesGenerator.getGraceActivatedAndExpiryDate(_subjectPackageData.value!!.expiresOn!!, _subjectPackageData.value!!.packageName!!)
     }
 
-
-    fun beginSetup(id: String, context: Context, listener: AppSetupManager.AppSetupListener){
-        val userDataDao = GceOLMcqDatabase.getDatabase(context).userDataDao()
-        appSetupManager.apply {
-            initRepositories(id, userDataDao)
-            start(listener)
-        }
-//        appSetupManager.start(listener)
-
+    fun initPaper1DataRepository(){
+        Paper1DataRepository.initPaper1Data(userDataManager.getPaper1Data())
     }
 
-    fun isUserInitialised(): Boolean{
-        return appSetupManager.isUserDataInitialised()
+    fun isPaper1DataInitialised(): Boolean{
+        return Paper1DataRepository.isPaper1DataInitialised()
+    }
+
+    fun isUserDataInitialised():Boolean{
+        return userDataManager.isUserDataInitialised()
+    }
+
+    fun beginSetup(id: String, context: Context, listener: UserDataManager.UserDataManagerListener){
+        userDataManager.apply {
+            initUserDataDao(context)
+            initID(id)
+            start(listener)
+        }
+
     }
 
 }

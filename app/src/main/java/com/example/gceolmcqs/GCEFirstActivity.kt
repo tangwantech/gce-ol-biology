@@ -12,9 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gceolmcqs.viewmodels.SplashActivityViewModel
 import com.example.gceolmcqs.databinding.ActivitySplashBinding
 import com.example.gceolmcqs.databinding.TermsOfUseLayoutBinding
-import com.example.gceolmcqs.datamodels.SubjectPackageData
-import com.example.gceolmcqs.repository.RestRepository
-import com.google.gson.Gson
 //import com.parse.ParseException
 import kotlinx.coroutines.*
 
@@ -33,7 +30,7 @@ class GCEFirstActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         pref = getSharedPreferences(resources.getString(R.string.app_name), MODE_PRIVATE)
-
+//        Toast.makeText(this, "onCreate Splash Activity", Toast.LENGTH_SHORT).show()
         setupViewModel()
         checkTerms()
 
@@ -43,9 +40,12 @@ class GCEFirstActivity : AppCompatActivity() {
         val termsAccepted = pref.getBoolean(MCQConstants.TERMS_ACCEPTED, false)
         if(!termsAccepted){
             hideProgressBar()
+//            Toast.makeText(this, "Terms NOT accepted", Toast.LENGTH_SHORT).show()
             displayTermsOfServiceDialog()
         }else{
+//            Toast.makeText(this, "Terms accepted", Toast.LENGTH_SHORT).show()
             beginSetup()
+
         }
     }
 
@@ -53,13 +53,11 @@ class GCEFirstActivity : AppCompatActivity() {
         binding.loProgressBar.visibility = View.GONE
     }
 
-
-
     private fun beginNetworkCheckTimeoutCount(){
         println("Network timeout check started...")
         NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
             override fun onNetworkTimeout() {
-                displayErrorDialog(getString(R.string.network_timeout))
+                displayErrorDialog()
             }
         })
     }
@@ -69,30 +67,32 @@ class GCEFirstActivity : AppCompatActivity() {
     }
 
     private fun beginSetup(){
-        beginNetworkCheckTimeoutCount()
+//        beginNetworkCheckTimeoutCount()
         val id = UtilityFunctions().getDeviceId(this)
-        viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
-            override fun onSetupSuccessful() {
+        viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
+            override fun onSuccess() {
                 runOnUiThread{
-                    stopNetworkTimer()
-                    println("Setup complete...Navigating to Main Activity")
+//                    stopNetworkTimer()
+//                    Toast.makeText(this@GCEFirstActivity,"Setup complete...Navigating to Main Activity", Toast.LENGTH_SHORT).show()
                     gotoMainActivity()
                 }
             }
 
-            override fun onSetupFailed() {
+            override fun onUserDataUnavailable() {
                 runOnUiThread{
-                    displayInternetConnectionDialog()
+//                    displayInternetConnectionDialog()
+                    displayErrorDialog()
                 }
             }
 
         })
+
     }
 
-    fun displayErrorDialog(error: String?){
+    fun displayErrorDialog(){
         dialog?.dismiss()
         dialog = AlertDialog.Builder(this).apply {
-            setMessage(error)
+            setMessage(R.string.network_timeout)
             setNegativeButton("Exit"){_, _ ->
                 finish()
             }
@@ -106,12 +106,13 @@ class GCEFirstActivity : AppCompatActivity() {
     }
 
     private fun displayInternetConnectionDialog(){
-        displayTermsOfServiceDialog()
+//        displayTermsOfServiceDialog()
+
     }
 
     private fun displayTermsOfServiceDialog(){
 //        val view = LayoutInflater.from(this).inflate(R.layout.terms_of_use_layout, null)
-        val dialogBinding = TermsOfUseLayoutBinding.inflate(layoutInflater)
+        val dialogBinding = TermsOfUseLayoutBinding.inflate(layoutInflater, null, false)
         dialogBinding.btnTerms.setOnClickListener {
             gotoTermsOfServiceActivity()
         }
@@ -120,9 +121,7 @@ class GCEFirstActivity : AppCompatActivity() {
             gotoPrivacyPolicy()
         }
 
-        if(dialog!=null){
-            dialog?.dismiss()
-        }
+        dialog?.dismiss()
         dialog = AlertDialog.Builder(this).create()
         dialog?.setTitle(resources.getString(R.string.agreement))
         dialog?.setView(dialogBinding.root)
@@ -130,7 +129,6 @@ class GCEFirstActivity : AppCompatActivity() {
             binding.loProgressBar.visibility = View.VISIBLE
             saveTermsOfServiceAcceptedStatus()
 //            verifyDeviceIdInRemoteDatabase()
-
             beginSetup()
         }
         dialog?.setButton(AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.decline)) { _, _ ->
@@ -170,6 +168,7 @@ class GCEFirstActivity : AppCompatActivity() {
     }
 
 
+
     private fun gotoMainActivity(){
         CoroutineScope(Dispatchers.IO).launch{
             delay(2000L)
@@ -188,7 +187,7 @@ class GCEFirstActivity : AppCompatActivity() {
         pref.edit().apply {
             putBoolean(MCQConstants.TERMS_ACCEPTED, true)
             apply()
-        }
+        }.commit()
     }
 
 

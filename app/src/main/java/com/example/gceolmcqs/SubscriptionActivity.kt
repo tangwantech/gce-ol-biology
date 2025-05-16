@@ -16,7 +16,7 @@ import com.example.gceolmcqs.datamodels.PackageFormData
 
 import com.example.gceolmcqs.fragments.PackagesDialogFragment
 import com.example.gceolmcqs.fragments.PaymentMethodDialogFragment
-
+import com.example.gceolmcqs.repository.RemoteDatabaseManager
 import com.example.gceolmcqs.viewmodels.SubscriptionActivityViewModel
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
@@ -75,7 +75,7 @@ class SubscriptionActivity: AppCompatActivity(),
 
             status?.let{
                 if (it){
-                    showPackageActivatedDialog()
+//                    showPackageActivatedDialog()
                 }
 
             }
@@ -85,7 +85,6 @@ class SubscriptionActivity: AppCompatActivity(),
         viewModel.momoPartner.observe(this){
             when (it){
                 MCQConstants.OPERATOR_MTN -> {
-                    println("MTN oooooooh")
                     showRequestUserToPayDialog(MCQConstants.OPERATOR_MTN)
                 }
                 MCQConstants.OPERATOR_ORANGE -> {
@@ -359,7 +358,19 @@ class SubscriptionActivity: AppCompatActivity(),
     }
 
     private fun activateUserPackage() {
-        viewModel.activateSubjectPackage(UtilityFunctions().getDeviceId(this))
+        viewModel.activateSubjectPackage(UtilityFunctions().getDeviceId(this), object: RemoteDatabaseManager.OnUpdateListener{
+            override fun onUpdateSuccessful() {
+                runOnUiThread {
+                    showPackageActivatedDialog()
+                }
+            }
+
+            override fun onError(error: String?) {
+
+            }
+
+
+        })
     }
 
     override fun onPackageDialogNextButtonClicked() {

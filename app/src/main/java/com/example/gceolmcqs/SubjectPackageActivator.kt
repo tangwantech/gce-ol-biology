@@ -41,7 +41,7 @@ class SubjectPackageActivator {
         fun activateSubjectPackage(tempSubjectName: String, tempSubjectIndex: Int, packageType: String, packageDuration: Int): SubjectPackageData {
             val activationExpiryDates =
                 ActivationExpiryDatesGenerator.generateActivationExpiryDates(
-                    MCQConstants.MINUTES,
+                    MCQConstants.HOURS,
                     packageDuration
                 )
 

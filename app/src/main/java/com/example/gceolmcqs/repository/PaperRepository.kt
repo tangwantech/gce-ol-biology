@@ -26,13 +26,18 @@ class PaperRepository {
         private val paperPercentage = MutableLiveData(0)
         private val areAllSectionsAnswered = MutableLiveData(false)
 
-        fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int) {
-            paperData = Paper1DataRepository.getPaperData(subjectIndex, examTypeIndex, examItemIndex)
-            paperData?.let {
+        fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int, paperData: PaperData) {
+//            println("PaperData within initPaperData: $paperData")
+            this.paperData = paperData
+            paperData.let {
                 sectionsScores.value = MutableList(it.numberOfSections) { 0 }
                 sectionsAnsweredData.clear()
                 sectionsAnsweredData.addAll(List(it.numberOfSections) { false })
             }
+        }
+
+        fun isPaperDataInitialised(): Boolean{
+            return paperData != null
         }
 
         fun getUnAnsweredSectionIndexes(): List<Int> = unAnsweredSectionIndexes
@@ -127,6 +132,7 @@ class PaperRepository {
         fun getSectionNames(): Array<String>? = paperData?.sections?.map { it.title }?.toTypedArray()
 
         fun getSectionNameBundleList(): Array<Bundle>? {
+            println("Within getSectionNameBundleList: ${paperData?.sections}")
             return paperData?.sections?.map { section ->
                 Bundle().apply {
                     putString("sectionName", section.title)

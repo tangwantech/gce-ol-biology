@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/redeem_bonus"
+            android:textSize="12sp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 

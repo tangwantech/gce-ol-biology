@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.example.gceolmcqs.adapters.SectionNavigationRecyclerViewAdapter
 import com.example.gceolmcqs.adapters.SectionRecyclerAdapter
 import com.example.gceolmcqs.datamodels.QuestionWithUserAnswerMarkedData
 import com.example.gceolmcqs.datamodels.SectionResultData
@@ -41,11 +40,7 @@ class PaperActivity : AppCompatActivity(),
     private lateinit var tvInstruction: TextView
 
     private var currentSectionFragment: Fragment? = null
-    private var subjectName: String? = null
-
-    private var subjectIndex: Int = 0
-    private var examTypeIndex: Int = 0
-    private var examItemIndex: Int = 0
+//    private var subjectName: String? = null
 
 
 
@@ -54,10 +49,20 @@ class PaperActivity : AppCompatActivity(),
         setContentView(R.layout.activity_paper)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupViewModel()
+        updateIndexes()
+        setSubjectName()
         beginSetup()
 
 //        displayPaperInstructionDialog()
 
+
+    }
+
+    private fun updateIndexes(){
+        _viewModel.updateSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
+        _viewModel.updateExamTypeIndex(intent.getIntExtra(MCQConstants.EXAM_TYPE_INDEX, 0))
+        _viewModel.updateExamItemIndex(intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0))
+        _viewModel.setCurrentFragmentIndex(0)
 
     }
 
@@ -66,23 +71,12 @@ class PaperActivity : AppCompatActivity(),
         _viewModel = ViewModelProvider(this)[PaperActivityViewModel::class.java]
     }
 
-    private fun initPaper1Data(){
-        subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
-        examTypeIndex = intent.getIntExtra(MCQConstants.EXAM_TYPE_INDEX, 0)
-        examItemIndex = intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0)
-
-        _viewModel.initPaperData(subjectIndex, examTypeIndex, examItemIndex)
-
+    private fun setSubjectName(){
         _viewModel.setSubjectName(intent.getStringExtra(MCQConstants.SUBJECT_NAME)!!)
-
-        _viewModel.setCurrentFragmentIndex(0)
-
-        subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)
-        setActivityTitle()
     }
 
     private fun setActivityTitle(){
-        this.title = _viewModel.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+        this.title = _viewModel.getExamItemTitle()
     }
 
     private fun gotoSectionNavigationFragment() {
@@ -142,15 +136,15 @@ class PaperActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        beginSetup()
         setActivityTitle()
-        startUsageTimer()
-//        _viewModel.startUsageTime()
+
 
     }
 
     override fun onPause() {
         super.onPause()
-        stopUsageTimer()
+
     }
 
 
@@ -294,7 +288,7 @@ class PaperActivity : AppCompatActivity(),
             val view = this.layoutInflater.inflate(R.layout.paper_instruction_dialog_lo, null)
             checkBox = view.findViewById(R.id.instructionCheckBox)
             tvInstruction = view.findViewById(R.id.tvPaperInstruction)
-            val examItemTitle = _viewModel.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+            val examItemTitle = _viewModel.getExamItemTitle()
             val message: String =
                 "$examItemTitle ${resources.getStringArray(R.array.paper_instruction)[0]} ${_viewModel.getTotalNumberOfQuestions()} " +
                         "${resources.getStringArray(R.array.paper_instruction)[1]} ${_viewModel.getNumberOfSections()} ${resources.getStringArray(R.array.paper_instruction)[2]}"
@@ -354,15 +348,14 @@ class PaperActivity : AppCompatActivity(),
 
     private fun gotoSubscriptionActivity(){
 //        val subjectIndex = intent.getBundleExtra("paperData")!!.getInt(MCQConstants.SUBJECT_INDEX)
-        val subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
+        val subjectIndex = _viewModel.getSubjectIndex()
+        val subjectName = _viewModel.getSubjectName()
 
-        startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName!!))
+        startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName))
     }
 
     override fun onDestroy() {
         super.onDestroy()
-//        stopUsageTimer()
-//        _viewModel.resetUsageTimerData()
     }
 
     override fun onSectionNavFragmentRecyclerItemClick(position: Int) {
@@ -370,37 +363,26 @@ class PaperActivity : AppCompatActivity(),
         gotoSection(position)
     }
 
-    private fun startUsageTimer(){
-        val isActive = _viewModel.isPackageActive()
-        if (isActive) {
-            _viewModel.startUsageTime(0)
-        }
-
-    }
-
-    private fun stopUsageTimer(){
-        _viewModel.stopUsageTimer()
-    }
-
-
-
     private fun beginSetup(){
         val id = UtilityFunctions().getDeviceId(this)
-        if (_viewModel.isUserInitialised()){
-            _viewModel.beginSetup(id, this, object : AppSetupManager.AppSetupListener{
-                override fun onSetupSuccessful() {
+        if (!_viewModel.isPaperDataInitialised() && !_viewModel.isPaper1DataInitialised() && !_viewModel.isUserDataInitialised()){
+            _viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
+                override fun onSuccess() {
                     runOnUiThread {
-                        initPaper1Data()
+                        _viewModel.initRepositories()
                         loadFragment()
+//                        setActivityTitle()
+
                     }
                 }
 
-                override fun onSetupFailed() {
+                override fun onUserDataUnavailable() {
 
                 }
             })
         }else{
-            initPaper1Data()
+//            println("setupSuccessful()")
+            _viewModel.initRepositories()
             loadFragment()
         }
 
