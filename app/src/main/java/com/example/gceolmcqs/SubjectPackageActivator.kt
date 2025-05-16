@@ -32,7 +32,7 @@ class SubjectPackageActivator {
         fun activateTrialPackage(): SubjectPackageData{
             val activationExpiryDates =
                 ActivationExpiryDatesGenerator.generateActivationExpiryDates(
-                    MCQConstants.MINUTES,
+                    MCQConstants.HOURS,
                     MCQConstants.TRIAL_DURATION
                 )
             return SubjectPackageData(0, MCQConstants.SUBJECTS_AVAILABLE[0], "TRIAL", activationExpiryDates.activatedOn, activationExpiryDates.expiresOn, isPackageActive = true)
