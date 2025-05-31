@@ -53,8 +53,8 @@
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.example.gceolmcqs.fragments.SubscriptionPackageFragment"
-            tools:layout="@layout/fragment_subscription_package"/>
+            android:name="com.example.gceolmcqs.fragments.HomeFragment"
+            tools:layout="@layout/fragment_home"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 

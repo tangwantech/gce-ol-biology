@@ -136,7 +136,7 @@ class PaperActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-        beginSetup()
+//        beginSetup()
         setActivityTitle()
 
 

@@ -7,25 +7,34 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.AssertReader
+import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.R
+import com.example.gceolmcqs.UtilityFunctions
 import com.example.gceolmcqs.adapters.PackagesDialogRecyclerAdapter
 import com.example.gceolmcqs.datamodels.PackageFormData
+import com.example.gceolmcqs.repository.RemoteDatabaseManager
+import com.example.gceolmcqs.viewmodels.MainActivityViewModel
 import com.example.gceolmcqs.viewmodels.PackageDialogViewModel
+import com.example.gceolmcqs.viewmodels.SubscriptionActivityViewModel
 
 class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.ItemSelectListener {
     private lateinit var packageDialogListener: PackageDialogListener
     private lateinit var viewModel: PackageDialogViewModel
+    private val subscriptionActivityViewModel by activityViewModels<SubscriptionActivityViewModel>()
     private var rvAdapter: PackagesDialogRecyclerAdapter? = null
     private var btnNext: Button? = null
 
     private fun initViewModel(){
         viewModel = ViewModelProvider(requireActivity())[PackageDialogViewModel::class.java]
-        val json = AssertReader.getJsonFromAssets(requireContext(), "mcq_packages.json")
-        viewModel.setPackages(json!!)
+//        println("PackageTypes: ${subscriptionActivityViewModel.getPackageTypes()}")
+        viewModel.setPackages(subscriptionActivityViewModel.getPackageTypes())
+//        val json = AssertReader.getJsonFromAssets(requireContext(), "mcq_packages.json")
+//        viewModel.setPackages(json!!)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +50,11 @@ class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.I
         }
     }
 
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogView = requireActivity().layoutInflater.inflate(R.layout.fragment_packages_dialog, null)
         val rv: RecyclerView = dialogView.findViewById(R.id.packageRecyclerView)
+
         setupRecyclerView(rv)
         val dialog = AlertDialog.Builder(requireActivity()).apply {
             setTitle("Select a package")
@@ -76,7 +87,6 @@ class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.I
     }
 
     private fun setupRecyclerView(rv: RecyclerView){
-
         rvAdapter = PackagesDialogRecyclerAdapter(requireContext(), viewModel.getPackages(), this)
         val loMan = LinearLayoutManager(requireContext()).apply {
             orientation = LinearLayoutManager.VERTICAL

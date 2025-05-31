@@ -10,11 +10,11 @@ import com.example.gceolmcqs.ActivationExpiryDatesGenerator
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.R
 import com.example.gceolmcqs.SubscriptionCountDownTimer
-import com.example.gceolmcqs.databinding.FragmentSubscriptionPackageBinding
+import com.example.gceolmcqs.databinding.FragmentHomeBinding
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 
-class SubscriptionPackageFragment : Fragment() {
-    private var binding: FragmentSubscriptionPackageBinding? = null
+class HomeFragment : Fragment() {
+    private var binding: FragmentHomeBinding? = null
     private lateinit var listener: SubscriptionPackageListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +26,7 @@ class SubscriptionPackageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentSubscriptionPackageBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
@@ -105,7 +105,7 @@ class SubscriptionPackageFragment : Fragment() {
 
         @JvmStatic
         fun newInstance() =
-            SubscriptionPackageFragment().apply {
+            HomeFragment().apply {
                 arguments = Bundle().apply {
 
                 }

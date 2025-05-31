@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
 import com.example.gceolmcqs.datamodels.AppData
 import com.example.gceolmcqs.datamodels.DictionaryData
+import com.example.gceolmcqs.datamodels.NotesData
 import com.example.gceolmcqs.datamodels.Paper1Data
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.UserData
@@ -132,6 +133,30 @@ class LocalUserDataRepository{
 
         fun getAllMatches(keyword: String): List<String>{
             return DictionaryRepository.getAllMatches(keyword)
+        }
+
+        fun initNotesDataRepository(){
+            val notesString =  getAppData()?.notesData!!
+            val notesJson = JSONObject(notesString).getString("chapters").toString()
+            val type = object :  TypeToken<List<NotesData>>(){}.type
+            val notes = Gson().fromJson<List<NotesData>>(notesJson, type)
+            NotesDataRepository.initNotesData(notes)
+        }
+
+        fun getChapterNames(): List<String>{
+            return NotesDataRepository.getChapterNames()
+        }
+
+        fun getFilePath(chapterIndex: Int): String{
+            return NotesDataRepository.getFilePath(chapterIndex)
+        }
+
+        fun getChapterExerciseNumbers(chapterIndex: Int): List<String>{
+            return NotesDataRepository.getChapterExerciseNumbers(chapterIndex)
+        }
+
+        fun getIsNotesInitialised(): Boolean{
+            return NotesDataRepository.isNotesInitialised()
         }
     }
 

@@ -4,8 +4,6 @@ import android.content.Context
 import com.example.gceolmcqs.datamodels.Paper1Data
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.UserData
-import com.example.gceolmcqs.repository.DictionaryRepository
-//import com.example.gceolmcqs.repository.SubscriptionDataRepository
 import com.example.gceolmcqs.repository.LocalUserDataRepository
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
 
@@ -157,6 +155,27 @@ class UserDataManager {
 
     fun getAllMatches(keyword: String): List<String>{
         return LocalUserDataRepository.getAllMatches(keyword)
+    }
+
+    fun initNotesDataRepository(){
+
+        LocalUserDataRepository.initNotesDataRepository()
+    }
+
+    fun getChapterNames(): List<String>{
+        return LocalUserDataRepository.getChapterNames()
+    }
+
+    fun getFilePath(chapterIndex: Int): String{
+        return LocalUserDataRepository.getFilePath(chapterIndex)
+    }
+
+    fun getChapterExerciseNumbers(chapterIndex: Int): List<String>{
+        return LocalUserDataRepository.getChapterExerciseNumbers(chapterIndex)
+    }
+
+    fun getIsNotesInitialised(): Boolean{
+        return LocalUserDataRepository.getIsNotesInitialised()
     }
 
 

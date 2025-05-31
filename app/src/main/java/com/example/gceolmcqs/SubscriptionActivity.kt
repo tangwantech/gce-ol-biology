@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 
 import androidx.lifecycle.ViewModelProvider
+import com.example.gceolmcqs.databinding.ActivitySubscriptionBinding
 
 import com.example.gceolmcqs.datamodels.PackageFormData
 
@@ -30,14 +32,6 @@ class SubscriptionActivity: AppCompatActivity(),
     PaymentMethodDialogFragment.OnPaymentMethodDialogListeners,
     PackagesDialogFragment.PackageDialogListener{
 
-//    private var processingAlertDialog: AlertDialog? = null
-//    private var requestToPayDialog: AlertDialog? = null
-//    private var failedToActivatePackageDialog: AlertDialog? = null
-//    private var activatingPackageDialog: AlertDialog? = null
-//    private var packageActivatedDialog: AlertDialog? = null
-//    private var paymentReceivedDialog: AlertDialog? = null
-//    private var momoNumberInputDialog: AlertDialog? = null
-
     private var dialog: AlertDialog? = null
 
 //    private var packagesDialog: DialogFragment? = null
@@ -46,14 +40,19 @@ class SubscriptionActivity: AppCompatActivity(),
     private var currentRefNum: String? = null
 
     private lateinit var viewModel: SubscriptionActivityViewModel
+    private lateinit var binding: ActivitySubscriptionBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivitySubscriptionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)
         title = "$subjectName subscription"
         setupViewModel()
         setupViewObservers()
-        showPackagesDialog()
+        queryPackagesFromRemoteRepo()
+//        showPackagesDialog()
     }
 
 
@@ -61,6 +60,29 @@ class SubscriptionActivity: AppCompatActivity(),
         val subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
         val subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)!!
         viewModel.initSubscriptionFormData(subjectIndex, subjectName)
+    }
+
+    private fun queryPackagesFromRemoteRepo(){
+        val params = hashMapOf<String, String>()
+        val id = UtilityFunctions().getDeviceId(this)
+        params[MCQConstants.USER_NAME] = id
+        params[MCQConstants.PASS_WORD] = id
+        viewModel.queryPackageTypesFromRemoteRepo(params, object: RemoteDatabaseManager.OnQueryListener{
+            override fun onSuccess() {
+                runOnUiThread {
+                    binding.progressCircular.visibility = View.GONE
+                    showPackagesDialog()
+                }
+
+//                cancel circular progress view
+//                showPackagesDialog()
+            }
+
+            override fun onError(error: String?) {
+                //                cancel circular progress view
+            }
+
+        })
     }
 
     private fun setupViewModel() {

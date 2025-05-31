@@ -12,6 +12,7 @@ import com.example.gceolmcqs.datamodels.PackageFormData
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.SubscriptionFormData
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
+
 //import com.example.gceolmcqs.repository.RemoteRepoManager
 //import com.example.gceolmcqs.repository.SubscriptionDataRepository
 
@@ -32,6 +33,8 @@ class SubscriptionActivityViewModel: ViewModel() {
     val momoPartner: LiveData<String> = _momoPartner
 
     private val userDataManager = UserDataManager()
+
+    private var packageTypes: String? = null
 
     fun initSubscriptionFormData(subjectIndex: Int, subjectName: String){
         _subscriptionData.subjectPosition = subjectIndex
@@ -157,7 +160,24 @@ class SubscriptionActivityViewModel: ViewModel() {
     }
 
 
+    fun queryPackageTypesFromRemoteRepo(params: HashMap<String, String>, listener: RemoteDatabaseManager.OnQueryListener){
+        RemoteDatabaseManager.queryPackageTypes(params, object: RemoteDatabaseManager.OnQueryPackageTypesListener{
+            override fun onSuccess(result: String) {
+//                println("PackageTypes: $result")
+                packageTypes = result
+                listener.onSuccess()
+            }
 
+            override fun onError(error: String?) {
+                listener.onError(error)
+            }
+
+        })
+    }
+
+    fun getPackageTypes(): String{
+        return packageTypes!!
+    }
 
 
 }

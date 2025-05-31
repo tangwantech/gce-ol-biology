@@ -18,6 +18,7 @@ class RestRepository {
         const val GET_APP_DATA = "getAppData"
         const val GET_APP_VERSION = "getAppVersion"
         const val UPDATE_SUBSCRIPTION = "updateSubscription"
+        const val GET_PACKAGE_TYPES = "getPackageTypes"
 //        const val GET_SUBSCRIPTION = "getSubscription"
 //        const val GET_USER_DATA = "getUserData"
         const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"
@@ -30,6 +31,7 @@ class RestRepository {
             SIGN_UP -> "https://parseapi.back4app.com/functions/signup"
             GET_APP_DATA -> "https://parseapi.back4app.com/functions/getAppData"
             UPDATE_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/updateSubscription"
+            GET_PACKAGE_TYPES -> "https://parseapi.back4app.com/functions/getPackageTypes"
             else -> "https://parseapi.back4app.com/functions/getAppVersion"
         }
 

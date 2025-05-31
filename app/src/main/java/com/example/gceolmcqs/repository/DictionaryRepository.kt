@@ -14,7 +14,7 @@ class DictionaryRepository {
 
         private fun updateKeyWords(){
 
-            keyWords = dictionaryData.map { it.keyword }
+            keyWords = dictionaryData.map { it.keyword}
 
         }
         fun getKeys(): List<String>{
@@ -22,8 +22,8 @@ class DictionaryRepository {
         }
 
         fun getDefinition(keyWord: String): String{
-            if (keyWord in keyWords ){
 
+            if (keyWord.lowercase() in keyWords.map { it.lowercase() } ){
                 val match = dictionaryData.find { it.keyword.lowercase() == keyWord.lowercase()}
                 return match?.definition!!
 

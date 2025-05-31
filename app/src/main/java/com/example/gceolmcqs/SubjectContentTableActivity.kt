@@ -157,8 +157,13 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-
+        start()
 //       loadSubjectPackageDataFromRemoteRepo()
+
+
+    }
+
+    private fun start(){
         if (!viewModel.isPaper1DataInitialised() && !viewModel.isUserDataInitialised()){
             beginSetup()
         }else{
@@ -168,7 +173,6 @@ class SubjectContentTableActivity : AppCompatActivity(),
             setupActivityViewListeners()
             setupViewObservers()
         }
-
     }
 
     override fun onDestroy() {

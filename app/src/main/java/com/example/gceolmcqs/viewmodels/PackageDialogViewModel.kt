@@ -1,12 +1,17 @@
 package com.example.gceolmcqs.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.datamodels.PackageFormData
 import com.example.gceolmcqs.datamodels.PackagesData
+import com.example.gceolmcqs.repository.RemoteDatabaseManager
 import com.google.gson.Gson
 
 class PackageDialogViewModel: ViewModel() {
     private val packages = ArrayList<PackageFormData>()
+    private val _packageTypesReady = MutableLiveData<Boolean>()
+    val packageTypesReady: LiveData<Boolean> = _packageTypesReady
 //    private var selectedPackage: PackageData? = null
 
     fun setPackages(jsonData: String){
@@ -42,5 +47,6 @@ class PackageDialogViewModel: ViewModel() {
     fun clearPackages(){
         packages.clear()
     }
+
 
 }

@@ -34,7 +34,7 @@
     <color name="color_red">#C71C1C</color>
     <color name="color_green">#074D02</color>
 <!--    <color name="color_green">#0E437E</color>-->
-    <color name="card_background">#f0f5f1</color>
+    <color name="card_background">#D9E4DB</color>
 
     <color name="dark_background">#292929</color>
 
@@ -52,6 +52,8 @@
 
     <color name="mtn">#C2A54E</color>
     <color name="orange">#F18764</color>
+
+    <color name="test_background">#C6D9CC</color>
 
 
 </resources>

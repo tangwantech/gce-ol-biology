@@ -3,11 +3,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/homeRecyclerView"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.HomeFragment"
+    android:background="@color/card_background">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/subscriptionPackageCard"
+            layout="@layout/subject_item_card"
+            />
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal"
+            android:columnCount="2">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minWidth="72dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/lesson_notes"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvDictionary"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/dictionary"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvPaper1"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/paper_1"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvPaper2"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/paper_2"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+
+
+        </GridLayout>
+
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </FrameLayout>

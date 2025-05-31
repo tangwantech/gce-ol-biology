@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -15,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 
 import com.example.gceolmcqs.databinding.ActivityMainBinding
 import com.example.gceolmcqs.datamodels.SubjectPackageData
-import com.example.gceolmcqs.fragments.SubscriptionPackageFragment
+import com.example.gceolmcqs.fragments.HomeFragment
 import com.example.gceolmcqs.repository.LocalUserDataRepository
 //import com.example.gceolmcqs.repository.SubscriptionDataRepository
 
@@ -27,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(),
-    SubscriptionPackageFragment.SubscriptionPackageListener
+    HomeFragment.SubscriptionPackageListener
 {
 
     private lateinit var viewModel: MainActivityViewModel
@@ -376,7 +375,7 @@ class MainActivity : AppCompatActivity(),
 
 
     override fun onNotesButtonClicked() {
-        println("Navigating to Notes activity")
+        startActivity(NotesActivity.getIntent(this))
     }
 
     override fun onPaper2ButtonClick() {
@@ -406,7 +405,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupSubscriptionFragmentStatusView(){
 
-        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as SubscriptionPackageFragment
+        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeFragment
         fragmentContainer.setSubscriptionFragment(viewModel.getSubjectPackageData())
 
     }
