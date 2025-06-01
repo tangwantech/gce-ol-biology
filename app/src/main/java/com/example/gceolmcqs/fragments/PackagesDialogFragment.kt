@@ -31,10 +31,7 @@ class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.I
 
     private fun initViewModel(){
         viewModel = ViewModelProvider(requireActivity())[PackageDialogViewModel::class.java]
-//        println("PackageTypes: ${subscriptionActivityViewModel.getPackageTypes()}")
         viewModel.setPackages(subscriptionActivityViewModel.getPackageTypes())
-//        val json = AssertReader.getJsonFromAssets(requireContext(), "mcq_packages.json")
-//        viewModel.setPackages(json!!)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
