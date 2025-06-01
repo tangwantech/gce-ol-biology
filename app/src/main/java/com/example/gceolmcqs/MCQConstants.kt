@@ -92,10 +92,6 @@ class MCQConstants{
         const val U_GRADE = "U Grade"
         const val MINIMUM_PASS_PERCENTAGE = 50
 
-        const val SECTION_I = "Section I"
-        const val SECTION_II = "Section II"
-        const val SECTION_V = "Section V"
-        const val SECTION_VI = "Section VI"
         const val FOUR_ALTS = "fourAlts"
         const val MILLI_SEC_PER_QUESTION = 108000L
         const val COUNT_DOWN_INTERVAL = 1000L
@@ -119,9 +115,6 @@ class MCQConstants{
         const val OPERATOR_MTN = "MTN"
         const val USSD_CODE = "ussd_code"
         const val ORANGE_MOMO = "ORANGE MOMO"
-        const val BIOLOGY = "Biology"
-        const val HUMAN_BIOLOGY = "Human Biology"
-        const val APP_LINK = "https://gce-ol-mcqs.en.uptodown.com/android"
 
         const val EXAM_TYPE_INDEX = "examTypeIndex"
         const val EXAM_ITEM_INDEX = "examItemIndex"
@@ -135,9 +128,6 @@ class MCQConstants{
         const val APP_PACKAGE_NAME = "com.example.gceolmcqs"
         const val LAST_USED = "last_used_gceolmcqs"
 
-        const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"
-        const val CLIENT_KEY = "wPNTqR18DRbZr7UK8jfaIQItw7t7q9xiUX96AWMe"
-       const val OBJECT_ID = "objectId"
 
     }
 }

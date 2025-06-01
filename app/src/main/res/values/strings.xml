@@ -69,8 +69,8 @@
 
     <!-- Change BOTH strings as required -->
     <string name="back4app_server_url">https://parseapi.back4app.com/</string>
-    <string name="back4app_app_id">k5qCXIjDC4S1MMJtpKWsJwyadC2Hb7zI2PoKei4j</string>
-    <string name="back4app_client_key">BQusbF13972k5Px17VylOsTpWhajMB171Zp0YnkG</string>
+    <string name="back4app_app_id">9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn</string>
+    <string name="back4app_client_key">fUqJvhE2dPbRASrEbTLViYd53QOv22PY7gT6y8iB</string>
 
 
     <string name="campay_app_id">wC0GZDVBg_PuHYDwlo5rJeewzit0JSfQfLD_2_swn5twtDLLIpY6dGySSaKCVS6D4bFuWBGpM22_LmKmap2S1w</string>
