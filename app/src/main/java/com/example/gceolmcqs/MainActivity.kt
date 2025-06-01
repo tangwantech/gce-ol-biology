@@ -55,13 +55,16 @@ class MainActivity : AppCompatActivity(),
 
     private  fun checkInternetConnectivity(){
 //        val internetAvailable = CheckInternetConnectivity().isInternetAvailable(this)
-        CoroutineScope(Dispatchers.IO).launch {
-            val isConnected = CheckInternetConnectivity().hasRealInternetAccess()
-            println("isConnected: $isConnected")
-            withContext(Dispatchers.Main){
-                if (isConnected){
+        val params = hashMapOf("" to "")
+        ConnectivityTester.checkConnection(this, params, object : ConnectivityTester.OnTestConnectionListener{
+            override fun onConnectionAvailable() {
+                runOnUiThread{
                     checkForLatestAppVersion()
-                }else{
+                }
+            }
+
+            override fun onConnectionUnavailable() {
+                runOnUiThread {
                     val latestVersion = pref.getString(MCQConstants.VERSION_STR, null)
                     if (latestVersion != null){
                         val installedVersion = VersionChecker().getInstalledVersion(packageManager, packageName)
@@ -70,8 +73,10 @@ class MainActivity : AppCompatActivity(),
                         }
                     }
                 }
+
             }
-        }
+
+        })
 
 
     }

@@ -51,7 +51,8 @@ class SubscriptionActivity: AppCompatActivity(),
         title = "$subjectName subscription"
         setupViewModel()
         setupViewObservers()
-        queryPackagesFromRemoteRepo()
+        checkInternetConnectivity()
+//        queryPackagesFromRemoteRepo()
 //        showPackagesDialog()
     }
 
@@ -61,7 +62,21 @@ class SubscriptionActivity: AppCompatActivity(),
         val subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)!!
         viewModel.initSubscriptionFormData(subjectIndex, subjectName)
     }
+    private fun checkInternetConnectivity(){
+        val params = hashMapOf("" to "")
+        ConnectivityTester.checkConnection(this, params, object: ConnectivityTester.OnTestConnectionListener{
+            override fun onConnectionAvailable() {
+                queryPackagesFromRemoteRepo()
+            }
 
+            override fun onConnectionUnavailable() {
+                runOnUiThread {
+                    showNetWorkErrorDialog()
+                }
+            }
+
+        })
+    }
     private fun queryPackagesFromRemoteRepo(){
         val params = hashMapOf<String, String>()
         val id = UtilityFunctions().getDeviceId(this)
@@ -74,8 +89,6 @@ class SubscriptionActivity: AppCompatActivity(),
                     showPackagesDialog()
                 }
 
-//                cancel circular progress view
-//                showPackagesDialog()
             }
 
             override fun onError(error: String?) {
