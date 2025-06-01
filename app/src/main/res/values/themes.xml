@@ -20,6 +20,8 @@
         <item name="cardViewStyle">@style/CustomCardViewStyle</item>
         <item name="android:windowBackground">@color/card_background</item>
 
+<!--        <item name="alertDialogTheme">@style/CustomAlertDialog</item>-->
+
 
     </style>
 
@@ -67,4 +69,9 @@
     <style name="CustomCardViewStyle" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/card_background</item> <!-- Replace with your desired color -->
     </style>
+
+<!--    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">-->
+<!--        <item name="cornerFamily">rounded</item>-->
+<!--        <item name="cornerSize">8dp</item>-->
+<!--    </style>-->
 </resources>
