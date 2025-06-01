@@ -79,9 +79,9 @@ class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.I
         return dialog
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//    }
 
     private fun setupRecyclerView(rv: RecyclerView){
         rvAdapter = PackagesDialogRecyclerAdapter(requireContext(), viewModel.getPackages(), this)
