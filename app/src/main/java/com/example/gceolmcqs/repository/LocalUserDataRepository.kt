@@ -6,6 +6,7 @@ import com.example.gceolmcqs.datamodels.AppData
 import com.example.gceolmcqs.datamodels.DictionaryData
 import com.example.gceolmcqs.datamodels.NotesData
 import com.example.gceolmcqs.datamodels.Paper1Data
+import com.example.gceolmcqs.datamodels.Paper2Data
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.UserData
 import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
@@ -111,6 +112,12 @@ class LocalUserDataRepository{
             return paper1Data
         }
 
+
+//        fun getPaper2Data(): Paper2Data{
+//            val paper2Data = Gson().fromJson(getAppData()?.paper2Data, Paper2Data::class.java)
+//            return paper2Data
+//        }
+
         fun isUserDataInitialised(): Boolean{
             return userData != null
         }
@@ -134,6 +141,47 @@ class LocalUserDataRepository{
         fun getAllMatches(keyword: String): List<String>{
             return DictionaryRepository.getAllMatches(keyword)
         }
+
+
+
+
+
+        fun initPaper2DataRepository(){
+            val paper2Data = Gson().fromJson(getAppData()?.paper2Data, Paper2Data::class.java)
+            Paper2DataRepository.initPaper2Data(paper2Data)
+
+        }
+
+        fun getPaper2SubjectNames(): List<String>{
+            return Paper2DataRepository.getSubjectNames()
+        }
+
+        fun getPaper2SubjectNameAt(subjectIndex: Int): String{
+            return Paper2DataRepository.getSubjectName(subjectIndex)
+        }
+
+        fun getPaper2ExamTitles(subjectIndex: Int): List<String>{
+            return Paper2DataRepository.getExamTitles(subjectIndex)
+        }
+
+        fun getPaper2ExamItemTitles(subjectIndex: Int, examTypeIndex: Int): List<String>{
+            return Paper2DataRepository.getExamItemTitles(subjectIndex, examTypeIndex)
+        }
+
+        fun getPaper2ExamItemTitle(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
+            return Paper2DataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+        }
+
+        fun getPaper2FilePath(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
+            return Paper2DataRepository.getPaper2FilePath(subjectIndex, examTypeIndex, examItemIndex)
+        }
+
+        fun isPaper2DataInitialised(): Boolean{
+            return Paper2DataRepository.isPaper2DataInitialised()
+        }
+
+
+
 
         fun initNotesDataRepository(){
             val notesString =  getAppData()?.notesData!!

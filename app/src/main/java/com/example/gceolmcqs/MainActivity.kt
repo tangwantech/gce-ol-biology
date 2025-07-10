@@ -354,6 +354,7 @@ class MainActivity : AppCompatActivity(),
 
     }
 
+
     override fun onSubscribeButtonClicked(position: Int, subjectName: String) {
 //        setSubjectPackageDataToActivate(position, subjectPackageData)
         gotoSubscriptionActivity(position, subjectName)
@@ -361,6 +362,10 @@ class MainActivity : AppCompatActivity(),
 
     private fun gotoSubscriptionActivity(subjectIndex: Int, subjectName: String){
         startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName))
+    }
+
+    private fun gotoPaper2Activity(subjectIndex: Int){
+        startActivity(Paper2Activity.getIntent(this, 0))
     }
 
 
@@ -384,7 +389,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onPaper2ButtonClick() {
-        println("Navigating to Paper2 Activity")
+        gotoPaper2Activity(0)
     }
 
     override fun onDictionaryButtonClick() {

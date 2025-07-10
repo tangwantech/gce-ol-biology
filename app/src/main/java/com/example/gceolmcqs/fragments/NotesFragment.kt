@@ -64,6 +64,7 @@ class NotesFragment : Fragment() {
         // To load from assets:
 
         val path = viewModel.getFilePath(requireArguments().getInt(CHAPTER_INDEX))
+        println("File path: $path")
         binding.webView.loadUrl(path)
 
     }
@@ -72,10 +73,6 @@ class NotesFragment : Fragment() {
     fun showDefinition(term: String){
         println("Showing definition for $term")
         listener.onShowDefinition(term)
-    }
-
-    fun gotoExercise(exerciseNumber: String){
-        listener.onGotoExercise(requireArguments().getInt(CHAPTER_INDEX), exerciseNumber)
     }
 
     class WebAppInterface(private val fragment: NotesFragment) {
@@ -88,6 +85,10 @@ class NotesFragment : Fragment() {
         fun gotoExercise(exerciseNumber: String){
             fragment.gotoExercise(exerciseNumber)
         }
+    }
+
+    fun gotoExercise(exerciseNumber: String){
+        listener.onGotoExercise(requireArguments().getInt(CHAPTER_INDEX), exerciseNumber)
     }
 
     companion object {

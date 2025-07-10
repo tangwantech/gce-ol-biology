@@ -100,6 +100,7 @@ class UserDataManager {
         return LocalUserDataRepository.getPaper1Data()
     }
 
+
     fun isSubscriptionActive(): Boolean{
 //        println(userDataRepository)
         return LocalUserDataRepository.isSubscriptionActive()!!
@@ -141,6 +142,8 @@ class UserDataManager {
         })
     }
 
+
+
     fun initDictionaryRepository(){
         LocalUserDataRepository.initDictionaryRepository()
     }
@@ -156,6 +159,8 @@ class UserDataManager {
     fun getAllMatches(keyword: String): List<String>{
         return LocalUserDataRepository.getAllMatches(keyword)
     }
+
+
 
     fun initNotesDataRepository(){
 
@@ -177,6 +182,43 @@ class UserDataManager {
     fun getIsNotesInitialised(): Boolean{
         return LocalUserDataRepository.getIsNotesInitialised()
     }
+
+
+
+
+    fun initPaper2DataRepository(){
+        LocalUserDataRepository.initPaper2DataRepository()
+    }
+
+    fun getPaper2SubjectNames(): List<String>{
+        return LocalUserDataRepository.getPaper2SubjectNames()
+    }
+
+    fun getPaper2SubjectNameAt(subjectIndex: Int): String{
+        return LocalUserDataRepository.getPaper2SubjectNameAt(subjectIndex)
+    }
+
+    fun getPaper2ExamTitles(subjectIndex: Int): List<String>{
+        return LocalUserDataRepository.getPaper2ExamTitles(subjectIndex)
+    }
+
+    fun getPaper2ExamItemTitles(subjectIndex: Int, examTypeIndex: Int): List<String>{
+        return LocalUserDataRepository.getPaper2ExamItemTitles(subjectIndex, examTypeIndex)
+    }
+
+    fun getPaper2ExamItemTitle(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
+        return LocalUserDataRepository.getPaper2ExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+    }
+
+    fun getPaper2FilePath(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
+        return LocalUserDataRepository.getPaper2FilePath(subjectIndex, examTypeIndex, examItemIndex)
+    }
+
+    fun getIsPaper2DataInitialised(): Boolean{
+        return LocalUserDataRepository.isPaper2DataInitialised()
+    }
+
+
 
 
     interface UserDataManagerListener{
