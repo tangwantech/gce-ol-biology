@@ -9,24 +9,16 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.lifecycle.ViewModelProvider
 
 import com.example.gceolmcqs.databinding.ActivityMainBinding
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.fragments.HomeFragment
 import com.example.gceolmcqs.repository.LocalUserDataRepository
-//import com.example.gceolmcqs.repository.SubscriptionDataRepository
-
-//import com.example.gceolmcqs.repository.RemoteRepoManager
 import com.example.gceolmcqs.viewmodels.MainActivityViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(),
-    HomeFragment.SubscriptionPackageListener
+    HomeFragment.OnHomeFragmentListener
 {
 
     private lateinit var viewModel: MainActivityViewModel
@@ -35,6 +27,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var binding: ActivityMainBinding
 //    private lateinit var homeRecyclerViewAdapter: HomeRecyclerViewAdapter
     private var dialog: AlertDialog? = null
+    private val PAPER1 = 0
+    private val PAPER2 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,7 +114,7 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-    private fun gotoSubjectContentTableActivity(position: Int) {
+    private fun gotoPaper1TabActivity(position: Int) {
         val intent = Intent(this, SubjectContentTableActivity::class.java)
 
         intent.apply {
@@ -236,6 +230,7 @@ class MainActivity : AppCompatActivity(),
         if (!viewModel.isUserDataInitialised()){
             beginSetup()
         }else{
+
             setupSubscriptionFragmentStatusView()
             checkInternetConnectivity()
         }
@@ -247,8 +242,8 @@ class MainActivity : AppCompatActivity(),
         viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
             override fun onSuccess() {
                 runOnUiThread {
-//                        viewModel.setSubjectPackageData()
                     setupSubscriptionFragmentStatusView()
+
                 }
 
             }
@@ -343,20 +338,21 @@ class MainActivity : AppCompatActivity(),
 
     override fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?) {
         setIndexOfCurrentSubject(position)
-        if(packageName == MCQConstants.NA){
-//            Toast.makeText(this, "Please activate your Trial Package", Toast.LENGTH_LONG).show()
-        }else{
-            isPackageActive?.let{
-                gotoSubjectContentTableActivity(position)
-            }
+        gotoPaper1TabActivity(position)
 
-        }
+//        if(viewModel.isPaperAvailableAt(PAPER1, position)){
+//
+//        }else{
+//            println("We are working to make this paper available to you soon")
+//        }
 
     }
 
+    override fun onPaper2ButtonClick(position: Int, isPackageActive: Boolean?, packageName: String?) {
+        gotoPaper2Activity(position, isPackageActive, packageName)
 
+    }
     override fun onSubscribeButtonClicked(position: Int, subjectName: String) {
-//        setSubjectPackageDataToActivate(position, subjectPackageData)
         gotoSubscriptionActivity(position, subjectName)
     }
 
@@ -364,8 +360,8 @@ class MainActivity : AppCompatActivity(),
         startActivity(SubscriptionActivity.getIntent(this, subjectIndex, subjectName))
     }
 
-    private fun gotoPaper2Activity(subjectIndex: Int){
-        startActivity(Paper2Activity.getIntent(this, 0))
+    private fun gotoPaper2Activity(position: Int, isPackageActive: Boolean?, packageName: String?){
+        startActivity(Paper2Activity.getIntent(this, position))
     }
 
 
@@ -384,17 +380,15 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-    override fun onNotesButtonClicked() {
-        startActivity(NotesActivity.getIntent(this))
-    }
+//    override fun onNotesButtonClicked() {
+//        startActivity(NotesActivity.getIntent(this))
+//    }
 
-    override fun onPaper2ButtonClick() {
-        gotoPaper2Activity(0)
-    }
 
-    override fun onDictionaryButtonClick() {
-        startActivity(DictionaryActivity.getIntent(this))
-    }
+
+//    override fun onDictionaryButtonClick() {
+//        startActivity(DictionaryActivity.getIntent(this))
+//    }
 
     private fun setIndexOfCurrentSubject(position: Int){
         viewModel.setIndexOfCurrentSubject(position)
@@ -414,10 +408,15 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupSubscriptionFragmentStatusView(){
+        val subjectsPackages = viewModel.getSubjectsPackages()
+        val fragmentContainer1 = supportFragmentManager.findFragmentById(R.id.fragmentContainer1) as HomeFragment
+        fragmentContainer1.setSubscriptionPackage(subjectsPackages[0])
 
-        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as HomeFragment
-        fragmentContainer.setSubscriptionFragment(viewModel.getSubjectPackageData())
+        val fragmentContainer2 = supportFragmentManager.findFragmentById(R.id.fragmentContainer2) as HomeFragment
+        fragmentContainer2.setSubscriptionPackage(subjectsPackages[1])
+
 
     }
+
 
 }

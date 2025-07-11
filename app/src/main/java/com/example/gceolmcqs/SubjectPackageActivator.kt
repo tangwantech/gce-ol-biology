@@ -1,11 +1,12 @@
 package com.example.gceolmcqs
 
 import com.example.gceolmcqs.datamodels.SubjectPackageData
+import com.example.gceolmcqs.datamodels.SubjectsPackages
 
 class SubjectPackageActivator {
     companion object{
 
-        fun activateTrialPackageForAllSubjectsAvailable(availableSubjects: List<String>?): List<SubjectPackageData>{
+        fun activateTrialPackageForAllSubjectsAvailable(availableSubjects: List<String>?): SubjectsPackages{
             val activationExpiryDates =
                 ActivationExpiryDatesGenerator.generateActivationExpiryDates(
                     MCQConstants.HOURS,
@@ -27,7 +28,7 @@ class SubjectPackageActivator {
                 )
 
             }
-            return packageDataList
+            return SubjectsPackages(packageDataList)
         }
         fun activateTrialPackage(): SubjectPackageData{
             val activationExpiryDates =

@@ -22,7 +22,7 @@
             android:paddingStart="@dimen/margin_14"
             android:paddingEnd="@dimen/margin_14"
             android:background="@drawable/drawable_background_biology"
-            android:visibility="gone">
+            android:visibility="visible">
             <TextView
                 android:id="@+id/subjectTitleTv"
                 android:layout_width="match_parent"
@@ -128,14 +128,103 @@
 <!--            layout="@layout/bonuses"-->
 <!--            android:visibility="visible"/>-->
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="2">
+
+            <androidx.cardview.widget.CardView
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:minWidth="72dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/lesson_notes"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvDictionary"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/dictionary"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1">
+
+                <TextView
+                    android:id="@+id/tvPaper1"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/paper_1"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:layout_gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvPaper2"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/paper_2"
+                    android:textAllCaps="true" />
+            </androidx.cardview.widget.CardView>
+
+
+        </GridLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="56dp"
             android:gravity="end"
-            android:paddingStart="@dimen/margin_14"
-            android:paddingEnd="@dimen/margin_14"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:paddingBottom="4dp">
 
             <Button
@@ -148,5 +237,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 />
         </LinearLayout>
+
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -15,7 +15,7 @@ import com.example.gceolmcqs.datamodels.SubjectPackageData
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null
-    private lateinit var listener: SubscriptionPackageListener
+    private lateinit var listener: OnHomeFragmentListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +32,15 @@ class HomeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is SubscriptionPackageListener){
+        if (context is OnHomeFragmentListener){
             listener = context
         }
     }
 
-    fun setSubscriptionFragment(subjectPackageData: SubjectPackageData){
+    fun setSubscriptionPackage(subjectPackageData: SubjectPackageData){
+        println("withing HomeFragment...... $subjectPackageData")
         setupListeners(subjectPackageData)
-
+        binding?.subscriptionPackageCard?.subjectTitleTv?.text = subjectPackageData.subjectName
         binding?.subscriptionPackageCard?.tvPackageType?.text = subjectPackageData.packageName
 
         if(subjectPackageData.isPackageActive != null){
@@ -85,15 +86,15 @@ class HomeFragment : Fragment() {
         }
 
         binding?.tvPaper2?.setOnClickListener {
-            listener.onPaper2ButtonClick()
+            listener.onPaper2ButtonClick(subjectPackageData.subjectIndex!!, subjectPackageData.isPackageActive!!, subjectPackageData.packageName!!)
         }
-
-        binding?.tvNotes?.setOnClickListener {
-            listener.onNotesButtonClicked()
-        }
-        binding?.tvDictionary?.setOnClickListener {
-            listener.onDictionaryButtonClick()
-        }
+//
+//        binding?.tvNotes?.setOnClickListener {
+//            listener.onNotesButtonClicked()
+//        }
+//        binding?.tvDictionary?.setOnClickListener {
+//            listener.onDictionaryButtonClick()
+//        }
     }
 
     override fun onDestroy() {
@@ -112,13 +113,13 @@ class HomeFragment : Fragment() {
             }
     }
 
-    interface SubscriptionPackageListener{
+    interface OnHomeFragmentListener{
         fun onSubscribeButtonClicked(position: Int, subjectName: String)
         fun onPackageExpired(subjectPackageData: SubjectPackageData)
-        fun onNotesButtonClicked()
+//        fun onNotesButtonClicked()
         fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?)
-        fun onPaper2ButtonClick()
-        fun onDictionaryButtonClick()
+        fun onPaper2ButtonClick(position: Int, isPackageActive: Boolean?, packageName: String?)
+//        fun onDictionaryButtonClick()
 
     }
 }

@@ -26,7 +26,7 @@ class SubjectContentTableViewModel : ViewModel() {
     private val userDataManager = UserDataManager()
 
     fun loadSubjectPackageDataFromUserDataRepository(){
-        _subjectPackageData.value = userDataManager.getSubscriptionData()
+        _subjectPackageData.value = userDataManager.getSubjectPackageAt(subjectIndex!!)
     }
 
     fun getExamTitles(): List<String?> {
@@ -43,7 +43,7 @@ class SubjectContentTableViewModel : ViewModel() {
     }
 
     fun getPackageStatus(): Boolean{
-        return userDataManager.isSubscriptionActive()
+        return userDataManager.isSubscriptionActiveAt(subjectIndex!!)
 //        return ActivationExpiryDatesGenerator().checkExpiry(_subjectPackageData.value!!.activatedOn!!, _subjectPackageData.value!!.expiresOn!!)
     }
 

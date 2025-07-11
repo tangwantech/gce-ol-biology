@@ -44,6 +44,11 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
 
     }
+
+    private fun setTitle(){
+        title = viewModel.getSubjectName() + " " + getString(R.string.paper_1)
+    }
+
     private fun initActivityViews(){
         tabLayout = findViewById(R.id.homeTab)
         viewPager = findViewById(R.id.homeViewPager)
@@ -168,7 +173,7 @@ class SubjectContentTableActivity : AppCompatActivity(),
             beginSetup()
         }else{
             viewModel.initPaper1DataRepository()
-            title = viewModel.getSubjectName()
+            setTitle()
             viewModel.loadSubjectPackageDataFromUserDataRepository()
             setupActivityViewListeners()
             setupViewObservers()

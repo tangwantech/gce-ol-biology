@@ -30,6 +30,7 @@ class Paper2ExamTypeFragment : Fragment(), Paper2ExamTypeRecyclerAdapter.OnRecyc
     private val viewModel: Paper2ActivityViewModel by viewModels()
 
     private lateinit var onNavigateToPaper2FragmentListener: OnNavigateToPaper2FragmentListener
+    private lateinit var onPaper2PackageExpiredListener: OnPackageExpiredListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,10 @@ class Paper2ExamTypeFragment : Fragment(), Paper2ExamTypeRecyclerAdapter.OnRecyc
 
         if (context is OnNavigateToPaper2FragmentListener){
             onNavigateToPaper2FragmentListener = context
+        }
+
+        if (context is OnPackageExpiredListener){
+            onPaper2PackageExpiredListener = context
         }
     }
 
@@ -109,10 +114,21 @@ class Paper2ExamTypeFragment : Fragment(), Paper2ExamTypeRecyclerAdapter.OnRecyc
     }
 
     override fun onRecyclerItemClick(position: Int) {
-        onNavigateToPaper2FragmentListener.onNavigateToPaper2Fragment(viewModel.getSubjectIndex(), viewModel.getCurrentExamTypeIndex(), position)
+        val isSubscriptionActive = viewModel.isSubscriptionActiveAt(viewModel.getSubjectIndex())
+        println("subscription status: $isSubscriptionActive")
+        if (isSubscriptionActive){
+            onNavigateToPaper2FragmentListener.onNavigateToPaper2Fragment(viewModel.getSubjectIndex(), viewModel.getCurrentExamTypeIndex(), position)
+        }else{
+            onPaper2PackageExpiredListener.onPaper2PackageExpired()
+        }
+
     }
 
     interface OnNavigateToPaper2FragmentListener{
         fun onNavigateToPaper2Fragment(subjectIndex: Int, examTypeIndex: Int, examItemTitleIndex: Int)
+    }
+
+    interface OnPackageExpiredListener{
+        fun onPaper2PackageExpired()
     }
 }

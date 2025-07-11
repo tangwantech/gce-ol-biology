@@ -6,6 +6,7 @@ import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.UserData
 import com.example.gceolmcqs.repository.LocalUserDataRepository
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
+import com.example.gceolmcqs.repository.SubjectsPackagesDataRepository
 
 import com.google.gson.Gson
 
@@ -54,9 +55,15 @@ class UserDataManager {
 
     private fun signupUser(listener: UserDataManagerListener){
 
-        val subjectPackageData = SubjectPackageActivator.activateTrialPackage()
-        val subjectPackageDataString = Gson().toJson(subjectPackageData)
-        val params = hashMapOf(MCQConstants.USER_NAME to id!!, MCQConstants.PASS_WORD to id!!, MCQConstants.SUBSCRIPTION to subjectPackageDataString)
+//        val subjectPackageData = SubjectPackageActivator.activateTrialPackage()
+
+        val subjectsPackages = SubjectPackageActivator.activateTrialPackageForAllSubjectsAvailable(MCQConstants.SUBJECTS_AVAILABLE)
+
+        val subscriptions = Gson().toJson(subjectsPackages)
+
+
+//        val subjectPackageDataString = Gson().toJson(subjectPackageData)
+        val params = hashMapOf(MCQConstants.USER_NAME to id!!, MCQConstants.PASS_WORD to id!!, MCQConstants.SUBSCRIPTION to subscriptions)
         RemoteDatabaseManager.signupUser(params, object: RemoteDatabaseManager.OnSignupListener{
             override fun onSignupSuccessful(userData: UserData) {
                 LocalUserDataRepository.insertUserDataToLocaldb(userData, object:LocalUserDataRepository.OnInsertUserDataListener{
@@ -101,18 +108,18 @@ class UserDataManager {
     }
 
 
-    fun isSubscriptionActive(): Boolean{
-//        println(userDataRepository)
-        return LocalUserDataRepository.isSubscriptionActive()!!
-    }
-
-    fun getSubscriptionTimeRemaining(): Long{
-        return LocalUserDataRepository.getSubscriptionTimeRemaining()
-    }
-
-    fun getSubscriptionData(): SubjectPackageData{
-        return LocalUserDataRepository.getSubscriptionData()!!
-    }
+//    fun isSubscriptionActive(): Boolean{
+////        println(userDataRepository)
+//        return LocalUserDataRepository.isSubscriptionActive()!!
+//    }
+//
+//    fun getSubscriptionTimeRemaining(): Long{
+//        return LocalUserDataRepository.getSubscriptionTimeRemaining()
+//    }
+//
+//    fun getSubscriptionData(): SubjectPackageData{
+//        return LocalUserDataRepository.getSubscriptionData()!!
+//    }
 
     fun updateSubscriptionDataInLocaldb(subjectPackageData: SubjectPackageData, listener: LocalUserDataRepository.OnUpdateUserDataListener){
         LocalUserDataRepository.updateSubscriptionInUserData(subjectPackageData, object: LocalUserDataRepository.OnUpdateUserDataListener{
@@ -125,8 +132,9 @@ class UserDataManager {
     }
 
    fun updateSubscriptionDataInRemoteRepo(subjectPackageData: SubjectPackageData, listener: RemoteDatabaseManager.OnUpdateListener){
-        val subscriptionDataString = Gson().toJson(subjectPackageData)
-        val params = hashMapOf(MCQConstants.USER_NAME to id!!, MCQConstants.PASS_WORD to id!!, MCQConstants.SUBSCRIPTION to subscriptionDataString)
+        SubjectsPackagesDataRepository.updateSubjectPackageAt(subjectPackageData.subjectIndex!!, subjectPackageData)
+        val subscriptions = Gson().toJson(SubjectsPackagesDataRepository.getSubjectsPackages())
+        val params = hashMapOf(MCQConstants.USER_NAME to id!!, MCQConstants.PASS_WORD to id!!, MCQConstants.SUBSCRIPTION to subscriptions)
         RemoteDatabaseManager.updateUserSubscriptionInRemoteDatabase(params, object :RemoteDatabaseManager.OnUpdateListener{
             override fun onUpdateSuccessful() {
                 LocalUserDataRepository.updateSubscriptionInUserData(subjectPackageData, object :LocalUserDataRepository.OnUpdateUserDataListener{
@@ -167,7 +175,7 @@ class UserDataManager {
         LocalUserDataRepository.initNotesDataRepository()
     }
 
-    fun getChapterNames(): List<String>{
+    fun getPaper1ChapterNames(): List<String>{
         return LocalUserDataRepository.getChapterNames()
     }
 
@@ -219,6 +227,42 @@ class UserDataManager {
     }
 
 
+//    fun initSubjectsPackagesDataRepository(){
+//        LocalUserDataRepository.initSubjectsPackagesDataRepository()
+//    }
+
+    fun isSubjectsPackagesDataInitialised(): Boolean{
+        return LocalUserDataRepository.isSubjectsPackagesDataInitialised()
+    }
+
+    fun getSubjectsPackagesList(): List<SubjectPackageData>{
+        return LocalUserDataRepository.getSubjectsPackagesList()
+    }
+
+    fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData{
+        return LocalUserDataRepository.getSubjectPackageAt(subjectIndex)
+    }
+
+    fun updateSubjectPackageAt(subjectIndex: Int, subjectPackageData: SubjectPackageData){
+        LocalUserDataRepository.updateSubjectPackageAt(subjectIndex, subjectPackageData)
+
+    }
+
+    fun getSubscriptionTimeRemainingAt(subjectIndex: Int): Long{
+        return LocalUserDataRepository.getSubscriptionTimeRemainingAt(subjectIndex)
+    }
+
+    fun isSubscriptionActiveAt(subjectIndex: Int): Boolean{
+        return LocalUserDataRepository.isSubscriptionActiveAt(subjectIndex)
+    }
+
+    fun isPaper1Available(subjectIndex: Int): Boolean {
+        return LocalUserDataRepository.isPaper1Available(subjectIndex)
+    }
+
+    fun isPaper2Available(subjectIndex: Int): Boolean {
+        return LocalUserDataRepository.isPaper2Available(subjectIndex)
+    }
 
 
     interface UserDataManagerListener{

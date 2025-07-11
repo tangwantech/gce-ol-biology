@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GCE OL Biology"
+rootProject.name = "GCE OL REVISION COMPANION"
 include(":app")

@@ -51,5 +51,10 @@ class Paper2DataRepository {
         fun isPaper2DataInitialised(): Boolean{
             return paper2Data != null
         }
+
+        fun isPaper2Available(subjectIndex: Int): Boolean {
+            println(paper2Data)
+            return paper2Data?.subjects?.get(subjectIndex) != null
+        }
     }
 }

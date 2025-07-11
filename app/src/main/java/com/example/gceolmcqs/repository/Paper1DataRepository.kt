@@ -58,6 +58,10 @@ class Paper1DataRepository {
             return paper1Data != null
         }
 
+        fun isPaper1AvailableAt(subjectIndex: Int): Boolean {
+            return paper1Data?.subjects?.get(subjectIndex) != null
+        }
+
     }
 
     interface OnAppDataInitialiseListener{

@@ -140,7 +140,7 @@ class PaperActivityViewModel:ViewModel() {
 
     fun startUsageTime(subjectIndex: Int) {
 
-        val timeRemaining = userDataManager.getSubscriptionTimeRemaining()
+        val timeRemaining = userDataManager.getSubscriptionTimeRemainingAt(subjectIndex)
         UsageTimer.startUsageTimer(timeRemaining)
     }
 
@@ -152,8 +152,8 @@ class PaperActivityViewModel:ViewModel() {
         UsageTimer.resetUsageTimerData()
     }
 
-    fun isPackageActive(): Boolean{
-        return userDataManager.isSubscriptionActive()
+    fun isPackageActive(subjectIndex: Int): Boolean{
+        return userDataManager.isSubscriptionActiveAt(subjectIndex)
     }
 
     private fun initPaper1DataRepository(){

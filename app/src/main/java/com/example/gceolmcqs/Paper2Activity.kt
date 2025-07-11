@@ -9,12 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.gceolmcqs.databinding.ActivityPaper2Binding
 import com.example.gceolmcqs.databinding.DefinitionDialogBinding
 import com.example.gceolmcqs.fragments.Paper2ExamTypeFragment
+import com.example.gceolmcqs.fragments.Paper2ExamTypeFragment.OnPackageExpiredListener
 import com.example.gceolmcqs.fragments.Paper2ExamTypesTabFragment
 import com.example.gceolmcqs.fragments.Paper2QuestionsSolutionFragment
 import com.example.gceolmcqs.viewmodels.Paper2ActivityViewModel
 
 class Paper2Activity : AppCompatActivity(),
-    Paper2ExamTypeFragment.OnNavigateToPaper2FragmentListener, Paper2QuestionsSolutionFragment.OnShowDefinitionListener {
+    Paper2ExamTypeFragment.OnNavigateToPaper2FragmentListener,
+    Paper2QuestionsSolutionFragment.OnShowDefinitionListener,
+    OnPackageExpiredListener
+{
     companion object{
         const val SUBJECT_INDEX = "subjectIndex"
         fun getIntent(context: Context, subjectIndex: Int): Intent {
@@ -34,7 +38,8 @@ class Paper2Activity : AppCompatActivity(),
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         start()
-        viewModel.updateSubjectIndex(intent.getIntExtra(SUBJECT_INDEX, 0))
+
+//        println("subjectName: ${viewModel.getSubjectName(viewModel.getSubjectIndex())} At ${viewModel.getSubjectIndex()}")
 
     }
 
@@ -56,10 +61,15 @@ class Paper2Activity : AppCompatActivity(),
         if (!viewModel.isPaper2DataInitialised() && !viewModel.isUserDataInitialised()){
             beginSetup()
         }else{
-            viewModel.initPaper2DataRepository()
-            gotoExamTypesTabFragment()
+            displayTabFragment()
 
         }
+    }
+
+    private fun displayTabFragment(){
+        viewModel.updateSubjectIndex(intent.getIntExtra(SUBJECT_INDEX, 0))
+        viewModel.initPaper2DataRepository()
+        gotoExamTypesTabFragment()
     }
 
     private fun beginSetup(){
@@ -67,8 +77,7 @@ class Paper2Activity : AppCompatActivity(),
         viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
             override fun onSuccess() {
                 runOnUiThread {
-                    viewModel.initPaper2DataRepository()
-                    gotoExamTypesTabFragment()
+                    displayTabFragment()
                 }
             }
 
@@ -81,9 +90,7 @@ class Paper2Activity : AppCompatActivity(),
     }
 
     private fun gotoExamTypesTabFragment(){
-
         val fragment = Paper2ExamTypesTabFragment.newInstance(viewModel.getSubjectIndex(), "", "")
-//        replaceFragment(fragment)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.apply {
             replace(binding.fragmentContainer.id, fragment)
@@ -112,6 +119,7 @@ class Paper2Activity : AppCompatActivity(),
         examTypeIndex: Int,
         examItemTitleIndex: Int
     ) {
+
        gotoPaper2Fragment(subjectIndex, examTypeIndex, examItemTitleIndex)
     }
 
@@ -130,6 +138,26 @@ class Paper2Activity : AppCompatActivity(),
             dialog.show()
         }
 
+    }
+
+    private fun showAlertDialog(){
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.apply {
+            setMessage(resources.getString(R.string.package_expired_message))
+            setPositiveButton("Ok") { _, _ ->
+                exitActivity()
+            }
+            setCancelable(false)
+        }.create()
+        alertDialog.show()
+    }
+
+    private fun exitActivity() {
+        this.finish()
+    }
+
+    override fun onPaper2PackageExpired() {
+        showAlertDialog()
     }
 
 }

@@ -30,7 +30,7 @@ class NotesActivityViewModel: ViewModel() {
     }
 
     fun getChapterNames(): List<String>{
-        return userDataManager.getChapterNames()
+        return userDataManager.getPaper1ChapterNames()
     }
 
     fun getFilePath(chapterIndex: Int): String{

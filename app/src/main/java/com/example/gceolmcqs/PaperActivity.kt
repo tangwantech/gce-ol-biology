@@ -174,7 +174,7 @@ class PaperActivity : AppCompatActivity(),
     private fun checkPackageExpiry(position: Int){
         resetCurrentSectionFragment()
         _viewModel.setCurrentSectionIndex(position)
-        val isActive = _viewModel.isPackageActive()
+        val isActive = _viewModel.isPackageActive(_viewModel.getSubjectIndex())
         if (!isActive) {
             showPackageExpiredDialog()
         }else{
@@ -219,7 +219,7 @@ class PaperActivity : AppCompatActivity(),
     }
 
     override fun onRequestToGoToResult(sectionResultData: SectionResultData) {
-        val isActive = _viewModel.isPackageActive()
+        val isActive = _viewModel.isPackageActive(_viewModel.getSubjectIndex())
         if (!isActive) {
             showPackageExpiredDialog()
         }else{

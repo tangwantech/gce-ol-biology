@@ -22,9 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/color_on_primary"/>
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/your_revision_companion"
@@ -32,11 +33,12 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:orientation="vertical"
         android:id="@+id/subscriptionPackageLo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_round"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,16 +48,39 @@
             android:id="@+id/homeRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/subject_item_card"
+            tools:listitem="@layout/home_fragment_recycler_container_view_item"
             android:visibility="gone"/>
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainer"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.example.gceolmcqs.fragments.HomeFragment"
-            tools:layout="@layout/fragment_home"
-           android:layout_margin="4dp"/>
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.fragment.app.FragmentContainerView
+                    android:visibility="visible"
+                    android:id="@+id/fragmentContainer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="com.example.gceolmcqs.fragments.HomeFragment"
+                    tools:layout="@layout/fragment_home"
+                    android:layout_margin="4dp"/>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:visibility="visible"
+                    android:id="@+id/fragmentContainer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="com.example.gceolmcqs.fragments.HomeFragment"
+                    tools:layout="@layout/fragment_home"
+                    android:layout_margin="4dp"/>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </ScrollView>
+
+
+
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 

@@ -35,7 +35,8 @@ class Paper2ExamTypesTabFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            subjectIndex = it.getInt(SUBJECT_INDEX, 0)
+            viewModel.updateSubjectIndex(it.getInt(SUBJECT_INDEX, 0))
+//            subjectIndex = it.getInt(SUBJECT_INDEX, 0)
             subjectPackageName = it.getString(SUBJECT_PACKAGE_NAME)
             expiresOn = it.getString(EXPIRES_ON)
         }
@@ -61,6 +62,7 @@ class Paper2ExamTypesTabFragment : Fragment() {
 
     private fun setTitle(){
         val subjectIndex = viewModel.getSubjectIndex()
+//        println("subjectName: ${viewModel.getSubjectName(subjectIndex)} At $subjectIndex")
         requireActivity().title = viewModel.getSubjectName(subjectIndex) + " " + getString(R.string.paper_2)
     }
 
@@ -74,10 +76,10 @@ class Paper2ExamTypesTabFragment : Fragment() {
     private fun setUpExamTypesTab() {
         println("Setting up paper2 exam types tab")
         val fragments = ArrayList<Fragment>()
-        val examTypeTitles = viewModel.getPaper2ExamTitles(subjectIndex!!)
+        val examTypeTitles = viewModel.getPaper2ExamTitles(viewModel.getSubjectIndex())
         examTypeTitles.forEachIndexed { index, s ->
             binding.layoutHomeTab.homeTab.addTab(binding.layoutHomeTab.homeTab.newTab().setText(s))
-            fragments.add(Paper2ExamTypeFragment.newInstance(subjectIndex!!, index))
+            fragments.add(Paper2ExamTypeFragment.newInstance(viewModel.getSubjectIndex(), index))
         }
 
 

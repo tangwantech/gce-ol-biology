@@ -30,7 +30,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun getSubjectPackageData(): SubjectPackageData{
-        return userDataManager.getSubscriptionData()
+        return userDataManager.getSubjectPackageAt(0)
     }
 
     fun setIndexOfCurrentSubject(index: Int){
@@ -61,6 +61,22 @@ class MainActivityViewModel : ViewModel() {
 
     }
 
+    fun getSubjectsPackages(): List<SubjectPackageData> {
+        return userDataManager.getSubjectsPackagesList()
+    }
+
+    fun isPaperAvailableAt(paperIndex: Int, subjectIndex: Int): Boolean{
+        var isPaperAvailable = false
+        when (paperIndex){
+            0 -> {
+               isPaperAvailable = userDataManager.isPaper1Available(subjectIndex)
+            }
+            1 -> {
+                isPaperAvailable = userDataManager.isPaper2Available(subjectIndex)
+            }
+        }
+        return isPaperAvailable
+    }
 
 
 }

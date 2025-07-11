@@ -8,6 +8,7 @@ import com.example.gceolmcqs.datamodels.NotesData
 import com.example.gceolmcqs.datamodels.Paper1Data
 import com.example.gceolmcqs.datamodels.Paper2Data
 import com.example.gceolmcqs.datamodels.SubjectPackageData
+import com.example.gceolmcqs.datamodels.SubjectsPackages
 import com.example.gceolmcqs.datamodels.UserData
 import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
 import com.example.gceolmcqs.roomDB.UserDataDao
@@ -51,6 +52,7 @@ class LocalUserDataRepository{
                     tempList?.let {
                         if (it.isNotEmpty()){
                             userData = tempList[0]
+                            initSubjectsPackagesDataRepository()
                             listener.onUserDataLoaded()
                         }else{
                             listener.onUserDataUnavailable("No data found")
@@ -61,37 +63,14 @@ class LocalUserDataRepository{
             }
         }
 
-        fun updateSubscriptionInUserData(subscription: SubjectPackageData, listener: OnUpdateUserDataListener){
-            userData?.subscription = Gson().toJson(subscription)
+        fun updateSubscriptionInUserData(subjectPackageData: SubjectPackageData, listener: OnUpdateUserDataListener){
+            updateSubjectPackageAt(subjectPackageData.subjectIndex!!, subjectPackageData)
+            userData?.subscription = Gson().toJson(getSubjectsPackages())
             updateUserDataInLocaldb(listener)
 
 
         }
 
-
-
-
-        fun getSubscriptionData(): SubjectPackageData?{
-            return if (userData != null){
-                Gson().fromJson<SubjectPackageData>(userData!!.subscription, SubjectPackageData::class.java)
-            }else{
-                null
-            }
-        }
-
-        fun getSubscriptionTimeRemaining(): Long{
-            val subscriptionData = Gson().fromJson<SubjectPackageData>(userData!!.subscription, SubjectPackageData::class.java)
-            return ActivationExpiryDatesGenerator.getTimeRemaining(subscriptionData?.activatedOn!!, subscriptionData.expiresOn!!)
-        }
-
-        fun isSubscriptionActive(): Boolean?{
-            val subscriptionData = Gson().fromJson<SubjectPackageData>(userData!!.subscription, SubjectPackageData::class.java)
-            return if (subscriptionData != null){
-                ActivationExpiryDatesGenerator().checkExpiry(subscriptionData.activatedOn!!, subscriptionData.expiresOn!!)
-            }else{
-                null
-            }
-        }
 
         fun updateAppData(appData: AppData, listener: OnUpdateUserDataListener){
             userData?.appData = Gson().toJson(appData)
@@ -144,7 +123,39 @@ class LocalUserDataRepository{
 
 
 
+        private fun initSubjectsPackagesDataRepository(){
+            val subjectsPackages = Gson().fromJson(userData?.subscription, SubjectsPackages::class.java)
+            SubjectsPackagesDataRepository.initSubjectsPackages(subjectsPackages)
+        }
 
+        private fun getSubjectsPackages(): SubjectsPackages{
+            return SubjectsPackagesDataRepository.getSubjectsPackages()
+        }
+
+        fun isSubjectsPackagesDataInitialised(): Boolean{
+            return SubjectsPackagesDataRepository.isSubjectsPackagesInitialised()
+        }
+
+        fun getSubjectsPackagesList(): List<SubjectPackageData>{
+            return SubjectsPackagesDataRepository.getSubjectPackagesList()
+        }
+
+        fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData{
+            return SubjectsPackagesDataRepository.getSubjectPackageAt(subjectIndex)
+        }
+
+        fun updateSubjectPackageAt(subjectIndex: Int, subjectPackageData: SubjectPackageData){
+            SubjectsPackagesDataRepository.updateSubjectPackageAt(subjectIndex, subjectPackageData)
+
+        }
+
+        fun getSubscriptionTimeRemainingAt(subjectIndex: Int): Long{
+            return SubjectsPackagesDataRepository.getSubscriptionTimeRemainingAt(subjectIndex)
+        }
+
+        fun isSubscriptionActiveAt(subjectIndex: Int): Boolean{
+            return SubjectsPackagesDataRepository.isSubscriptionActiveAt(subjectIndex)
+        }
 
         fun initPaper2DataRepository(){
             val paper2Data = Gson().fromJson(getAppData()?.paper2Data, Paper2Data::class.java)
@@ -205,6 +216,14 @@ class LocalUserDataRepository{
 
         fun getIsNotesInitialised(): Boolean{
             return NotesDataRepository.isNotesInitialised()
+        }
+
+        fun isPaper1Available(subjectIndex: Int): Boolean {
+            return Paper1DataRepository.isPaper1AvailableAt(subjectIndex)
+        }
+
+        fun isPaper2Available(subjectIndex: Int): Boolean {
+            return Paper2DataRepository.isPaper2Available(subjectIndex)
         }
     }
 

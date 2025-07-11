@@ -119,7 +119,7 @@ class MCQConstants{
         const val EXAM_TYPE_INDEX = "examTypeIndex"
         const val EXAM_ITEM_INDEX = "examItemIndex"
 
-        val SUBJECTS_AVAILABLE = arrayListOf("Biology")
+        val SUBJECTS_AVAILABLE = arrayListOf("Biology", "Human Biology")
         const val MCQ_DAY = "MCQ DAY"
         const val MCQ_WEEK = "MCQ 7 DAYS"
         const val MCQ_MONTH = "MCQ 30 DAYS"

@@ -14,6 +14,7 @@ class Paper2ActivityViewModel: ViewModel() {
     private var currentExamTypeItemIndex = 0
 
 
+
     fun updateSubjectIndex(subjectIndex: Int){
         this.subjectIndex = subjectIndex
     }
@@ -82,6 +83,10 @@ class Paper2ActivityViewModel: ViewModel() {
 
     fun getPaper2FilePath(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
         return userDataManager.getPaper2FilePath(subjectIndex, examTypeIndex, examItemIndex)
+    }
+
+    fun isSubscriptionActiveAt(subjectIndex: Int): Boolean{
+        return userDataManager.isSubscriptionActiveAt(subjectIndex)
     }
 
 }
