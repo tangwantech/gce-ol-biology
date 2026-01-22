@@ -45,7 +45,7 @@ class Paper2DataRepository {
         }
 
         fun getPaper2FilePath(subjectIndex: Int, contentIndex: Int, examItemIndex: Int): String {
-            return "file:///android_asset/paper2/html/${paper2Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].fileName}"
+            return "file:///android_asset/paper2/biology/html/${paper2Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].fileName}"
         }
 
         fun isPaper2DataInitialised(): Boolean{

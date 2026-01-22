@@ -1,0 +1,35 @@
+
+
+
+.flex {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.list-item {
+
+    text-align: center;
+    padding:12px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #D1CDCD;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    
+}
+
+.ul-nav{
+    list-style: none;  
+    padding: 0px;
+    margin: 8px;
+
+}
+
+ a{
+    display: block;
+    text-decoration: none;
+    padding: 8px;
+
+}

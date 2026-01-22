@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.setViewTreeOnBackPressedDispatcherOwner
 import androidx.fragment.app.viewModels
-import com.example.gceolmcqs.R
+import androidx.lifecycle.Lifecycle
 import com.example.gceolmcqs.databinding.FragmentPaper2QuestionsSolutionBinding
-import com.example.gceolmcqs.fragments.NotesFragment.OnShowDefinitionListener
 import com.example.gceolmcqs.viewmodels.Paper2ActivityViewModel
 
 private const val SUBJECT_INDEX = "subjectIndex"
@@ -28,8 +30,11 @@ class Paper2QuestionsSolutionFragment : Fragment() {
     private var examTypeItemIndex: Int? = null
     private val viewModel: Paper2ActivityViewModel by viewModels()
 
+    private var pageIndex = 0
+
     private lateinit var binding: FragmentPaper2QuestionsSolutionBinding
     private lateinit var listener: OnShowDefinitionListener
+    private lateinit var onGoToExamTypes: OnBackListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +51,12 @@ class Paper2QuestionsSolutionFragment : Fragment() {
             listener = context
         }else{
             throw RuntimeException("$context must implement OnShowDefinitionListener")
+        }
+
+        if (context is OnBackListener){
+            onGoToExamTypes = context
+        }else{
+            throw RuntimeException("$context must implement OnExitListener")
         }
     }
 
@@ -80,11 +91,21 @@ class Paper2QuestionsSolutionFragment : Fragment() {
         val path = viewModel.getPaper2FilePath(subjectIndex!!, examTypeIndex!!, examTypeItemIndex!!)
         binding.webView.loadUrl(path)
 
+
+    }
+
+    fun onNavigateBack(){
+        binding.webView.goBack()
+    }
+
+    fun onBack(){
+        println("Navigating back.....")
+
     }
 
     // Add this function to your WebViewActivity
     fun showDefinition(term: String){
-        println("Showing definition for $term")
+
         listener.onShowDefinition(term)
     }
 
@@ -92,6 +113,11 @@ class Paper2QuestionsSolutionFragment : Fragment() {
         @JavascriptInterface
         fun getDefinition(term: String) {
             fragment.showDefinition(term)
+        }
+
+        @JavascriptInterface
+        fun onBack(){
+            fragment.onBack()
         }
 
     }
@@ -111,5 +137,9 @@ class Paper2QuestionsSolutionFragment : Fragment() {
 
     interface OnShowDefinitionListener{
         fun onShowDefinition(term: String)
+    }
+
+    interface OnBackListener{
+        fun onBack()
     }
 }

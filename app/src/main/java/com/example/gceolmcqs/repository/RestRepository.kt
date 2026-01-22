@@ -19,6 +19,7 @@ class RestRepository {
         const val GET_APP_VERSION = "getAppVersion"
         const val UPDATE_SUBSCRIPTION = "updateSubscription"
         const val GET_PACKAGE_TYPES = "getPackageTypes"
+        const val GET_CAMPAY_CREDENTIALS = "getCampayCredentials"
 //        const val GET_SUBSCRIPTION = "getSubscription"
 //        const val GET_USER_DATA = "getUserData"
         const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"

@@ -67,7 +67,7 @@
                     android:layout_margin="4dp"/>
 
                 <androidx.fragment.app.FragmentContainerView
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/fragmentContainer2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

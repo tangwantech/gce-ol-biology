@@ -70,6 +70,8 @@
         <item name="cardBackgroundColor">@color/card_background</item> <!-- Replace with your desired color -->
     </style>
 
+
+
 <!--    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">-->
 <!--        <item name="cornerFamily">rounded</item>-->
 <!--        <item name="cornerSize">8dp</item>-->

@@ -17,7 +17,7 @@ import com.example.gceolmcqs.viewmodels.Paper2ActivityViewModel
 class Paper2Activity : AppCompatActivity(),
     Paper2ExamTypeFragment.OnNavigateToPaper2FragmentListener,
     Paper2QuestionsSolutionFragment.OnShowDefinitionListener,
-    OnPackageExpiredListener
+    OnPackageExpiredListener,Paper2QuestionsSolutionFragment.OnBackListener
 {
     companion object{
         const val SUBJECT_INDEX = "subjectIndex"
@@ -46,6 +46,8 @@ class Paper2Activity : AppCompatActivity(),
 
 
     override fun onSupportNavigateUp(): Boolean {
+
+
 
         if (supportFragmentManager.backStackEntryCount == 0){
             finish()
@@ -140,6 +142,7 @@ class Paper2Activity : AppCompatActivity(),
 
     }
 
+
     private fun showAlertDialog(){
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.apply {
@@ -158,6 +161,10 @@ class Paper2Activity : AppCompatActivity(),
 
     override fun onPaper2PackageExpired() {
         showAlertDialog()
+    }
+
+    override fun onBack() {
+       gotoExamTypesTabFragment()
     }
 
 }

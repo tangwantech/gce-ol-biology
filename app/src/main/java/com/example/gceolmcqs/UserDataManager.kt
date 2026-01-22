@@ -40,8 +40,6 @@ class UserDataManager {
     private fun loadUserDataFromLocaldb(listener: UserDataManagerListener){
         LocalUserDataRepository.loadUserDataFromLocaldb(object: LocalUserDataRepository.OnLoadUserDataListener{
             override fun onUserDataLoaded() {
-//                initAppData()
-//                setupSubscriptionData()
                listener.onSuccess()
             }
 
