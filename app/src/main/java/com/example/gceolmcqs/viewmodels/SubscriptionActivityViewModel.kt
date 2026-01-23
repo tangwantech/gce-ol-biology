@@ -8,10 +8,14 @@ import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.MomoPayService
 
 import com.example.gceolmcqs.SubjectPackageActivator
+import com.example.gceolmcqs.datamodels.CampayCredentials
 import com.example.gceolmcqs.datamodels.PackageFormData
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.SubscriptionFormData
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
+import com.example.gceolmcqs.repository.RemoteDatabaseManager.OnQueryCampayCredentialsListener
+import com.example.gceolmcqs.repository.RestRepository
+import org.json.JSONObject
 
 //import com.example.gceolmcqs.repository.RemoteRepoManager
 //import com.example.gceolmcqs.repository.SubscriptionDataRepository
@@ -90,9 +94,39 @@ class SubscriptionActivityViewModel: ViewModel() {
         return _subscriptionData.momoPartner!!
     }
 
-    fun initiatePayment(){
+//    private fun getCampayCredentials(id: String, object: ){
+//        val params = hashMapOf(MCQConstants.USER_NAME to id!!, MCQConstants.PASS_WORD to id!!)
+//    }
+    fun queryCampayCredentials(
+        params: HashMap<String, String>,
+        listener: OnQueryCampayCredentialsListener
+    ) {
+        RestRepository().query(
+            RestRepository.GET_CAMPAY_CREDENTIALS,
+            params,
+            object : RestRepository.OnQueryListener {
+                override fun onSuccess(result: String) {
 
-        momoPay.initiatePayment(_subscriptionData, object: MomoPayService.TransactionStatusListener{
+                    val campayUsername = JSONObject(result).getString("username")
+                    val campayPassword = JSONObject(result).getString("password")
+                    val campayTokenUri = JSONObject(result).getString("tokenUri")
+                    val requestToPayUri = JSONObject(result).getString("requestToPayUri")
+                    val transactionStatusUri = JSONObject(result).getString("transactionStatusUri")
+                    val campayCredentials = CampayCredentials("", campayUsername, campayPassword, campayTokenUri, requestToPayUri, transactionStatusUri)
+
+//                    initiatePayment(campayCredentials)
+                    listener.onSuccess(campayCredentials)
+                }
+
+                override fun onError(error: String?) {
+                    listener.onError(error)
+                }
+            })
+    }
+
+    fun initiatePayment(campayCredentials: CampayCredentials){
+
+        momoPay.initiatePayment(campayCredentials, _subscriptionData, object: MomoPayService.TransactionStatusListener{
             override fun onTransactionTokenAvailable(token: String?) {
                 println(token)
 //                updateCurrentTransactionToken(token!!)

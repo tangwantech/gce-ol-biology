@@ -3,6 +3,7 @@ package com.example.gceolmcqs.repository
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.SubjectPackageActivator
 import com.example.gceolmcqs.datamodels.AppData
+import com.example.gceolmcqs.datamodels.CampayCredentials
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.datamodels.UserData
 import com.google.gson.Gson
@@ -111,7 +112,6 @@ class RemoteDatabaseManager {
 
 
 
-
     }
     interface OnSignupListener {
         fun onSignupSuccessful(userData: UserData)
@@ -140,6 +140,11 @@ class RemoteDatabaseManager {
 
     interface OnCheckAppVersionForUpdateListener {
         fun onCheckAppVersionSuccessful(status: Boolean)
+        fun onError(error: String?)
+    }
+
+    interface OnQueryCampayCredentialsListener {
+        fun onSuccess(campayCredentials: CampayCredentials)
         fun onError(error: String?)
     }
 

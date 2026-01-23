@@ -3,6 +3,7 @@ package com.example.gceolmcqs
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -13,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 
 import androidx.lifecycle.ViewModelProvider
 import com.example.gceolmcqs.databinding.ActivitySubscriptionBinding
+import com.example.gceolmcqs.datamodels.CampayCredentials
 
 import com.example.gceolmcqs.datamodels.PackageFormData
 
@@ -330,13 +332,29 @@ class SubscriptionActivity: AppCompatActivity(),
             setCancelable(false)
             setPositiveButton(resources.getString(R.string.pay)  ){_, _ ->
                 showProcessingRequestDialog()
-                viewModel.initiatePayment()
+//                viewModel.initiatePayment()
+                queryCampayCredentials()
             }
             setNegativeButton(resources.getString(R.string.cancel)){_, _ ->
                 exitActivity()
             }
         }.create()
         dialog?.show()
+    }
+
+    private fun queryCampayCredentials(){
+        val id = UtilityFunctions().getDeviceId(this)
+        val params = hashMapOf("username" to id, "password" to id)
+        viewModel.queryCampayCredentials(params, object: RemoteDatabaseManager.OnQueryCampayCredentialsListener{
+            override fun onSuccess(campayCredentials: CampayCredentials) {
+                println(campayCredentials)
+                viewModel.initiatePayment(campayCredentials)
+            }
+
+            override fun onError(error: String?) {
+                Log.d(SubscriptionActivity::class.simpleName, error!!)
+            }
+        })
     }
 
     private fun showPackagesDialog(){

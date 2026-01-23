@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gceolmcqs.MCQConstants
+//import com.example.gceolmcqs.UserDataManager.Companion.id
 import com.example.gceolmcqs.datamodels.SubscriptionFormData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,11 +31,13 @@ class RequestToPayViewModel : ViewModel() {
     }
     fun setSubscriptionFormData(subscriptionFormData: SubscriptionFormData) {
         this.subscriptionFormData = subscriptionFormData
-//        setMoMoPartner()
-//        setAccessToken()
-        testUpdateTransactionSuccessful(true)
+        setMoMoPartner()
+        setAccessToken()
+//        testUpdateTransactionSuccessful(true)
 //        requestToPay()
     }
+
+
 
     private fun setMoMoPartner(){
         momoPartner.value = subscriptionFormData.momoPartner!!

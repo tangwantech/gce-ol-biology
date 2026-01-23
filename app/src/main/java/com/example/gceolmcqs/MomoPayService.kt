@@ -4,12 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.gceolmcqs.datamodels.CampayCredentials
 import com.example.gceolmcqs.datamodels.SubscriptionFormData
 import com.example.gceolmcqs.datamodels.TransactionStatus
+//import com.example.gceolmcqs.repository.RemoteDatabaseManager.Companion.restRepository
 
 import kotlinx.coroutines.*
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -34,18 +35,21 @@ class MomoPayService(private val context: Context) {
     private var transactionStatus = MutableLiveData<TransactionStatus>()
     private val _isPaymentSystemAvailable = MutableLiveData<Boolean?>(true)
     val isPaymentSystemAvailable: LiveData<Boolean?> = _isPaymentSystemAvailable
+    var campayCredentials = CampayCredentials("", "", "", "", "", "")
+
 
 
     fun initiatePayment(
+        campayCredentials: CampayCredentials,
         subscriptionFormData: SubscriptionFormData,
         transactionStatusListener: TransactionStatusListener,
         tokenTransactionIdBundle: Bundle? = null
     ) {
-
+        this.campayCredentials = campayCredentials
         this.subscriptionFormData = subscriptionFormData
-//        generateAccessToken(transactionStatusListener)
+        generateAccessToken(transactionStatusListener)
 
-        testUpdateTransactionSuccessful(transactionStatusListener)
+//        testUpdateTransactionSuccessful(transactionStatusListener)
 
     }
 
@@ -74,13 +78,23 @@ class MomoPayService(private val context: Context) {
             .build()
 
 
+//        val requestBody = FormBody.Builder()
+//            .add(MCQConstants.USER_NAME, context.getString(R.string.campay_app_user_name))
+//            .add(MCQConstants.PASS_WORD, context.getString(R.string.campay_app_pass_word))
+//            .build()
+
         val requestBody = FormBody.Builder()
-            .add(MCQConstants.USER_NAME, context.getString(R.string.campay_app_user_name))
-            .add(MCQConstants.PASS_WORD, context.getString(R.string.campay_app_pass_word))
+            .add(MCQConstants.USER_NAME, campayCredentials.username)
+            .add(MCQConstants.PASS_WORD, campayCredentials.password)
             .build()
 
+//        val request = Request.Builder()
+//            .url(context.getString(R.string.campay_token_url))
+//            .post(requestBody)
+//            .build()
+
         val request = Request.Builder()
-            .url(context.getString(R.string.campay_token_url))
+            .url(campayCredentials.tokenUri)
             .post(requestBody)
             .build()
 
@@ -137,7 +151,8 @@ class MomoPayService(private val context: Context) {
             ).build()
 
         val request = Request.Builder()
-            .url(context.getString(R.string.campay_requestToPay_url))
+//            .url(context.getString(R.string.campay_requestToPay_url))
+            .url(campayCredentials.requestToPayUri)
             .post(requestBody)
             .addHeader(MCQConstants.AUTHORIZATION, "${MCQConstants.TOKEN} ${transaction.token}")
             .build()
@@ -188,7 +203,7 @@ class MomoPayService(private val context: Context) {
     ) {
 //        val client = OkHttpClient().newBuilder().build()
         val request: Request = Request.Builder()
-            .url("${MCQConstants.TRANSACTION_STATUS_URL}${transaction.refId}/")
+            .url("${campayCredentials.transactionStatusUri}${transaction.refId}/")
             .addHeader(MCQConstants.AUTHORIZATION, "${MCQConstants.TOKEN} ${transaction.token}")
             .addHeader(MCQConstants.CONTENT_TYPE, MCQConstants.APPLICATION_JSON)
             .build()
@@ -235,6 +250,8 @@ class MomoPayService(private val context: Context) {
         transactionStatus.value = TransactionStatus(status = SUCCESSFUL)
         transactionStatusListener.onTransactionSuccessful()
     }
+
+
 
 
     fun reset() {

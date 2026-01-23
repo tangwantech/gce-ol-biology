@@ -33,6 +33,7 @@ class RestRepository {
             GET_APP_DATA -> "https://parseapi.back4app.com/functions/getAppData"
             UPDATE_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/updateSubscription"
             GET_PACKAGE_TYPES -> "https://parseapi.back4app.com/functions/getPackageTypes"
+            GET_CAMPAY_CREDENTIALS -> "https://parseapi.back4app.com/functions/getCampayCredentials"
             else -> "https://parseapi.back4app.com/functions/getAppVersion"
         }
 
