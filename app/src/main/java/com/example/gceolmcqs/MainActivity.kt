@@ -386,9 +386,9 @@ class MainActivity : AppCompatActivity(),
 
 
 
-//    override fun onDictionaryButtonClick() {
-//        startActivity(DictionaryActivity.getIntent(this))
-//    }
+    override fun onDictionaryButtonClick() {
+        startActivity(DictionaryActivity.getIntent(this))
+    }
 
     private fun setIndexOfCurrentSubject(position: Int){
         viewModel.setIndexOfCurrentSubject(position)

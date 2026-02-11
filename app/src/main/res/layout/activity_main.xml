@@ -16,20 +16,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="18dp"
+
         android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="20sp"
+            android:text="GCE OL BIOLOGY"
+            android:textSize="24sp"
+            android:gravity="center"
             android:textColor="@color/color_on_primary"/>
         <TextView
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/your_revision_companion"
-            android:textColor="@color/color_on_primary"/>
+            android:text="Questions and Answers"
+            android:textColor="@color/color_on_primary"
+            />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -75,15 +78,14 @@
                     tools:layout="@layout/fragment_home"
                     android:layout_margin="4dp"/>
 
+
+
             </androidx.appcompat.widget.LinearLayoutCompat>
         </ScrollView>
 
 
 
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

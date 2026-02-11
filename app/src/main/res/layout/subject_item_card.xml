@@ -22,7 +22,7 @@
             android:paddingStart="@dimen/margin_14"
             android:paddingEnd="@dimen/margin_14"
             android:background="@drawable/drawable_background_biology"
-            android:visibility="visible">
+            android:visibility="gone">
             <TextView
                 android:id="@+id/subjectTitleTv"
                 android:layout_width="match_parent"
@@ -132,7 +132,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:columnCount="2">
+            android:columnCount="1">
 
             <androidx.cardview.widget.CardView
                 android:visibility="gone"
@@ -166,7 +166,6 @@
                 android:layout_rowWeight="1">
 
                 <TextView
-                    android:id="@+id/tvDictionary"
                     android:layout_width="match_parent"
                     android:layout_height="72dp"
                     android:foreground="?attr/selectableItemBackground"
@@ -202,7 +201,8 @@
                 app:cardElevation="8dp"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/tvPaper2"
@@ -211,12 +211,46 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:text="@string/paper_2"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:enabled="false"/>
             </androidx.cardview.widget.CardView>
 
 
         </GridLayout>
+        <androidx.cardview.widget.CardView
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
 
+            <TextView
+                android:id="@+id/tvDictionary"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/dictionary"
+                android:textAllCaps="true" />
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
+
+            <TextView
+                android:id="@+id/btnSubscribe"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/subscribe"
+                android:textAllCaps="true" />
+        </androidx.cardview.widget.CardView>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -225,10 +259,11 @@
             android:gravity="end"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:paddingBottom="4dp">
+            android:paddingBottom="4dp"
+            android:visibility="gone">
 
             <Button
-                android:id="@+id/btnSubscribe"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/subscribe"
@@ -237,6 +272,7 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 />
         </LinearLayout>
+
 
 
     </LinearLayout>

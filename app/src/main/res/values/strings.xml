@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GCE OL REVISION COMPANION"</string>
+    <string name="app_name">GCE OL BIOLOGY-Questions and Answers</string>
     <string name="recycler_item_text">Item test text</string>
     <string name="home">Home</string>
     <string name="current_package">Current package</string>
@@ -135,7 +135,7 @@
     <string name="expires_in">Expires in: %1$s</string>
     <string name="tap_to_select_package">Tap to select package</string>
     <string name="tap_to_select_payment_method">Tap to select payment method</string>
-    <string name="terms_agreement">By using the services provided by GCE OL MCQS ("Service Provider"), you agree to be bound by this Agreement</string>
+    <string name="terms_agreement">By using the services provided by GCE OL Biology ("Service Provider"), you agree to be bound by this Agreement</string>
     <string name="terms_of_service">Terms of service</string>
     <string name="agreement">Agreement</string>
     <string name="selected_package">Selected Package:</string>
@@ -174,12 +174,12 @@
     <string name="redeem_bonus">Redeem bonus</string>
     <string name="please_verify_internet_connection">Network timeout. Please verify that you have an active internet connection and try again</string>
     <string name="app_usage_reminder">Reminder to Use GCE OL MCQS</string>
-    <string name="app_usage_reminder_message">You haven\'t used GCE OL MCQS for a while. Tap to open it now!</string>
-    <string name="update_app_message">New version for GCE OL MCQS is available. Please kindly update to the latest version</string>
+    <string name="app_usage_reminder_message">You haven\'t used GCE OL Biology for a while. Tap to open it now!</string>
+    <string name="update_app_message">New version for GCE OL Biology is available. Please kindly update to the latest version</string>
     <string name="lesson_notes">Lesson Notes</string>
     <string name="paper_1">Paper 1</string>
     <string name="paper_2">Paper 2</string>
-    <string name="dictionary">Dictionary</string>
+    <string name="dictionary">Free dictionary</string>
     <string name="biology_dictionary">Biology dictionary</string>
     <string name="chapters">Chapters</string>
 

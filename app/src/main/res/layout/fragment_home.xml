@@ -44,25 +44,7 @@
                     android:textAllCaps="true" />
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:visibility="gone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1">
 
-                <TextView
-                    android:id="@+id/tvDictionary"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/dictionary"
-                    android:textAllCaps="true" />
-            </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

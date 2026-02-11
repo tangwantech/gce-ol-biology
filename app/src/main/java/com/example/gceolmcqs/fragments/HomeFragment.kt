@@ -92,9 +92,9 @@ class HomeFragment : Fragment() {
 //        binding?.tvNotes?.setOnClickListener {
 //            listener.onNotesButtonClicked()
 //        }
-//        binding?.tvDictionary?.setOnClickListener {
-//            listener.onDictionaryButtonClick()
-//        }
+        binding?.subscriptionPackageCard?.tvDictionary?.setOnClickListener {
+            listener.onDictionaryButtonClick()
+        }
     }
 
     override fun onDestroy() {
@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
 //        fun onNotesButtonClicked()
         fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?)
         fun onPaper2ButtonClick(position: Int, isPackageActive: Boolean?, packageName: String?)
-//        fun onDictionaryButtonClick()
+        fun onDictionaryButtonClick()
 
     }
 }
