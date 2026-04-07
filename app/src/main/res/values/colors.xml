@@ -3,57 +3,51 @@
     <color name="black">#212121</color>
     <color name="white">#FFFFFFFF</color>
 
-
+    <!-- Light Mode Theme -->
     <color name="color_primary">#2D4935</color>
     <color name="color_primary_variant">#233828</color>
     <color name="colorAccent">#FFC107</color>
 
     <color name="color_primary_light">#EDEBF4</color>
     <color name="color_on_primary">@color/white</color>
-    <color name="color_primary_text_default">@color/primary_text_default_material_light</color>
 
-
-
-    <color name="background">#E6FFFFFF</color>
+    <color name="background">#F5F5F5</color>
     <color name="background2">@color/white</color>
 
-    <color name="color_secondary_light">#BCB062</color>
     <color name="color_secondary">#F4D884</color>
     <color name="color_secondary_dark">#BDA766</color>
     <color name="color_on_secondary">#141414</color>
 
     <color name="color_tab">@color/color_primary</color>
-    <color name="colorTabIndicator">#FFC107</color>
     <color name="tab_color">#E7C754</color>
 
     <color name="option_selected">#F4D884</color>
-    <color name="option_selected2">#BDA766</color>
 
-    <color name="primary_text_color">#FF171717</color>
-    <color name="divider_color">#FFBDBDBD</color>
-    <color name="color_red">#C71C1C</color>
-    <color name="color_green">#074D02</color>
-<!--    <color name="color_green">#0E437E</color>-->
-    <color name="card_background">#F5F8F6</color>
-
-    <color name="dark_background">#292929</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="divider_color">#BDBDBD</color>
+    <color name="color_red">#D32F2F</color>
+    <color name="color_green">#2E7D32</color>
+    <color name="card_background">#FFFFFF</color>
 
     <color name="background_round_top">#F6F6F6</color>
 
-
-
     <color name="color_background_biology">#355036</color>
     <color name="color_background_human_biology">#5A322F</color>
-
-    <color name="package3_color">#9FABF3</color>
-    <color name="package4_color">#00BCD4</color>
-    <color name="package5_color">#5A0968</color>
-<!--    <color name="background_main">#272739</color>-->
 
     <color name="mtn">#C2A54E</color>
     <color name="orange">#F18764</color>
 
     <color name="test_background">#C6D9CC</color>
 
+    <color name="package3_color">#4CAF50</color>
+    <color name="package4_color">#FF9800</color>
+    <color name="package5_color">#2196F3</color>
 
+    <color name="subscribe_button_color">#4CAF50</color>
+
+    <!-- Button States (Option 2: Amber) -->
+    <color name="subscribe_button_active">#FFC107</color>
+    <color name="subscribe_button_disabled">#FFECB3</color> <!-- Amber 100: Very pale yellow -->
+    <color name="subscribe_button_text_active">#212121</color>
+    <color name="subscribe_button_text_disabled">#9E9E9E</color> <!-- Gray 500 -->
 </resources>

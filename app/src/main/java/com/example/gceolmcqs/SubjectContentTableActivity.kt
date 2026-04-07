@@ -39,7 +39,7 @@ class SubjectContentTableActivity : AppCompatActivity(),
         initActivityViews()
         initViewModel()
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 //        checkIfGraceExtensionAvailable()
 
 
@@ -284,4 +284,3 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     }
 }
-

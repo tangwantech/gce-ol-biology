@@ -47,7 +47,7 @@ class PaperActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paper)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupViewModel()
         updateIndexes()
         setSubjectName()
@@ -431,8 +431,3 @@ interface OnCheckPackageExpiredListener{
     fun onCheckPackageExpired(sectionIndex: Int)
     fun onShowPackageExpiredDialog()
 }
-
-
-
-
-

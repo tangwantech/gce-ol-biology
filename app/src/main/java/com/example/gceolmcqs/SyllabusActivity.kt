@@ -24,7 +24,7 @@ class SyllabusActivity : AppCompatActivity(), SyllabusChapterItemClickLister {
         super.onCreate(savedInstanceState)
         binding = ActivitySyllabusBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         updateClassIndex()
         initSyllabusViewModel()
         gotoChaptersFragment()

@@ -15,7 +15,8 @@
         android:layout_margin="@dimen/margin_2"
         android:layout_weight="0.5"
         app:cardBackgroundColor="@color/color_tab"
-        app:cardCornerRadius="@dimen/margin_8">
+        app:cardCornerRadius="@dimen/margin_8"
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,8 +29,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/sections_answered"
-                android:textColor="@color/color_on_primary"
-                android:textSize="@dimen/text_size_16" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -38,7 +40,7 @@
                 android:layout_marginEnd="@dimen/margin_8"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:background="@color/color_on_primary" />
+                app:dividerColor="@color/white" />
 
             <TextView
                 android:id="@+id/tvSectionsAnswered"
@@ -46,8 +48,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="6/6"
-                android:textColor="@color/color_on_primary"
-                android:textSize="@dimen/text_size_16" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -59,7 +62,8 @@
         android:layout_weight="0.5"
         app:cardBackgroundColor="@color/color_tab"
         android:layout_margin="@dimen/margin_4"
-        app:cardCornerRadius="@dimen/margin_8">
+        app:cardCornerRadius="@dimen/margin_8"
+        app:cardElevation="0dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -71,8 +75,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/tvPaperScore"
-                android:textColor="@color/color_on_primary"
-                android:textSize="@dimen/text_size_16" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -81,7 +86,7 @@
                 android:layout_marginEnd="@dimen/margin_8"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:background="@color/color_on_primary" />
+                app:dividerColor="@color/white" />
 
             <TextView
                 android:id="@+id/tvScore"
@@ -89,8 +94,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="10/50"
-                android:textColor="@color/color_on_primary"
-                android:textSize="@dimen/text_size_16" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

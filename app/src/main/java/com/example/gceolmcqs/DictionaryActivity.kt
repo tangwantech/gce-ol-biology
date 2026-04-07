@@ -29,7 +29,7 @@ class DictionaryActivity : AppCompatActivity(), DictionaryActivityRecyclerAdapte
         super.onCreate(savedInstanceState)
         binding = ActivityDictionaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupViewModel()
     }
 

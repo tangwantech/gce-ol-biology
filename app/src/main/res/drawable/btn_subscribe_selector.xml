@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Disabled state -->
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@color/subscribe_button_disabled" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <!-- Enabled state -->
+    <item>
+        <shape>
+            <solid android:color="@color/colorAccent" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+</selector>
