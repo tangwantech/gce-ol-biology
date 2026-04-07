@@ -27,6 +27,7 @@
 
     <dimen name="card_corner_radius_4">4dp</dimen>
     <dimen name="card_corner_radius_8">8dp</dimen>
+    <dimen name="card_corner_radius_12">12dp</dimen>
 
     <dimen name="card_elevation_4">4dp</dimen>
     <dimen name="card_elevation_8">8dp</dimen>

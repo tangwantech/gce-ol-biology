@@ -41,14 +41,14 @@ class HomeFragment : Fragment() {
 //        println("withing HomeFragment...... $subjectPackageData")
         setupListeners(subjectPackageData)
         binding?.subscriptionPackageCard?.subjectTitleTv?.text = subjectPackageData.subjectName
-        binding?.subscriptionPackageCard?.tvPackageType?.text = subjectPackageData.packageName
+        binding?.subscriptionPackageCard?.tvPackageType?.text = getString(R.string.package_info, subjectPackageData.packageName)
 
         if(subjectPackageData.isPackageActive != null){
-            binding?.subscriptionPackageCard?.expireInLo?.visibility = View.VISIBLE
+            binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.VISIBLE
             val timeLeft = ActivationExpiryDatesGenerator.getTimeRemaining(subjectPackageData.activatedOn!!, subjectPackageData.expiresOn!!)
             setupExpiryCountDown(timeLeft, subjectPackageData)
         }else{
-            binding?.subscriptionPackageCard?.tvSubjectStatus?.text = MCQConstants.NA
+            binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, MCQConstants.NA)
             binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = false
         }
 
@@ -58,15 +58,15 @@ class HomeFragment : Fragment() {
         SubscriptionCountDownTimer(0).apply {
             startTimer(timeLeft, object : SubscriptionCountDownTimer.OnTimeRemainingListener{
                 override fun onTimeRemaining(expiresIn: String) {
-                    binding?.subscriptionPackageCard?.expiresInTv?.text = requireContext().resources.getString(R.string.expires_in, expiresIn)
-                    binding?.subscriptionPackageCard?.tvSubjectStatus?.text = requireContext().resources.getString(R.string.active)
+                    binding?.subscriptionPackageCard?.expiresInTv?.text = getString(R.string.expires_in, expiresIn)
+                    binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, getString(R.string.active))
                     binding?.subscriptionPackageCard?.tvSubjectStatus?.setTextColor(requireContext().resources.getColor(R.color.color_green))
                     binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = false
 
                 }
                 override fun onExpired() {
-                    binding?.subscriptionPackageCard?.expireInLo?.visibility = View.GONE
-                    binding?.subscriptionPackageCard?.tvSubjectStatus?.text = requireContext().resources.getString(R.string.expired)
+                    binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.GONE
+                    binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, getString(R.string.expired))
                     binding?.subscriptionPackageCard?.tvSubjectStatus?.setTextColor(requireContext().resources.getColor(R.color.color_red))
                     binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = true
                     subjectPackageData.isPackageActive = false

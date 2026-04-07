@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GCE OL BIOLOGY-Questions and Answers</string>
     <string name="recycler_item_text">Item test text</string>
@@ -11,7 +12,8 @@
     <string name="mcq_week">MCQ Week</string>
     <string name="mcq_month">MCQ Month</string>
     <string name="type">Type</string>
-    <string name="status">Status:</string>
+    <string name="status">Status</string>
+    <string name="status_info">Status: %1$s</string>
     <string name="trial">TRIAL</string>
     <string name="active">ACTIVE</string>
     <string name="expired">EXPIRED</string>
@@ -62,7 +64,8 @@
 
     <string name="activation_successful">activation successful</string>
     <string name="activation_failed">activation failed</string>
-    <string name="package_type">Package:</string>
+    <string name="package_type">Package</string>
+    <string name="package_info">Package: %1$s</string>
     <string name="amount_to_pay">Amount to pay:</string>
     <string name="transaction_id">Transaction ID:</string>
 
@@ -93,7 +96,7 @@
     <string name="subjects">Subjects</string>
     <string name="retry_message">Your current score for this section will be set to zero</string>
     <string name="_continue">Continue</string>
-    <string name="cancel">Cancel</string>access to all contents
+    <string name="cancel">Cancel</string>
     <string name="payment_received">Payment received successfully</string>
     <string name="content_access_denied_Message">This content is not available with TRIAL package. Please subscribe to another package to gain access to all contents</string>
     <string name="grade">Grade</string>
@@ -132,6 +135,7 @@
     <string name="email">Email: tangwantech@gmail.com</string>
     <string name="next">Next</string>
     <string name="correct_answer">Correct answer:</string>
+    <string name="expires_in_label">Expires in</string>
     <string name="expires_in">Expires in: %1$s</string>
     <string name="tap_to_select_package">Tap to select package</string>
     <string name="tap_to_select_payment_method">Tap to select payment method</string>
@@ -179,7 +183,7 @@
     <string name="lesson_notes">Lesson Notes</string>
     <string name="paper_1">Paper 1</string>
     <string name="paper_2">Paper 2</string>
-    <string name="dictionary">Free dictionary</string>
+    <string name="dictionary">Dictionary</string>
     <string name="biology_dictionary">Biology dictionary</string>
     <string name="chapters">Chapters</string>
     <string name="syllabus">Syllabus</string>
