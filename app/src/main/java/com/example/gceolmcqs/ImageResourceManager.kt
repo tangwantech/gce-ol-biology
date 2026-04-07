@@ -1,6 +1,6 @@
 package com.example.gceolmcqs
 
-class ResourceImages {
+class ImageResourceManager {
     companion object{
         var images:HashMap<String?, Int> = HashMap()
         init {
@@ -160,6 +160,22 @@ class ResourceImages {
             images["bacterium_west_mock_2023.jpg"] = R.drawable.bacterium_west_mock_2023
             images["potometer_west_mock_2023.jpg"] = R.drawable.potometer_west_mock_2023
             images["joint_west_mock_2023.jpg"] = R.drawable.joint_west_mock_2023
+
+//            2026
+            images["skin_west_mock_2026.jpg"] = R.drawable.skin_west_mock_2026
+            images["eye_west_mock_2026.jpg"] = R.drawable.eye_west_mock_2026
+            images["carbon_cycle_west_mock_2026.jpg"] = R.drawable.carbon_cycle_west_mock_2026
+            images["food_chain_west_mock_2026.jpg"] = R.drawable.food_chain_west_mock_2026
+            images["plant_cell_west_mock_2026.jpg"] = R.drawable.plant_cell_west_mock_2026
+            images["photosynthesis_west_mock_2026.jpg"] = R.drawable.photosynthesis_west_mock_2026
+            images["bird_west_mock_2026.jpg"] = R.drawable.bird_west_mock_2026
+            images["graph_respiration_west_mock_2026.jpg"] = R.drawable.graph_respiration_west_mock_2026
+            images["experiment_photosynthesis_west_mock_2026.jpg"] = R.drawable.experiment_photosynthesis_west_mock_2026
+            images["blood_group_test_west_mock_2026.jpg"] = R.drawable.blood_group_test_west_mock_2026
+
+
+
+
 
 //            Adamawa mock
 //            2025

@@ -47,9 +47,9 @@ class MomoPayService(private val context: Context) {
     ) {
         this.campayCredentials = campayCredentials
         this.subscriptionFormData = subscriptionFormData
-        generateAccessToken(transactionStatusListener)
+//        generateAccessToken(transactionStatusListener)
 
-//        testUpdateTransactionSuccessful(transactionStatusListener)
+        testUpdateTransactionSuccessful(transactionStatusListener)
 
     }
 
@@ -246,8 +246,10 @@ class MomoPayService(private val context: Context) {
     }
 
     private fun testUpdateTransactionSuccessful(transactionStatusListener: TransactionStatusListener) {
-        isTransactionSuccessful.value = true
-        transactionStatus.value = TransactionStatus(status = SUCCESSFUL)
+//        isTransactionSuccessful.value = true
+        isTransactionSuccessful.postValue(true)
+//        transactionStatus.value = TransactionStatus(status = SUCCESSFUL)
+        transactionStatus.postValue(TransactionStatus(status = SUCCESSFUL))
         transactionStatusListener.onTransactionSuccessful()
     }
 

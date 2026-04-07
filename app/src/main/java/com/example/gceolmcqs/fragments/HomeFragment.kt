@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
     }
 
     fun setSubscriptionPackage(subjectPackageData: SubjectPackageData){
-        println("withing HomeFragment...... $subjectPackageData")
+//        println("withing HomeFragment...... $subjectPackageData")
         setupListeners(subjectPackageData)
         binding?.subscriptionPackageCard?.subjectTitleTv?.text = subjectPackageData.subjectName
         binding?.subscriptionPackageCard?.tvPackageType?.text = subjectPackageData.packageName
@@ -95,6 +95,10 @@ class HomeFragment : Fragment() {
         binding?.subscriptionPackageCard?.tvDictionary?.setOnClickListener {
             listener.onDictionaryButtonClick()
         }
+
+        binding?.subscriptionPackageCard?.tvSyllabus?.setOnClickListener {
+            listener.onSyllabusButtonClick()
+        }
     }
 
     override fun onDestroy() {
@@ -120,6 +124,7 @@ class HomeFragment : Fragment() {
         fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?)
         fun onPaper2ButtonClick(position: Int, isPackageActive: Boolean?, packageName: String?)
         fun onDictionaryButtonClick()
+        fun onSyllabusButtonClick()
 
     }
 }

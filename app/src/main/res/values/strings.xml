@@ -38,7 +38,7 @@
     <string name="transaction_cancelled">Transaction Cancelled</string>
     <string name="transaction_expired">Transaction Expired</string>
     <string name="no_internet_connection">No internet connection</string>
-    <string name="verify_internet_connection">Please verify that you have an active internet connection and then try again</string>
+    <string name="verify_internet_connection">No active internet connection. Please try again</string>
     <string name="retry">Retry</string>
     <string name="ok">OK</string>
     <string name="pending_transaction">Pending transaction</string>
@@ -182,6 +182,12 @@
     <string name="dictionary">Free dictionary</string>
     <string name="biology_dictionary">Biology dictionary</string>
     <string name="chapters">Chapters</string>
+    <string name="syllabus">Syllabus</string>
+    <string name="chapter_name">Chapter: %1$s</string>
+    <string name="module">Module: %1$s</string>
+    <string name="category">Category of action: %1$s</string>
+    <string name="lessons">Lessons:</string>
+    <string name="lesson">%1$s. %2$s</string>
 
 
     <string-array name="paper_instruction">

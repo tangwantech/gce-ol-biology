@@ -93,7 +93,7 @@ class MCQConstants{
         const val MINIMUM_PASS_PERCENTAGE = 50
 
         const val FOUR_ALTS = "fourAlts"
-        const val MILLI_SEC_PER_QUESTION = 108000L
+        const val MILLI_SEC_PER_QUESTION = 60000L
         const val COUNT_DOWN_INTERVAL = 1000L
         const val TIME_TO_ANIMATE_TIMER = 60000L
 

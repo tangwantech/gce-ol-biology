@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.R
-import com.example.gceolmcqs.ResourceImages
+import com.example.gceolmcqs.ImageResourceManager
 import com.example.gceolmcqs.databinding.QuestionCardItemBinding
 import com.example.gceolmcqs.datamodels.QuestionData
 
@@ -78,8 +78,8 @@ class SectionQuestionsRecyclerAdapter(private val context: Context, val title: S
             binding.imageCardLayout.root.visibility = View.GONE
         } else {
             binding.imageCardLayout.root.visibility = View.VISIBLE
-            println("image: ${ResourceImages.images[questions[adapterPosition].image]}")
-            binding.imageCardLayout.imgView.setImageResource(ResourceImages.images[questions[adapterPosition].image]!!)
+            println("image: ${ImageResourceManager.images[questions[adapterPosition].image]}")
+            binding.imageCardLayout.imgView.setImageResource(ImageResourceManager.images[questions[adapterPosition].image]!!)
 
         }
 

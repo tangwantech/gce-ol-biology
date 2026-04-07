@@ -7,11 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 
 import com.example.gceolmcqs.databinding.ActivityMainBinding
+import com.example.gceolmcqs.databinding.SpinnerLoBinding
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.fragments.HomeFragment
 import com.example.gceolmcqs.repository.LocalUserDataRepository
@@ -27,8 +29,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var binding: ActivityMainBinding
 //    private lateinit var homeRecyclerViewAdapter: HomeRecyclerViewAdapter
     private var dialog: AlertDialog? = null
-    private val PAPER1 = 0
-    private val PAPER2 = 1
+//    private val PAPER1 = 0
+//    private val PAPER2 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,12 +151,12 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-//    private fun startUpdateToAppData(){
-//        val appDataUpdateStatus = pref.getBoolean(MCQConstants.APP_DATA_UPDATE_STATUS, false)
-//        if (!appDataUpdateStatus){
-//            updateAppData()
-//        }
-//    }
+    private fun startUpdateToAppData(){
+        val appDataUpdateStatus = pref.getBoolean(MCQConstants.APP_DATA_UPDATE_STATUS, false)
+        if (!appDataUpdateStatus){
+            updateAppData()
+        }
+    }
 
 
 
@@ -294,9 +296,9 @@ class MainActivity : AppCompatActivity(),
 
 
 
-//    private fun updateAppData(){
-//
-//        checkingForUpdateToAppDataDialog()
+    private fun updateAppData(){
+
+        checkingForUpdateToAppDataDialog()
 //        viewModel.updateAppData(object: AppDataUpdater.AppDataUpdateListener{
 //            override fun onAppDataUpdated() {
 //                saveAppDataUpdateStatusToSharedPref(true)
@@ -317,14 +319,14 @@ class MainActivity : AppCompatActivity(),
 //                displayAppDataIsUpToDateDialog()
 //            }
 //        })
-//
-////        NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
-////            override fun onNetworkTimeout() {
-//////                checkingDialog.dismiss()
-////                displayErrorDialog(getString(R.string.network_timeout))
-////            }
-////        })
-//    }
+
+//        NetworkTimeout.checkTimeout(MCQConstants.NETWORK_TIME_OUT_DURATION, object: NetworkTimeout.OnNetWorkTimeoutListener{
+//            override fun onNetworkTimeout() {
+////                checkingDialog.dismiss()
+//                displayErrorDialog(getString(R.string.network_timeout))
+//            }
+//        })
+    }
     override fun onPackageExpired(subjectPackageData: SubjectPackageData) {
         viewModel.updateSubscriptionData(subjectPackageData, object : LocalUserDataRepository.OnUpdateUserDataListener{
 
@@ -390,6 +392,11 @@ class MainActivity : AppCompatActivity(),
         startActivity(DictionaryActivity.getIntent(this))
     }
 
+    override fun onSyllabusButtonClick() {
+        displayClassSelectionAlertDialog()
+
+    }
+
     private fun setIndexOfCurrentSubject(position: Int){
         viewModel.setIndexOfCurrentSubject(position)
     }
@@ -416,6 +423,40 @@ class MainActivity : AppCompatActivity(),
         fragmentContainer2.setSubscriptionPackage(subjectsPackages[1])
 
 
+    }
+
+    private fun displayClassSelectionAlertDialog(){
+        val spinnerBinding = SpinnerLoBinding.inflate(layoutInflater)
+        val classes = listOf("Form 3", "Form 4", "Form 5")
+        var selectedClassIndex: Int? = null
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, classes)
+        spinnerBinding.spinner.setAdapter(adapter)
+        spinnerBinding.spinner.setOnItemClickListener { parent, view, position, id ->
+            selectedClassIndex = position
+        }
+
+
+        AlertDialog.Builder(this)
+            .setView(spinnerBinding.root)
+            .setPositiveButton(getString(R.string.ok)){dialog, _ ->
+
+                if (selectedClassIndex == null){
+                    spinnerBinding.root.error = "Please select a class"
+                }else{
+                    dialog.dismiss()
+                    navigateToSyllabusActivity(selectedClassIndex!!)
+                }
+
+            }
+            .setNegativeButton(getString(R.string.cancel)){_, _ ->
+
+            }.create().show()
+
+
+    }
+
+    private fun navigateToSyllabusActivity(classIndex:Int){
+        startActivity(SyllabusActivity.getIntent(this, classIndex))
     }
 
 

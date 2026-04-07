@@ -23,7 +23,7 @@
                 <ImageView
                     android:layout_width="112dp"
                     android:layout_height="112dp"
-                    android:src="@drawable/app_logo"
+                    android:src="@drawable/gce_ol_biology_h"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

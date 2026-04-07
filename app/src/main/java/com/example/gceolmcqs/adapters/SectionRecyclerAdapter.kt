@@ -13,7 +13,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.R
-import com.example.gceolmcqs.ResourceImages
+import com.example.gceolmcqs.ImageResourceManager
 import com.example.gceolmcqs.databinding.QuestionCardItemBinding
 import com.example.gceolmcqs.datamodels.QuestionWithUserAnswerMarkedData
 
@@ -204,7 +204,7 @@ class SectionRecyclerAdapter(
             holder.imageLo.visibility = View.GONE
         } else {
             holder.imageLo.visibility = View.VISIBLE
-            holder.imageView.setImageResource(ResourceImages.images[questionData.image]!!)
+            holder.imageView.setImageResource(ImageResourceManager.images[questionData.image]!!)
 //            println(questionData.image!!)
 
         }

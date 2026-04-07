@@ -1,30 +1,27 @@
 [versions]
-agp = "8.5.1"
+agp = "8.2.2"
 
 fragmentKtx = "1.8.6"
 kotlin = "1.9.22"
-coreKtx = "1.15.0"
+coreKtx = "1.12.0"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-appcompat = "1.7.0"
-material = "1.12.0"
-activity = "1.10.1"
-constraintlayout = "2.2.1"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.11.0"
+activity = "1.8.2"
+constraintlayout = "2.1.4"
 
 coroutine = "1.7.1"
 liveData = "2.7.0"
 roomKtx = "2.6.0"
 rxjava = "3.0.0"
-viewModel = "2.8.7"
+viewModel = "2.7.0"
 gson = "2.10.1"
 okhttp3 = "4.10.0"
 parse = "1.26.0"
 androidSdk = "latest.release"
 cardview = "1.0.0"
-#roomKtx = "2.7.1"
-#roomRuntime = "2.7.1"
-#roomCompiler = "2.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,12 +45,7 @@ parse = {group ="com.github.parse-community.Parse-SDK-Android", name = "parse", 
 android-sdk = { module = "com.github.CamPay.android-sdk:android-sdk", version.ref = "androidSdk" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 
-#androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
-#androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
-#androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-

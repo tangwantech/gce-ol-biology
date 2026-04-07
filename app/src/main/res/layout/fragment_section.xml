@@ -12,7 +12,7 @@
         <include
             android:id="@+id/timerLayout"
             layout="@layout/timer_bar"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
