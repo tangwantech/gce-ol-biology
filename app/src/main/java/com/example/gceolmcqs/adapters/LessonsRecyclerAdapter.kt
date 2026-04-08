@@ -7,17 +7,29 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.R
+import com.example.gceolmcqs.datamodels.Lesson
 
-class LessonsRecyclerAdapter(private val lessons: List<String>): RecyclerView.Adapter<LessonsRecyclerAdapter.ViewHolder>() {
+class LessonsRecyclerAdapter(
+    private val lessons: List<Lesson>,
+    private val listener: OnLessonClickListener
+): RecyclerView.Adapter<LessonsRecyclerAdapter.ViewHolder>() {
     private lateinit var context: Context
-    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
-        val tvLesson: TextView = view.findViewById(R.id.tvLesson)
 
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view){
+        val tvItem: TextView = view.findViewById(R.id.tvItem)
+        init {
+            view.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onLessonClick(lessons[position])
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.lessons_recycler_view_lo, null, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item_lo, parent, false)
         return ViewHolder(view)
     }
 
@@ -26,7 +38,10 @@ class LessonsRecyclerAdapter(private val lessons: List<String>): RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvLesson.text =  context.getString(R.string.lesson, (position + 1).toString(),lessons[position],)
+        holder.tvItem.text = context.getString(R.string.lesson, (position + 1).toString(), lessons[position].lesson)
+    }
 
+    interface OnLessonClickListener {
+        fun onLessonClick(lesson: Lesson)
     }
 }

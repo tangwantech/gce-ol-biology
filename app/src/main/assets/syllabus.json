@@ -1,4 +1,3 @@
-
 {
   "syllabus": [
     {
@@ -8,64 +7,119 @@
           "chapter": "Cells and water relations",
           "module": "The living world",
           "categoryOfActions": "Understanding cellular exchanges to better conserve life",
-          "lessons": "Notion of cells and cell theory; Ultra-structure of plant and animal cells; Importance of water to living organisms"
+          "lessons": [
+            { "lesson": "Notion of cells and cell theory", "filename": "nutrition_in_plants.html" },
+            { "lesson": "Ultra-structure of plant and animal cells", "filename": "" },
+            { "lesson": "Importance of water to living organisms", "filename": "" }
+          ]
         },
         {
           "chapter": "Cellular exchange in different conditions",
           "module": "The living world",
           "categoryOfActions": "Understanding cellular exchanges to better conserve life",
-          "lessons": "The water cycle; Diffusion; Osmosis and Active transport"
+          "lessons": [
+            { "lesson": "The water cycle", "filename": "" },
+            { "lesson": "Diffusion", "filename": "" },
+            { "lesson": "Osmosis and Active transport", "filename": "" }
+          ]
         },
         {
           "chapter": "Nature and variety of life forms",
           "module": "The living world",
           "categoryOfActions": "Understanding cellular exchanges to better conserve life",
-          "lessons": "Reasons for classification; Viruses; Bacteria; Amoeba; Spirogyra; Plasmodium; Mould fungus; Mushroom; Yeast; Monocots; Dicots; Tilapia; Agama lizard; Housefly; Cockroach; Birds; Mammalian herbivores; Carnivores; Omnivores"
+          "lessons": [
+            { "lesson": "Reasons for classification", "filename": "" },
+            { "lesson": "Viruses", "filename": "" },
+            { "lesson": "Bacteria", "filename": "" },
+            { "lesson": "Amoeba", "filename": "" },
+            { "lesson": "Spirogyra", "filename": "" },
+            { "lesson": "Plasmodium", "filename": "" },
+            { "lesson": "Mould fungus", "filename": "" },
+            { "lesson": "Mushroom", "filename": "" },
+            { "lesson": "Yeast", "filename": "" },
+            { "lesson": "Monocots", "filename": "" },
+            { "lesson": "Dicots", "filename": "" },
+            { "lesson": "Tilapia", "filename": "" },
+            { "lesson": "Agama lizard", "filename": "" },
+            { "lesson": "Housefly", "filename": "" },
+            { "lesson": "Cockroach", "filename": "" },
+            { "lesson": "Birds", "filename": "" },
+            { "lesson": "Mammalian herbivores", "filename": "" },
+            { "lesson": "Carnivores", "filename": "" },
+            { "lesson": "Omnivores", "filename": "" }
+          ]
         },
         {
           "chapter": "Plant nutrients",
           "module": "The living world",
           "categoryOfActions": "Improving the quantity and quality of plant and animal resources",
-          "lessons": "Major and minor nutrients and the importance of Nitrogen, Phosphorus and Potassium; Sources of plant nutrients and deficiency effects; Types of fertilizers and differences; Fertilizer application and effects on soil and environment"
+          "lessons": [
+            { "lesson": "Major and minor nutrients and the importance of Nitrogen, Phosphorus and Potassium", "filename": "" },
+            { "lesson": "Sources of plant nutrients and deficiency effects", "filename": "" },
+            { "lesson": "Types of fertilizers and differences", "filename": "" },
+            { "lesson": "Fertilizer application and effects on soil and environment", "filename": "" }
+          ]
         },
         {
           "chapter": "Classes of food",
           "module": "Health education",
           "categoryOfActions": "Preventing deficiencies in nutritional and calorific requirements in humans",
-          "lessons": "Sources, chemical composition, importance and deficiency of carbohydrates; Sources, chemical composition, importance and deficiency of proteins; Sources, chemical composition, importance and deficiency of carbohydrates lipids, Importance and deficiency of vitamins; Importance and deficiency of mineral salts; Importance and deficiency of roughage; Importance of water, Balanced diet, Nutritional and calorific requirements"
+          "lessons": [
+            { "lesson": "Sources, chemical composition, importance and deficiency of carbohydrates", "filename": "" },
+            { "lesson": "Sources, chemical composition, importance and deficiency of proteins", "filename": "" },
+            { "lesson": "Sources, chemical composition, importance and deficiency of carbohydrates lipids", "filename": "" },
+            { "lesson": "Importance and deficiency of vitamins", "filename": "" },
+            { "lesson": "Importance and deficiency of mineral salts", "filename": "" },
+            { "lesson": "Importance and deficiency of roughage", "filename": "" },
+            { "lesson": "Importance of water, Balanced diet, Nutritional and calorific requirements", "filename": "" }
+          ]
         },
         {
           "chapter": "Personal Hygiene",
           "module": "Health education",
           "categoryOfActions": "Preventing and eliminating the transmission of diseases of food crops, farm animals and humans including HIV/AIDS, STIs and Ebola; Rejecting risky behaviours that facilitate the transmission and propagation of these killers",
-          "lessons": "Rules of personal Hygiene"
+          "lessons": [
+            { "lesson": "Rules of personal Hygiene", "filename": "" }
+          ]
         },
         {
           "chapter": "Auto-medication",
           "module": "Health education",
           "categoryOfActions": "Preventing and eliminating the transmission of diseases of food crops, farm animals and humans including HIV/AIDS, STIs and Ebola, rejecting risky behaviours that facilitate the transmission and propagation of these killers",
-          "lessons": "Notion of auto-medication; Advantages and disadvantages of auto-medication; Advantages and disadvantages of traditional medicine"
+          "lessons": [
+            { "lesson": "Notion of auto-medication", "filename": "" },
+            { "lesson": "Advantages and disadvantages of auto-medication", "filename": "" },
+            { "lesson": "Advantages and disadvantages of traditional medicine", "filename": "" }
+          ]
         },
         {
           "chapter": "Emergent diseases",
           "module": "Heath education",
           "categoryOfActions": "Preventing and eliminating the transmission of diseases such HIV/AIDS, STIs and Ebola, rejecting risky behaviours that facilitate the transmission and propagation of these killers",
-          "lessons": "Ebola, Covid 19"
+          "lessons": [
+            { "lesson": "Ebola", "filename": "" },
+            { "lesson": "Covid 19", "filename": "" }
+          ]
         },
         {
           "chapter": "Intestinal worms",
           "module": "Health education",
           "categoryOfActions": "Preventing and eliminating intestinal worms",
-          "lessons": "Tape worm"
+          "lessons": [
+            { "lesson": "Tape worm", "filename": "" }
+          ]
         },
         {
           "chapter": "Interdependence between living organisms",
           "module": "Environmental education and sustainable development",
           "categoryOfActions": "Enhancing food production while conserving the environment",
-          "lessons": "Ecological balance, social organisation (bee and termite colony), fresh water ecosystem"
+          "lessons": [
+            { "lesson": "Ecological balance", "filename": "" },
+            { "lesson": "social organisation (bee and termite colony)", "filename": "" },
+            { "lesson": "fresh water ecosystem", "filename": "" }
+          ]
         }
       ]
-
     },
     {
       "className": "Form 4",
@@ -74,57 +128,157 @@
           "chapter": "Transport in plants",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Notion of need for a transport system in multicellular organism; Mechanism of uptake of uptake and ascend of water and mineral salts; Translocation of organic food in the phloem; Transpiration and wilting; Internal structure of stem and roots; Experiment to demonstrate transpiration and wilting; Observing the cross section of stem and roots; Experiment to demonstrate that xylem transport water and mineral salts; Experiment to demonstrate that phloem translocate organic food"
+          "lessons": [
+            { "lesson": "Notion of need for a transport system in multicellular organism", "filename": "" },
+            { "lesson": "Mechanism of uptake of uptake and ascend of water and mineral salts", "filename": "" },
+            { "lesson": "Translocation of organic food in the phloem", "filename": "" },
+            { "lesson": "Transpiration and wilting", "filename": "" },
+            { "lesson": "Internal structure of stem and roots", "filename": "" },
+            { "lesson": "Experiment to demonstrate transpiration and wilting", "filename": "" },
+            { "lesson": "Observing the cross section of stem and roots", "filename": "" },
+            { "lesson": "Experiment to demonstrate that xylem transport water and mineral salts", "filename": "" },
+            { "lesson": "Experiment to demonstrate that phloem translocate organic food", "filename": "" }
+          ]
         },
         {
           "chapter": "Nutrition in plants",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Nutritional requirement in plants; The process of photosynthesis; Adaptation of leaves to photosynthesis; Importance of photosynthesis; Factors affecting the rate of photosynthesis; Experiment to demonstrate that starch is produced during photosynthesis; Experiment to demonstrate that chlorophyll is necessary for photosynthesis; Experiment to demonstrate that sunlight is necessary for photosynthesis; Experiment to demonstrate that carbon dioxide is necessary for photosynthesis; Experiment to show that oxygen is released during photosynthesis; Fate of the products of photosynthesis"
+          "lessons": [
+            { "lesson": "Nutritional requirement in plants", "filename": "" },
+            { "lesson": "The process of photosynthesis", "filename": "" },
+            { "lesson": "Adaptation of leaves to photosynthesis", "filename": "" },
+            { "lesson": "Importance of photosynthesis", "filename": "" },
+            { "lesson": "Factors affecting the rate of photosynthesis", "filename": "" },
+            { "lesson": "Experiment to demonstrate that starch is produced during photosynthesis", "filename": "" },
+            { "lesson": "Experiment to demonstrate that chlorophyll is necessary for photosynthesis", "filename": "" },
+            { "lesson": "Experiment to demonstrate that sunlight is necessary for photosynthesis", "filename": "" },
+            { "lesson": "Experiment to demonstrate that carbon dioxide is necessary for photosynthesis", "filename": "" },
+            { "lesson": "Experiment to show that oxygen is released during photosynthesis", "filename": "" },
+            { "lesson": "Fate of the products of photosynthesis", "filename": "" }
+          ]
         },
         {
           "chapter": "Nutrition in animals",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Notion and characteristics of enzymes; Types and importance of enzymes; Experiment to demonstrate enzyme activity; Holozoic nutrition (Dentition; function of various tooth in mammals; Structure of incisor and molar teeth; Structure of the human alimentary canal and its associated glands; The process of digestion; Structure of the villus and adaptation to its function; Adaptation of the ileum to its function; Cellulose digestion in ruminant herbivores; Adaptation of herbivores and carnivores to their diet; Other forms of animal nutrition-Saprotrophism and parasitism"
+          "lessons": [
+            { "lesson": "Notion and characteristics of enzymes", "filename": "" },
+            { "lesson": "Types and importance of enzymes", "filename": "" },
+            { "lesson": "Experiment to demonstrate enzyme activity", "filename": "" },
+            { "lesson": "Holozoic nutrition (Dentition", "filename": "" },
+            { "lesson": "function of various tooth in mammals", "filename": "" },
+            { "lesson": "Structure of incisor and molar teeth", "filename": "" },
+            { "lesson": "Structure of the human alimentary canal and its associated glands", "filename": "" },
+            { "lesson": "The process of digestion", "filename": "" },
+            { "lesson": "Structure of the villus and adaptation to its function", "filename": "" },
+            { "lesson": "Adaptation of the ileum to its function", "filename": "" },
+            { "lesson": "Cellulose digestion in ruminant herbivores", "filename": "" },
+            { "lesson": "Adaptation of herbivores and carnivores to their diet", "filename": "" },
+            { "lesson": "Other forms of animal nutrition-Saprotrophism and parasitism", "filename": "" }
+          ]
         },
         {
           "chapter": "Transport in mammals",
           "module": "Health education",
           "categoryOfActions": "Prevention of cardiovascular accidents and diseases",
-          "lessons": "Review of how substances move in and out of cells (diffusion, osmosis and active transport); Importance of circulatory system; composition of circulatory system; Composition of blood; Structure and functions of blood cells; Blood vessels; Comparing arteries, veins and capillaries; Structure and function of the heart; Pulmonary and systemic circulation; Cardiac cycle; Myogenic stimulation of heart beat; Regulation of heart rate; Blood pressure; ABO blood group; Antigens/Antibody reactions; Tissue fluid formation; Differences between blood and tissue fluid; Differences between blood and lymph; Importance of the lymphatic system; Diseases and disorders of the circulatory system (Hypertension, Aterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)"
+          "lessons": [
+            { "lesson": "Review of how substances move in and out of cells (diffusion, osmosis and active transport)", "filename": "" },
+            { "lesson": "Importance of circulatory system", "filename": "" },
+            { "lesson": "composition of circulatory system", "filename": "" },
+            { "lesson": "Composition of blood", "filename": "" },
+            { "lesson": "Structure and functions of blood cells", "filename": "" },
+            { "lesson": "Blood vessels", "filename": "" },
+            { "lesson": "Comparing arteries, veins and capillaries", "filename": "" },
+            { "lesson": "Structure and function of the heart", "filename": "" },
+            { "lesson": "Pulmonary and systemic circulation", "filename": "" },
+            { "lesson": "Cardiac cycle", "filename": "" },
+            { "lesson": "Myogenic stimulation of heart beat", "filename": "" },
+            { "lesson": "Regulation of heart rate", "filename": "" },
+            { "lesson": "Blood pressure", "filename": "" },
+            { "lesson": "ABO blood group", "filename": "" },
+            { "lesson": "Antigens/Antibody reactions", "filename": "" },
+            { "lesson": "Tissue fluid formation", "filename": "" },
+            { "lesson": "Differences between blood and tissue fluid", "filename": "" },
+            { "lesson": "Differences between blood and lymph", "filename": "" },
+            { "lesson": "Importance of the lymphatic system", "filename": "" },
+            { "lesson": "Diseases and disorders of the circulatory system (Hypertension, Aterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)", "filename": "" }
+          ]
         },
         {
           "chapter": "Breathing, gaseous exchange and respiration",
           "module": "Health education",
           "categoryOfActions": "Preventing respiratory diseases and infections",
-          "lessons": "Notion of breathing, gaseous exchange and respiration; Adaptation of the human respiratory system; Mechanism of breathing (Inspiration and expiration); Control of breathing rate; Volume of air exchanged during breathing; Composition of inspired and expired air; Gaseous exchange at the lungs and tissues; Internal respiration (Aerobic and anaerobic respiration-Alcoholic and lactic acid fermentation); Diseases and disorders of the respiratory system; Experiment to demonstrate that heat is given off during respiration (e.g. plant, animal, germinating seeds); Experiment to demonstrate that carbon dioxide is given off during respiration (e.g. plant, animal and yeast);"
+          "lessons": [
+            { "lesson": "Notion of breathing, gaseous exchange and respiration", "filename": "" },
+            { "lesson": "Adaptation of the human respiratory system", "filename": "" },
+            { "lesson": "Mechanism of breathing (Inspiration and expiration)", "filename": "" },
+            { "lesson": "Control of breathing rate", "filename": "" },
+            { "lesson": "Volume of air exchanged during breathing", "filename": "" },
+            { "lesson": "Composition of inspired and expired air", "filename": "" },
+            { "lesson": "Gaseous exchange at the lungs and tissues", "filename": "" },
+            { "lesson": "Internal respiration (Aerobic and anaerobic respiration-Alcoholic and lactic acid fermentation)", "filename": "" },
+            { "lesson": "Diseases and disorders of the respiratory system", "filename": "" },
+            { "lesson": "Experiment to demonstrate that heat is given off during respiration (e.g. plant, animal, germinating seeds)", "filename": "" },
+            { "lesson": "Experiment to demonstrate that carbon dioxide is given off during respiration (e.g. plant, animal and yeast)", "filename": "" }
+          ]
         },
         {
           "chapter": "The excretory system",
           "module": "Health education",
           "categoryOfActions": "Preventing infections and disorders of the excretory system",
-          "lessons": "Notion and need for excretion; Differences between excretion, secretion and defecation; Excretory products plants, origin and methods of elimination; Excretory products in animals, origin and methods of elimination; Excretory organs in animals; Structure of the kidney and nephron; Function of the kidney in excretion and osmoregulation; Role of the hypothalamus and posterior pituitary in osmoregulation; Review of osmoregulation in marine/fresh water amoeba; Role of the lungs; liver and skin in excretion; Structure and function of the mammalian skin; Structure and function of the human liver; Disorder and diseases of the kidney"
+          "lessons": [
+            { "lesson": "Notion and need for excretion", "filename": "" },
+            { "lesson": "Differences between excretion, secretion and defecation", "filename": "" },
+            { "lesson": "Excretory products plants, origin and methods of elimination", "filename": "" },
+            { "lesson": "Excretory products in animals, origin and methods of elimination", "filename": "" },
+            { "lesson": "Excretory organs in animals", "filename": "" },
+            { "lesson": "Structure of the kidney and nephron", "filename": "" },
+            { "lesson": "Function of the kidney in excretion and osmoregulation", "filename": "" },
+            { "lesson": "Role of the hypothalamus and posterior pituitary in osmoregulation", "filename": "" },
+            { "lesson": "Review of osmoregulation in marine/fresh water amoeba", "filename": "" },
+            { "lesson": "Role of the lungs", "filename": "" },
+            { "lesson": "liver and skin in excretion", "filename": "" },
+            { "lesson": "Structure and function of the mammalian skin", "filename": "" },
+            { "lesson": "Structure and function of the human liver", "filename": "" },
+            { "lesson": "Disorder and diseases of the kidney", "filename": "" }
+          ]
         },
         {
           "chapter": "The skeletal and muscular system",
           "module": "Health education",
           "categoryOfActions": "Preventing skeletal system deformities, diseases and accidents",
-          "lessons": "Notion, function and types of skeletal system; Structure of the human skeleton; Joints, structure, types and functions; Movement of the elbow joint; Movement of the knee joint; Posture and deformities"
+          "lessons": [
+            { "lesson": "Notion, function and types of skeletal system", "filename": "" },
+            { "lesson": "Structure of the human skeleton", "filename": "" },
+            { "lesson": "Joints, structure, types and functions", "filename": "" },
+            { "lesson": "Movement of the elbow joint", "filename": "" },
+            { "lesson": "Movement of the knee joint", "filename": "" },
+            { "lesson": "Posture and deformities", "filename": "" }
+          ]
         },
         {
           "chapter": "Human impacts on the ecosystem",
           "module": "Environmental education and sustainable development",
           "categoryOfActions": "Maintaining a clean environment and the natural equilibrium through controlled human activities",
-          "lessons": "Harmful effects of population explosion, Urbanization and deforestation; Pollution (Notion, types, causes and control); Beneficial effects of human activities on the ecosystem (e.g. conservation of natural resources, waste management, good farming methods, etc)"
+          "lessons": [
+            { "lesson": "Harmful effects of population explosion, Urbanization and deforestation", "filename": "" },
+            { "lesson": "Pollution (Notion, types, causes and control)", "filename": "" },
+            { "lesson": "Beneficial effects of human activities on the ecosystem (e.g. conservation of natural resources, waste management, good farming methods, etc)", "filename": "" }
+          ]
         },
         {
           "chapter": "Pest control",
           "module": "Environmental education and sustainable development",
           "categoryOfActions": "Maintaining a clean environment and the natural equilibrium through controlled human activities",
-          "lessons": "Pest control (Notion, types, advantages and disadvantages); Role of saprotrophs in the ecosystem; Structure, feeding and lifecycle of Bread mould); Notion of parasitism and types; Life cycle of Phytophtora, tapeworm and plasmodium)"
+          "lessons": [
+            { "lesson": "Pest control (Notion, types, advantages and disadvantages)", "filename": "" },
+            { "lesson": "Role of saprotrophs in the ecosystem", "filename": "" },
+            { "lesson": "Structure, feeding and lifecycle of Bread mould)", "filename": "" },
+            { "lesson": "Notion of parasitism and types", "filename": "" },
+            { "lesson": "Life cycle of Phytophtora, tapeworm and plasmodium)", "filename": "" }
+          ]
         }
-
       ]
     },
     {
@@ -134,60 +288,145 @@
           "chapter": "Nuclear and cell division",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Notion of chromosomes, genes, DNA, Haploid and diploid cells; Mitosis and meiosis; Comparing mitosis and meiosis"
+          "lessons": [
+            { "lesson": "Notion of chromosomes, genes, DNA, Haploid and diploid cells", "filename": "" },
+            { "lesson": "Mitosis and meiosis", "filename": "" },
+            { "lesson": "Comparing mitosis and meiosis", "filename": "" }
+          ]
         },
         {
           "chapter": "Reproduction in plants",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Notion and types of reproduction; Advantages and disadvantages of asexual and sexual reproduction; Comparing asexual and sexual reproduction; Structure of a flower and function of parts; Pollination (Notion, types, agents and importance); Insect and wind pollinated flowers; Fertilization, seed and fruit formation; Seed and fruit dispersal; Structure of a seed; Seed germination(Notion, types and factors necessary for seed germination); Experiment to demonstrate the conditions necessary for seed germination"
+          "lessons": [
+            { "lesson": "Notion and types of reproduction", "filename": "" },
+            { "lesson": "Advantages and disadvantages of asexual and sexual reproduction", "filename": "" },
+            { "lesson": "Comparing asexual and sexual reproduction", "filename": "" },
+            { "lesson": "Structure of a flower and function of parts", "filename": "" },
+            { "lesson": "Pollination (Notion, types, agents and importance)", "filename": "" },
+            { "lesson": "Insect and wind pollinated flowers", "filename": "" },
+            { "lesson": "Fertilization, seed and fruit formation", "filename": "" },
+            { "lesson": "Seed and fruit dispersal", "filename": "" },
+            { "lesson": "Structure of a seed", "filename": "" },
+            { "lesson": "Seed germination(Notion, types and factors necessary for seed germination)", "filename": "" },
+            { "lesson": "Experiment to demonstrate the conditions necessary for seed germination", "filename": "" }
+          ]
         },
         {
           "chapter": "Coordination in plants",
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
-          "lessons": "Notion and types of plant movements; Phototropism; Geotropism; Importance of Phototropism and geotropism; Effects of auxins and other plant growth hormones on plant growth; Horticulture and its importance; Experiments to demonstrate phototropism and geotropism"
+          "lessons": [
+            { "lesson": "Notion and types of plant movements", "filename": "" },
+            { "lesson": "Phototropism", "filename": "" },
+            { "lesson": "Geotropism", "filename": "" },
+            { "lesson": "Importance of Phototropism and geotropism", "filename": "" },
+            { "lesson": "Effects of auxins and other plant growth hormones on plant growth", "filename": "" },
+            { "lesson": "Horticulture and its importance", "filename": "" },
+            { "lesson": "Experiments to demonstrate phototropism and geotropism", "filename": "" }
+          ]
         },
         {
           "chapter": "The human nervous system",
           "module": "Health education",
           "categoryOfActions": "Preventing silent killer diseases",
-          "lessons": "Notion of irritability; Types of neurons; Structure of a motor neurone; Impulse transmission along a neurone; Impulse transmission across a synapse; Structure and function of the human brain and spinal cord; Cranial and spinal nerves; Autonomic nervous system; Division of the nervous system; Voluntary and involuntary actions-reflex action and reflex arc; Conditioned reflex; Sense organs and their functions; Structure and function of the human eye; Function of the human eye (Image formation, accomodation, color vision); Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)"
+          "lessons": [
+            { "lesson": "Notion of irritability", "filename": "" },
+            { "lesson": "Types of neurons", "filename": "" },
+            { "lesson": "Structure of a motor neurone", "filename": "" },
+            { "lesson": "Impulse transmission along a neurone", "filename": "" },
+            { "lesson": "Impulse transmission across a synapse", "filename": "" },
+            { "lesson": "Structure and function of the human brain and spinal cord", "filename": "" },
+            { "lesson": "Cranial and spinal nerves", "filename": "" },
+            { "lesson": "Autonomic nervous system", "filename": "" },
+            { "lesson": "Division of the nervous system", "filename": "" },
+            { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "" },
+            { "lesson": "Conditioned reflex", "filename": "" },
+            { "lesson": "Sense organs and their functions", "filename": "" },
+            { "lesson": "Structure and function of the human eye", "filename": "" },
+            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "" },
+            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "" }
+          ]
         },
         {
           "chapter": "Endocrine system",
           "module": "Health education",
           "categoryOfActions": "Preventing silent killer diseases",
-          "lessons": "Notion and characteristics of endocrine glands and hormones; Differences between endocrine and exocrine glands; Position of main endocrine glands, their secretions and effects; Hormonal control of blood glucose level; Hormonal imbalance/consequences and some common disorders"
+          "lessons": [
+            { "lesson": "Notion and characteristics of endocrine glands and hormones", "filename": "" },
+            { "lesson": "Differences between endocrine and exocrine glands", "filename": "" },
+            { "lesson": "Position of main endocrine glands, their secretions and effects", "filename": "" },
+            { "lesson": "Hormonal control of blood glucose level", "filename": "" },
+            { "lesson": "Hormonal imbalance/consequences and some common disorders", "filename": "" }
+          ]
         },
         {
           "chapter": "Reproduction in humans and family planning",
           "module": "Health education",
           "categoryOfActions": "",
-          "lessons": "Importance of reproduction; Structure of male and female reproductive systems; Gametogenesis (Sperm and egg formation); Puberty; Menstrual cycle; Copulation and fertilization; Implantation, Signs and symptoms of pregnancy; functions of amniotic fluid and placenta; Birth and parental care; Family planning and birth control methods"
+          "lessons": [
+            { "lesson": "Importance of reproduction", "filename": "" },
+            { "lesson": "Structure of male and female reproductive systems", "filename": "" },
+            { "lesson": "Gametogenesis (Sperm and egg formation)", "filename": "" },
+            { "lesson": "Puberty", "filename": "" },
+            { "lesson": "Menstrual cycle", "filename": "" },
+            { "lesson": "Copulation and fertilization", "filename": "" },
+            { "lesson": "Implantation, Signs and symptoms of pregnancy", "filename": "" },
+            { "lesson": "functions of amniotic fluid and placenta", "filename": "" },
+            { "lesson": "Birth and parental care", "filename": "" },
+            { "lesson": "Family planning and birth control methods", "filename": "" }
+          ]
         },
         {
           "chapter": "Genetics",
           "module": "Health education",
           "categoryOfActions": "",
-          "lessons": "Notion of genetics and definition of key terms; Relationship between chromosomes and genes; Simple monohybrid cross-Complete dominance; Test and back cross; Incomplete dominance; Codominance; Sex determination; Sex linkage; Mutation; Variation; Genetic counselling; Paternity determination"
+          "lessons": [
+            { "lesson": "Notion of genetics and definition of key terms", "filename": "" },
+            { "lesson": "Relationship between chromosomes and genes", "filename": "" },
+            { "lesson": "Simple monohybrid cross-Complete dominance", "filename": "" },
+            { "lesson": "Test and back cross", "filename": "" },
+            { "lesson": "Incomplete dominance", "filename": "" },
+            { "lesson": "Codominance", "filename": "" },
+            { "lesson": "Sex determination", "filename": "" },
+            { "lesson": "Sex linkage", "filename": "" },
+            { "lesson": "Mutation", "filename": "" },
+            { "lesson": "Variation", "filename": "" },
+            { "lesson": "Genetic counselling", "filename": "" },
+            { "lesson": "Paternity determination", "filename": "" }
+          ]
         },
         {
           "chapter": "Modern biotechnology",
           "module": "Health education",
           "categoryOfActions": "",
-          "lessons": "Definition of basic terminologies used in biotechnology; Applications of biotechnology in production of human insulin, bear, wine and yoghurt, Baking; DNA fingerprinting"
+          "lessons": [
+            { "lesson": "Definition of basic terminologies used in biotechnology", "filename": "" },
+            { "lesson": "Applications of biotechnology in production of human insulin, bear, wine and yoghurt, Baking", "filename": "" },
+            { "lesson": "DNA fingerprinting", "filename": "" }
+          ]
         },
         {
           "chapter": "Ecology",
           "module": "Environmental education and sustainable development",
           "categoryOfActions": "Conserving the natural environment and recycling of matter in nature",
-          "lessons": "Ecological concepts (Ecosystem, environment, habitat, community, population, species, ecological niche); Effects of abiotic factors (Light, temperature, water, edaphic and topograhic factors); Adaptations of plants to dry habitat; Adaption of plants to aquatic habitat; Biotic interactions; Human impacts on the ecosystem; Feeding relationships (Food chains and food webs); Trophic levels; Bioaccumulation and biomagnification; Ecological pyramids; Examples and components of an ecosystem; Energy flow in an ecosystem; Biogeochemical cycles (Water cycle, Carbon cycle and Nitrogen cycle)"
+          "lessons": [
+            { "lesson": "Ecological concepts (Ecosystem, environment, habitat, community, population, species, ecological niche)", "filename": "" },
+            { "lesson": "Effects of abiotic factors (Light, temperature, water, edaphic and topograhic factors)", "filename": "" },
+            { "lesson": "Adaptations of plants to dry habitat", "filename": "" },
+            { "lesson": "Adaption of plants to aquatic habitat", "filename": "" },
+            { "lesson": "Biotic interactions", "filename": "" },
+            { "lesson": "Human impacts on the ecosystem", "filename": "" },
+            { "lesson": "Feeding relationships (Food chains and food webs)", "filename": "" },
+            { "lesson": "Trophic levels", "filename": "" },
+            { "lesson": "Bioaccumulation and biomagnification", "filename": "" },
+            { "lesson": "Ecological pyramids", "filename": "" },
+            { "lesson": "Examples and components of an ecosystem", "filename": "" },
+            { "lesson": "Energy flow in an ecosystem", "filename": "" },
+            { "lesson": "Biogeochemical cycles (Water cycle, Carbon cycle and Nitrogen cycle)", "filename": "" }
+          ]
         }
       ]
-
     }
-
   ]
-
 }

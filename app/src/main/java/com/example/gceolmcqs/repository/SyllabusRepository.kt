@@ -2,6 +2,7 @@ package com.example.gceolmcqs.repository
 
 import android.content.Context
 import com.example.gceolmcqs.AssertReader
+import com.example.gceolmcqs.datamodels.Lesson
 import com.example.gceolmcqs.datamodels.SyllabusData
 import com.google.gson.Gson
 
@@ -15,25 +16,14 @@ class SyllabusRepository {
 
     private fun initSyllabusData(str: String){
         syllabusData = Gson().fromJson(str, SyllabusData::class.java)
-//        println(syllabusData)
     }
 
     fun getChapterNamesForClassAt(classIndex: Int): List<String>{
-        val chapterNames = arrayListOf<String>()
-        syllabusData.syllabus[classIndex].chapters.forEach {
-            chapterNames.add(it.chapter)
-        }
-        return chapterNames
+        return syllabusData.syllabus[classIndex].chapters.map { it.chapter }
     }
-//
-    fun getChapterLessonsAt(classIndex: Int, chapterIndex: Int): List<String>{
-        val strLessons = syllabusData.syllabus[classIndex].chapters[chapterIndex].lessons
-        val lessons = arrayListOf<String>()
-        strLessons.split(";").forEach {
-            lessons.add(it)
-        }
-        return lessons
 
+    fun getChapterLessonsAt(classIndex: Int, chapterIndex: Int): List<Lesson>{
+        return syllabusData.syllabus[classIndex].chapters[chapterIndex].lessons
     }
 
     fun getClassNameAt(classIndex: Int): String {

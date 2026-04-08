@@ -7,21 +7,27 @@ class DictionaryRepository {
         private lateinit var dictionaryData: List<DictionaryData>
         private lateinit var keyWords: List<String>
 
+        fun isInitialized(): Boolean {
+            return ::keyWords.isInitialized
+        }
+
         fun updateDictionaryData(temp: List<DictionaryData>){
             dictionaryData = temp
             updateKeyWords()
         }
 
         private fun updateKeyWords(){
-
             keyWords = dictionaryData.map { it.keyword}
-
         }
+
         fun getKeys(): List<String>{
-            return keyWords
+            return if (isInitialized()) keyWords else emptyList()
         }
 
         fun getDefinition(keyWord: String): String{
+            if (!isInitialized()) {
+                return "Dictionary not initialized"
+            }
 
             if (keyWord.lowercase() in keyWords.map { it.lowercase() } ){
                 val match = dictionaryData.find { it.keyword.lowercase() == keyWord.lowercase()}
@@ -33,8 +39,8 @@ class DictionaryRepository {
         }
 
         fun getAllMatches(keyWord: String): List<String>{
+            if (!isInitialized()) return emptyList()
             return keyWords.filter { it.startsWith(keyWord, ignoreCase = true) }
-
         }
     }
 }

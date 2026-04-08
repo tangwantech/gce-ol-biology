@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.gceolmcqs.R
@@ -60,12 +61,18 @@ class ClassChaptersFragment : Fragment() {
         binding.recyclerView.layoutManager = loMan
         val adapter = SyllabusChaptersRecyclerAdapter(viewModel.getChapterNamesForClassAt(classIndex), listener)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                loMan.orientation
+            )
+        )
         binding.recyclerView.setHasFixedSize(true)
     }
 
     private fun updateTitle(){
         val className = viewModel.getClassNameAt(classIndex)
-        println("$className syllabus")
+//        println("$className syllabus")
         requireActivity().title = "$className syllabus"
     }
 
