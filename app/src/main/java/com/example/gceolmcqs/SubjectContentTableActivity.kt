@@ -11,74 +11,57 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.gceolmcqs.adapters.SubjectContentTableViewPagerAdapter
-
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.fragments.ExamTypeFragment
-//import com.example.gceolmcqs.repository.AppDataLocalRepository
-import com.example.gceolmcqs.viewmodels.SubjectContentTableViewModel
 import com.google.android.material.tabs.TabLayout
-
 
 class SubjectContentTableActivity : AppCompatActivity(),
     ExamTypeFragment.OnPackageExpiredListener,
     ExamTypeFragment.OnContentAccessDeniedListener,
-    ExamTypeFragment.OnGotoPaperActivityListener{
+    ExamTypeFragment.OnGotoPaperActivityListener {
 
     private lateinit var viewModel: SubjectContentTableViewModel
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
-    private lateinit var alertDialog: AlertDialog.Builder
     private lateinit var pref: SharedPreferences
-    private var currentTabIndex  = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subject_content_table)
-        pref = getSharedPreferences(SUBJECT_CONTENT_TABLE, MODE_PRIVATE)
-//        setAlertDialog()
+//        pref = getSharedPreferences(SUBJECT_CONTENT_TABLE, MODE_PRIVATE)
         initActivityViews()
         initViewModel()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        checkIfGraceExtensionAvailable()
-
-
     }
 
-    private fun setTitle(){
+    private fun setTitle() {
         title = viewModel.getSubjectName() + " " + getString(R.string.paper_1)
     }
 
-    private fun initActivityViews(){
+    private fun initActivityViews() {
         tabLayout = findViewById(R.id.homeTab)
         viewPager = findViewById(R.id.homeViewPager)
     }
 
-    private fun initViewModel(){
-
+    private fun initViewModel() {
         viewModel = ViewModelProvider(this)[SubjectContentTableViewModel::class.java]
-
         viewModel.setSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
-//        viewModel.setSubjectName(subjectTitle!!)
-
-
     }
 
-    private fun setupViewObservers(){
+    private fun setupViewObservers() {
         viewModel.getIsPackageActive().observe(this, Observer {
-
             if (!it) {
-
-//                showAlertDialog()
+                // showAlertDialog()
             }
         })
 
-        viewModel.subjectPackageData.observe(this, Observer{ subjectPackageData ->
+        viewModel.subjectPackageData.observe(this, Observer { subjectPackageData ->
             setUpSubjectContentTab(subjectPackageData)
         })
     }
 
-    private fun showAlertDialog(){
+    private fun showAlertDialog() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.apply {
             setMessage(resources.getString(R.string.package_expired_message))
@@ -90,21 +73,13 @@ class SubjectContentTableActivity : AppCompatActivity(),
         alertDialog.show()
     }
 
-//    private fun showAlertDialog(){
-//        if (alertDialog == null){
-//            alertDialog.show()
-//        }
-//
-//    }
-
     private fun exitActivity() {
         this.finish()
     }
 
     private fun setUpSubjectContentTab(subjectPackageData: SubjectPackageData) {
         val subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
-
-        val tabIndex = pref.getInt(TAB_INDEX, 0)
+        val tabIndex = viewModel.getCurrentTabIndex()
         val tabFragments: ArrayList<Fragment> = ArrayList()
 
         for (fragmentIndex in 0 until viewModel.getExamTypesCount()) {
@@ -115,7 +90,6 @@ class SubjectContentTableActivity : AppCompatActivity(),
                     subjectPackageData.expiresOn!!,
                     subjectPackageData.packageName!!,
                     subjectIndex
-
                 )
             tabFragments.add(fragment)
         }
@@ -130,23 +104,23 @@ class SubjectContentTableActivity : AppCompatActivity(),
         tabLayout.setupWithViewPager(viewPager)
     }
 
-    private fun setupActivityViewListeners(){
-
-        tabLayout.setOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+    private fun setupActivityViewListeners() {
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                currentTabIndex = tab?.position!!
-                saveSelectedTab(currentTabIndex)
+                tab?.position?.let { updateCurrentTabIndex(it) }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabReselected(tab: TabLayout.Tab?) {}
-
         })
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    fun updateCurrentTabIndex(index: Int) {
+        viewModel.updateCurrentTabIndex(index)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
@@ -163,15 +137,12 @@ class SubjectContentTableActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         start()
-//       loadSubjectPackageDataFromRemoteRepo()
-
-
     }
 
-    private fun start(){
-        if (!viewModel.isPaper1DataInitialised() && !viewModel.isUserDataInitialised()){
+    private fun start() {
+        if (!viewModel.isPaper1DataInitialised() && !viewModel.isUserDataInitialised()) {
             beginSetup()
-        }else{
+        } else {
             viewModel.initPaper1DataRepository()
             setTitle()
             viewModel.loadSubjectPackageDataFromUserDataRepository()
@@ -180,75 +151,32 @@ class SubjectContentTableActivity : AppCompatActivity(),
         }
     }
 
-    override fun onDestroy() {
-        saveSelectedTab(0)
-        super.onDestroy()
-
-    }
-
     override fun onShowPackageExpired() {
         showAlertDialog()
     }
 
     override fun onCheckIfPackageHasExpired(): Boolean {
         return viewModel.getPackageStatus()
-//        return true
     }
 
     override fun onContentAccessDenied() {
         val contentAccessDeniedDialog = AlertDialog.Builder(this)
         contentAccessDeniedDialog.apply {
             setMessage(resources.getString(R.string.content_access_denied_Message))
-            setPositiveButton("Ok") { d, _->
+            setPositiveButton("Ok") { d, _ ->
                 d.dismiss()
             }
         }.create().show()
     }
 
-    private fun saveSelectedTab(index: Int){
-        pref.edit().apply {
-            putInt(TAB_INDEX, index)
-        }.apply()
-    }
-
-
-
-    companion object{
+    companion object {
         private const val SUBJECT_CONTENT_TABLE = "subject content table"
         private const val TAB_INDEX = "tab index"
     }
 
-
-    private fun activateGraceExtension(){
-        val temp = viewModel.getGraceExtension()
-        pref.edit().apply{
-            putString(MCQConstants.ACTIVATED_ON, temp.activatedOn)
-            putString(MCQConstants.EXPIRES_ON, temp.expiresOn)
-        }.apply()
-
-    }
-
-    private fun checkIfGraceExtensionAvailable(){
-        val expiresOn = pref.getString(MCQConstants.EXPIRES_ON, null)
-        if (expiresOn == null){
-            activateGraceExtension()
-        }
-
-    }
-
-    private fun isGraceExtensionExpired(): Boolean{
-        val activatedOn = pref.getString(MCQConstants.ACTIVATED_ON, null)
-        val expiresOn = pref.getString(MCQConstants.EXPIRES_ON, null)
-//        println("GraceExtension activated on: $activatedOn")
-//        println("GraceExtension expires on: $expiresOn")
-        val isExpired = ActivationExpiryDatesGenerator().checkExpiry(activatedOn!!, expiresOn!!)
-        return isExpired
-    }
-
-
-    private fun beginSetup(){
+    private fun beginSetup() {
         val id = UtilityFunctions().getDeviceId(this)
-        viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener{
+        viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener {
             override fun onSuccess() {
                 runOnUiThread {
                     title = viewModel.getSubjectName()
@@ -256,30 +184,21 @@ class SubjectContentTableActivity : AppCompatActivity(),
                     setupActivityViewListeners()
                     setupViewObservers()
                 }
-
             }
-
-            override fun onUserDataUnavailable() {
-
-            }
+            override fun onUserDataUnavailable() {}
         })
-
-
     }
 
     override fun onGotoPaperActivity(intent: Intent) {
-        val packageStatus = viewModel.getPackageStatus()
-//        val graceExtensionStatus = isGraceExtensionExpired()
-//        println("Package status: $packageStatus, GraceExtension: $graceExtensionStatus")
-//        if (packageStatus || graceExtensionStatus){
-//            startActivity(intent)
-//        }else{
-//            showAlertDialog()
-//        }
-        if (packageStatus){
+        val examItemIndex = intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0)
+        if (examItemIndex == 0) {
             startActivity(intent)
         }else{
-            showAlertDialog()
+            if (!viewModel.getPackageStatus()) {
+                showAlertDialog()
+            } else {
+                startActivity(intent)
+            }
         }
 
     }

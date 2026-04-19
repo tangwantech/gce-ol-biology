@@ -174,12 +174,23 @@ class PaperActivity : AppCompatActivity(),
     private fun checkPackageExpiry(position: Int){
         resetCurrentSectionFragment()
         _viewModel.setCurrentSectionIndex(position)
+        val examItemIndex = _viewModel.getExamItemIndex()
         val isActive = _viewModel.isPackageActive(_viewModel.getSubjectIndex())
-        if (!isActive) {
-            showPackageExpiredDialog()
-        }else{
+        if (examItemIndex == 0){
             gotoSection(position)
+        }else{
+            if (!isActive) {
+                showPackageExpiredDialog()
+            }else{
+                gotoSection(position)
+            }
         }
+
+//        if (!isActive) {
+//            showPackageExpiredDialog()
+//        }else{
+//            gotoSection(position)
+//        }
 //        gotoSection(position)
     }
 
@@ -220,11 +231,22 @@ class PaperActivity : AppCompatActivity(),
 
     override fun onRequestToGoToResult(sectionResultData: SectionResultData) {
         val isActive = _viewModel.isPackageActive(_viewModel.getSubjectIndex())
-        if (!isActive) {
-            showPackageExpiredDialog()
-        }else{
+        val examItemIndex = _viewModel.getExamItemIndex()
+
+        if (examItemIndex == 0){
             gotoResult(sectionResultData)
+        }else{
+            if (!isActive) {
+                showPackageExpiredDialog()
+            }else{
+                gotoResult(sectionResultData)
+            }
         }
+//        if (!isActive) {
+//            showPackageExpiredDialog()
+//        }else{
+//            gotoResult(sectionResultData)
+//        }
 
     }
 

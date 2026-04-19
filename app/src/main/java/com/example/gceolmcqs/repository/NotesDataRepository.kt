@@ -18,7 +18,7 @@ class NotesDataRepository {
 
         fun getFilePath(chapterIndex: Int): String{
             val fileName = notes[chapterIndex].fileName
-            val filePath = "file:///android_asset/notes/$fileName"
+            val filePath = "file:///android_asset/notes/html/$fileName"
             return filePath
         }
 

@@ -53,7 +53,7 @@ class LessonNotesFragment : Fragment() {
             addJavascriptInterface(AndroidInterface(), "Android")
             
             filename?.let {
-                val url = "file:///android_asset/notes/$it"
+                val url = "file:///android_asset/notes/html/$it"
                 loadUrl(url)
             }
         }

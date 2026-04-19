@@ -72,6 +72,7 @@ img, .responsive-images {
     margin-top: -12px;
     margin-bottom: 20px;
     font-style: italic;
+    font-weight: bold;
 }
 
 /* Tables */
@@ -101,6 +102,15 @@ th {
 
 tr:nth-child(even) {
     background-color: rgba(0,0,0,0.03);
+}
+
+/* Summary */
+.summary {
+    background-color: var(--secondary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid var(--primary-color);
 }
 
 /* UI Elements */

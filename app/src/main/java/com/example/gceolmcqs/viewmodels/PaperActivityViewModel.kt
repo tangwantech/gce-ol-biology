@@ -41,6 +41,10 @@ class PaperActivityViewModel:ViewModel() {
         examItemIndex = index
     }
 
+    fun getExamItemIndex(): Int {
+        return examItemIndex
+    }
+
     fun getExamItemTitle(): String{
         return Paper1DataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
     }

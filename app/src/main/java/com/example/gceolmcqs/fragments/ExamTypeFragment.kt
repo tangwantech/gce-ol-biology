@@ -108,8 +108,18 @@ class ExamTypeFragment : Fragment(), ExamTypeRecyclerViewAdapter.OnRecyclerItemC
     }
 
     override fun onRecyclerItemClick(position: Int) {
+//        if (position == 0){
+//            gotoPaperActivity(position)
+//        }else{
+//            if(!onPackageExpiredListener.onCheckIfPackageHasExpired()){
+//                onContentAccessDeniedListener.onContentAccessDenied()
+//            }else{
+//                gotoPaperActivity(position)
+//            }
+//        }
 
-//        if(!onPackageExpiredListener.onCheckIfPackageHasExpired()){
+
+//        if(position != 0 || onPackageExpiredListener.onCheckIfPackageHasExpired()){
 //            onPackageExpiredListener.onShowPackageExpired()
 //        }else{
 //
