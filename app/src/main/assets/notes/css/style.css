@@ -144,6 +144,15 @@ tr:nth-child(even) {
     font-weight: 500;
 }
 
+/* Questions */
+.questions {
+    background-color: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #1976d2;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 600px) {
     body {
