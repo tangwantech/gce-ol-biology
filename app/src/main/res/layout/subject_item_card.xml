@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_margin="4dp"
-                android:text="@string/syllabus"
+                android:text="@string/notes"
                 android:textSize="12sp"
                 app:strokeColor="@color/color_primary"
                 android:textColor="@color/color_primary"

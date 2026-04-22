@@ -73,7 +73,7 @@ class ClassChaptersFragment : Fragment() {
     private fun updateTitle(){
         val className = viewModel.getClassNameAt(classIndex)
 //        println("$className syllabus")
-        requireActivity().title = "$className syllabus"
+        requireActivity().title = "$className notes"
     }
 
     override fun onResume() {

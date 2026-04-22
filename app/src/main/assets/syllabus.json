@@ -340,10 +340,10 @@
             { "lesson": "Division of the nervous system",  "filename": "human nervous system/divisions_of_nervous_system.html" },
             { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "human nervous system/reflex_action_reflex_arc.html" },
             { "lesson": "Conditioned reflex", "filename": "" },
-            { "lesson": "Sense organs and their functions", "filename": "" },
-            { "lesson": "Structure and function of the human eye", "filename": "" },
-            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "" },
-            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "" }
+            { "lesson": "Sense organs and their functions", "filename": "human nervous system/sense_organs.html" },
+            { "lesson": "Structure and function of the human eye", "filename": "human nervous system/human_eye.html" },
+            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "human nervous system/functions_of_eye.html" },
+            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "human nervous system/eye_defects.html" }
           ]
         },
         {

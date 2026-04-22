@@ -192,6 +192,7 @@
     <string name="category">Category of action: %1$s</string>
     <string name="lessons">Lessons:</string>
     <string name="lesson">%1$s. %2$s</string>
+    <string name="notes">Notes</string>
 
 
     <string-array name="paper_instruction">
