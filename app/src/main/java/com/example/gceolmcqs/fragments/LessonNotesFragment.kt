@@ -50,6 +50,11 @@ class LessonNotesFragment : Fragment() {
             settings.javaScriptEnabled = true
             settings.allowFileAccess = true
             
+            // Enable zoom features
+            settings.setSupportZoom(true)
+            settings.builtInZoomControls = true
+            settings.displayZoomControls = false
+            
             addJavascriptInterface(AndroidInterface(), "Android")
             
             filename?.let {

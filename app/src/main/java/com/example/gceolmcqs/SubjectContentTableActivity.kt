@@ -31,6 +31,8 @@ class SubjectContentTableActivity : AppCompatActivity(),
 //        pref = getSharedPreferences(SUBJECT_CONTENT_TABLE, MODE_PRIVATE)
         initActivityViews()
         initViewModel()
+        setupActivityViewListeners()
+        setupViewObservers()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -51,7 +53,7 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     private fun setupViewObservers() {
         viewModel.getIsPackageActive().observe(this, Observer {
-            if (!it) {
+            if (it == false) {
                 // showAlertDialog()
             }
         })
@@ -77,7 +79,9 @@ class SubjectContentTableActivity : AppCompatActivity(),
         this.finish()
     }
 
-    private fun setUpSubjectContentTab(subjectPackageData: SubjectPackageData) {
+    private fun setUpSubjectContentTab(subjectPackageData: SubjectPackageData?) {
+        if (subjectPackageData == null) return
+        
         val subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
         val tabIndex = viewModel.getCurrentTabIndex()
         val tabFragments: ArrayList<Fragment> = ArrayList()
@@ -87,8 +91,8 @@ class SubjectContentTableActivity : AppCompatActivity(),
                 ExamTypeFragment.newInstance(
                     fragmentIndex,
                     viewModel.getSubjectName(),
-                    subjectPackageData.expiresOn!!,
-                    subjectPackageData.packageName!!,
+                    subjectPackageData.expiresOn ?: "",
+                    subjectPackageData.packageName ?: "",
                     subjectIndex
                 )
             tabFragments.add(fragment)
@@ -146,8 +150,6 @@ class SubjectContentTableActivity : AppCompatActivity(),
             viewModel.initPaper1DataRepository()
             setTitle()
             viewModel.loadSubjectPackageDataFromUserDataRepository()
-            setupActivityViewListeners()
-            setupViewObservers()
         }
     }
 
@@ -181,8 +183,6 @@ class SubjectContentTableActivity : AppCompatActivity(),
                 runOnUiThread {
                     title = viewModel.getSubjectName()
                     viewModel.loadSubjectPackageDataFromUserDataRepository()
-                    setupActivityViewListeners()
-                    setupViewObservers()
                 }
             }
             override fun onUserDataUnavailable() {}

@@ -20,6 +20,6 @@ class SubjectContentTableViewPagerAdapter(
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return tabTitles[position]
+        return if (position in tabTitles.indices) tabTitles[position] else null
     }
 }

@@ -121,6 +121,10 @@ class ImageResourceManager {
             images["respiratory_system_nw_mock_2023.jpg"] = R.drawable.respiratory_system_nw_mock_2023
             images["experiment_respiration_nw_mock_2023.jpg"] = R.drawable.experiment_respiration_nw_mock_2023
 
+//            2026
+            images["villus_nw_mock_2026.jpg"] = R.drawable.villus_nw_mock_2026
+            images["position_endocrine_glands_human_june_2019.jpg"] = R.drawable.position_endocrine_glands_human_june_2019
+
 
 
 

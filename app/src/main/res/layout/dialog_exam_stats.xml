@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#1A000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="28dp">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exam Performance"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textColor="@color/color_primary"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.01" />
+
+        <TextView
+            android:id="@+id/tvDialogSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your progress at a glance"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:layout_marginTop="6dp"
+            android:fontFamily="sans-serif" />
+
+        <View
+            android:layout_width="48dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="28dp"
+            android:background="@color/color_primary"
+            android:alpha="0.15" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <!-- Total Attempts -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Attempts"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogAttempts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Highest Score -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Highest Score"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogHighScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="0/50"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_green"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Highest Grade -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Highest Grade"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogHighGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="U"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_green"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Lowest Score -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lowest Score"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogLowScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="0/50"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_red"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Lowest Grade -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lowest Grade"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogLowGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="U"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_red"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Recent Score -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recent Score"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogRecentScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="0/50"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+            <View android:layout_height="1dp" android:background="#0D000000" />
+
+            <!-- Recent Grade -->
+            <TableRow android:paddingVertical="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recent Grade"
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
+                <TextView
+                    android:id="@+id/tvDialogRecentGrade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="U"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-medium" />
+            </TableRow>
+
+        </TableLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseDialog"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="28dp"
+            android:text="Dismiss"
+            android:textAllCaps="false"
+            app:cornerRadius="16dp"
+            android:textSize="16sp"
+            android:backgroundTint="@color/color_primary"
+            android:elevation="0dp"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

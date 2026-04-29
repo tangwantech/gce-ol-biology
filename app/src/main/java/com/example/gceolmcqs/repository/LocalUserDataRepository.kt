@@ -38,9 +38,11 @@ class LocalUserDataRepository{
 
         private fun updateUserDataInLocaldb(listener: OnUpdateUserDataListener){
             CoroutineScope(Dispatchers.IO).launch {
-                userDataDao?.update(userData!!)
-                withContext(Dispatchers.Main){
-                    listener.onUpdateSuccessful()
+                userData?.let {
+                    userDataDao?.update(it)
+                    withContext(Dispatchers.Main){
+                        listener.onUpdateSuccessful()
+                    }
                 }
             }
         }
@@ -57,14 +59,15 @@ class LocalUserDataRepository{
                         }else{
                             listener.onUserDataUnavailable("No data found")
                         }
+                    } ?: run {
+                        listener.onUserDataUnavailable("No data found")
                     }
-
                 }
             }
         }
 
         fun updateSubscriptionInUserData(subjectPackageData: SubjectPackageData, listener: OnUpdateUserDataListener){
-            updateSubjectPackageAt(subjectPackageData.subjectIndex!!, subjectPackageData)
+            subjectPackageData.subjectIndex?.let { updateSubjectPackageAt(it, subjectPackageData) }
             userData?.subscription = Gson().toJson(getSubjectsPackages())
             updateUserDataInLocaldb(listener)
 
@@ -86,9 +89,9 @@ class LocalUserDataRepository{
             }
         }
 
-        fun getPaper1Data(): Paper1Data{
-            val paper1Data = Gson().fromJson(getAppData()?.paper1Data, Paper1Data::class.java)
-            return paper1Data
+        fun getPaper1Data(): Paper1Data? {
+            val appData = getAppData() ?: return null
+            return Gson().fromJson(appData.paper1Data, Paper1Data::class.java)
         }
 
 
@@ -102,11 +105,16 @@ class LocalUserDataRepository{
         }
 
         fun initDictionaryRepository(){
-            val dictionaryString =  getAppData()?.dictionaryData!!
-            val dictionaryJson = JSONObject(dictionaryString).getString("definitions").toString()
-            val type = object :  TypeToken<List<DictionaryData>>(){}.type
-            val dictionary = Gson().fromJson<List<DictionaryData>>(dictionaryJson, type)
-            DictionaryRepository.updateDictionaryData(dictionary)
+            val appData = getAppData() ?: return
+            val dictionaryString = appData.dictionaryData ?: return
+            try {
+                val dictionaryJson = JSONObject(dictionaryString).getString("definitions").toString()
+                val type = object : TypeToken<List<DictionaryData>>() {}.type
+                val dictionary = Gson().fromJson<List<DictionaryData>>(dictionaryJson, type)
+                DictionaryRepository.updateDictionaryData(dictionary)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         fun getDictionaryKeywords(): List<String>{
@@ -128,7 +136,7 @@ class LocalUserDataRepository{
             SubjectsPackagesDataRepository.initSubjectsPackages(subjectsPackages)
         }
 
-        private fun getSubjectsPackages(): SubjectsPackages{
+        private fun getSubjectsPackages(): SubjectsPackages?{
             return SubjectsPackagesDataRepository.getSubjectsPackages()
         }
 
@@ -140,7 +148,7 @@ class LocalUserDataRepository{
             return SubjectsPackagesDataRepository.getSubjectPackagesList()
         }
 
-        fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData{
+        fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData?{
             return SubjectsPackagesDataRepository.getSubjectPackageAt(subjectIndex)
         }
 
@@ -158,7 +166,8 @@ class LocalUserDataRepository{
         }
 
         fun initPaper2DataRepository(){
-            val paper2Data = Gson().fromJson(getAppData()?.paper2Data, Paper2Data::class.java)
+            val appData = getAppData() ?: return
+            val paper2Data = Gson().fromJson(appData.paper2Data, Paper2Data::class.java)
             Paper2DataRepository.initPaper2Data(paper2Data)
 
         }
@@ -195,11 +204,16 @@ class LocalUserDataRepository{
 
 
         fun initNotesDataRepository(){
-            val notesString =  getAppData()?.notesData!!
-            val notesJson = JSONObject(notesString).getString("chapters").toString()
-            val type = object :  TypeToken<List<NotesData>>(){}.type
-            val notes = Gson().fromJson<List<NotesData>>(notesJson, type)
-            NotesDataRepository.initNotesData(notes)
+            val appData = getAppData() ?: return
+            val notesString = appData.notesData ?: return
+            try {
+                val notesJson = JSONObject(notesString).getString("chapters").toString()
+                val type = object : TypeToken<List<NotesData>>() {}.type
+                val notes = Gson().fromJson<List<NotesData>>(notesJson, type)
+                NotesDataRepository.initNotesData(notes)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         fun getChapterNames(): List<String>{

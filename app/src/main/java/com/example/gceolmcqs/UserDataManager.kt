@@ -101,7 +101,7 @@ class UserDataManager {
 //        })
     }
 
-    fun getPaper1Data(): Paper1Data{
+    fun getPaper1Data(): Paper1Data? {
         return LocalUserDataRepository.getPaper1Data()
     }
 
@@ -237,7 +237,7 @@ class UserDataManager {
         return LocalUserDataRepository.getSubjectsPackagesList()
     }
 
-    fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData{
+    fun getSubjectPackageAt(subjectIndex: Int): SubjectPackageData?{
         return LocalUserDataRepository.getSubjectPackageAt(subjectIndex)
     }
 

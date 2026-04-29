@@ -26,10 +26,10 @@ class PaperRepository {
         private val paperPercentage = MutableLiveData(0)
         private val areAllSectionsAnswered = MutableLiveData(false)
 
-        fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int, paperData: PaperData) {
+        fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int, paperData: PaperData?) {
 //            println("PaperData within initPaperData: $paperData")
             this.paperData = paperData
-            paperData.let {
+            paperData?.let {
                 sectionsScores.value = MutableList(it.numberOfSections) { 0 }
                 sectionsAnsweredData.clear()
                 sectionsAnsweredData.addAll(List(it.numberOfSections) { false })
@@ -93,6 +93,7 @@ class PaperRepository {
         fun updateSectionsAnsweredAt(sectionIndex: Int) {
             sectionsAnsweredData[sectionIndex] = true
             sectionsAnsweredCount.value = sectionsAnsweredData.count { it }
+            updateGrade()
         }
 
         fun getSectionsAnswered(): List<Boolean> = sectionsAnsweredData
@@ -142,8 +143,7 @@ class PaperRepository {
         }
 
         private fun updateGrade() {
-            if (sectionsAnsweredCount.value == getNumberOfSections()) {
-                areAllSectionsAnswered.value = true
+            if (sectionsAnsweredCount.value ?: 0 > 0) {
                 paperPercentage.value = ((paperScore.value ?: 0).toDouble() / getTotalNumberOfQuestions() * 100).toInt()
 
                 paperGrade.value = when (paperPercentage.value ?: 0) {
@@ -154,6 +154,10 @@ class PaperRepository {
                     in 30..39 -> "E Grade"
                     else -> "U Grade"
                 }
+            }
+            
+            if (sectionsAnsweredCount.value == getNumberOfSections()) {
+                areAllSectionsAnswered.value = true
             }
         }
 

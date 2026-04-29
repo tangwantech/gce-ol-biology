@@ -12,7 +12,7 @@ class Paper1DataRepository {
 ////            paper1Data = RemoteRepoManager.getOLMCQDataFromParseUser()
 ////            callBack.onAppDataInitialised()
 //        }
-        fun initPaper1Data(paper1Data: Paper1Data){
+        fun initPaper1Data(paper1Data: Paper1Data?){
             Paper1DataRepository.paper1Data = paper1Data
 //            println("Paper1Data within initPaper1Data: $paper1Data")
         }
@@ -27,12 +27,12 @@ class Paper1DataRepository {
 
         fun getSubjectName(subjectIndex: Int): String{
 //            println(paper1Data)
-            return paper1Data?.subjects!![subjectIndex].title
+            return paper1Data?.subjects?.getOrNull(subjectIndex)?.title ?: ""
         }
 
         fun getExamTitles(subjectIndex: Int): List<String>{
             val contentTitles = ArrayList<String>()
-            paper1Data?.subjects!![subjectIndex].examTypes.forEach { examType ->
+            paper1Data?.subjects?.getOrNull(subjectIndex)?.examTypes?.forEach { examType ->
                 contentTitles.add(examType.title)
             }
             return contentTitles
@@ -40,18 +40,18 @@ class Paper1DataRepository {
 
         fun getExamItemTitles(subjectIndex: Int, examTypeIndex: Int): List<String>{
             val examItemTitles = ArrayList<String>()
-            paper1Data?.subjects!![subjectIndex].examTypes[examTypeIndex].examItems.forEach { examItem ->
+            paper1Data?.subjects?.getOrNull(subjectIndex)?.examTypes?.getOrNull(examTypeIndex)?.examItems?.forEach { examItem ->
                 examItemTitles.add(examItem.title)
             }
             return examItemTitles
         }
 
         fun getExamItemTitle(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int): String{
-            return paper1Data?.subjects!![subjectIndex].examTypes[examTypeIndex].examItems[examItemIndex].title
+            return paper1Data?.subjects?.getOrNull(subjectIndex)?.examTypes?.getOrNull(examTypeIndex)?.examItems?.getOrNull(examItemIndex)?.title ?: ""
         }
 
-        fun getPaperData(subjectIndex: Int, contentIndex: Int, examItemIndex: Int): PaperData{
-            return paper1Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].paperData
+        fun getPaperData(subjectIndex: Int, contentIndex: Int, examItemIndex: Int): PaperData?{
+            return paper1Data?.subjects?.getOrNull(subjectIndex)?.examTypes?.getOrNull(contentIndex)?.examItems?.getOrNull(examItemIndex)?.paperData
         }
 
         fun isPaper1DataInitialised(): Boolean{
@@ -59,7 +59,7 @@ class Paper1DataRepository {
         }
 
         fun isPaper1AvailableAt(subjectIndex: Int): Boolean {
-            return paper1Data?.subjects?.get(subjectIndex) != null
+            return paper1Data?.subjects?.getOrNull(subjectIndex) != null
         }
 
     }

@@ -195,6 +195,12 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
         super.onResume()
         sectionNavigationRecyclerViewAdapter.updateSectionScore(viewModel.getSectionsScores())
         sectionNavigationRecyclerViewAdapter.notifyDataSetChanged()
+        viewModel.updateExamScore(requireActivity().title.toString())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        viewModel.updateExamScore(requireActivity().title.toString())
     }
 
     companion object {
@@ -219,4 +225,3 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
 //    }
 
 }
-

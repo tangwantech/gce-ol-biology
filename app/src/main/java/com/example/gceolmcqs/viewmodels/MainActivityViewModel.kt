@@ -29,7 +29,7 @@ class MainActivityViewModel : ViewModel() {
         userDataManager.updateSubscriptionDataInLocaldb(subjectPackageData, listener)
     }
 
-    fun getSubjectPackageData(): SubjectPackageData{
+    fun getSubjectPackageData(): SubjectPackageData?{
         return userDataManager.getSubjectPackageAt(0)
     }
 
@@ -80,4 +80,3 @@ class MainActivityViewModel : ViewModel() {
 
 
 }
-

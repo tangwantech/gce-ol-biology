@@ -10,11 +10,11 @@ import com.example.gceolmcqs.repository.Paper1DataRepository
 
 class SubjectContentTableViewModel : ViewModel() {
     private val isSubjectPackageActive = MutableLiveData<Boolean>()
-    private var subjectIndex: Int? = 0
+    private var subjectIndex: Int = 0
     private var currentTabIndex: Int = 0
 
-    private val _subjectPackageData = MutableLiveData<SubjectPackageData>()
-    val subjectPackageData: LiveData<SubjectPackageData> = _subjectPackageData
+    private val _subjectPackageData = MutableLiveData<SubjectPackageData?>()
+    val subjectPackageData: LiveData<SubjectPackageData?> = _subjectPackageData
 
     private val userDataManager = UserDataManager()
 
@@ -25,29 +25,34 @@ class SubjectContentTableViewModel : ViewModel() {
     }
 
     fun loadSubjectPackageDataFromUserDataRepository() {
-        _subjectPackageData.value = userDataManager.getSubjectPackageAt(subjectIndex!!)
+        _subjectPackageData.value = userDataManager.getSubjectPackageAt(subjectIndex)
     }
 
-    fun getExamTitles(): List<String?> = Paper1DataRepository.getExamTitles(subjectIndex!!)
+    fun getExamTitles(): List<String?> = Paper1DataRepository.getExamTitles(subjectIndex)
 
-    fun getExamTypesCount(): Int = Paper1DataRepository.getExamTitles(subjectIndex!!).size
+    fun getExamTypesCount(): Int = Paper1DataRepository.getExamTitles(subjectIndex).size
 
     fun getIsPackageActive(): LiveData<Boolean> = isSubjectPackageActive
 
-    fun getPackageStatus(): Boolean = userDataManager.isSubscriptionActiveAt(subjectIndex!!)
+    fun getPackageStatus(): Boolean = userDataManager.isSubscriptionActiveAt(subjectIndex)
 
     fun setSubjectIndex(index: Int) {
         subjectIndex = index
     }
 
-    fun getSubjectName(): String = Paper1DataRepository.getSubjectName(subjectIndex!!)
+    fun getSubjectName(): String = Paper1DataRepository.getSubjectName(subjectIndex)
 
-    fun getGraceExtension(): ActivationExpiryDates {
-        return ActivationExpiryDatesGenerator.getGraceActivatedAndExpiryDate(_subjectPackageData.value!!.expiresOn!!, _subjectPackageData.value!!.packageName!!)
+    fun getGraceExtension(): ActivationExpiryDates? {
+        val data = _subjectPackageData.value ?: return null
+        val expiresOn = data.expiresOn ?: return null
+        val packageName = data.packageName ?: return null
+        return ActivationExpiryDatesGenerator.getGraceActivatedAndExpiryDate(expiresOn, packageName)
     }
 
     fun initPaper1DataRepository() {
-        Paper1DataRepository.initPaper1Data(userDataManager.getPaper1Data())
+        userDataManager.getPaper1Data()?.let {
+            Paper1DataRepository.initPaper1Data(it)
+        }
     }
 
     fun isPaper1DataInitialised(): Boolean = Paper1DataRepository.isPaper1DataInitialised()

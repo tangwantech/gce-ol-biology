@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.R
-import com.example.gceolmcqs.datamodels.ExamItemData
 
 
 class ExamTypeRecyclerViewAdapter(
@@ -21,17 +21,20 @@ class ExamTypeRecyclerViewAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         val tvItem: TextView = view.findViewById(R.id.tvRecyclerViewItem)
-        private val crossFade = AnimationUtils.loadAnimation(context, R.anim.cross_fade)
+        val btnStats: ImageButton = view.findViewById(R.id.btnStats)
+        
         init {
             tvItem.setOnClickListener {
                 listener.onRecyclerItemClick(adapterPosition)
+            }
+            btnStats.setOnClickListener {
+                listener.onStatsClick(adapterPosition)
             }
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         val view = LayoutInflater.from(context).inflate(R.layout.recycler_item_view, parent, false)
         return ViewHolder(view)
     }
@@ -46,6 +49,7 @@ class ExamTypeRecyclerViewAdapter(
 
     interface OnRecyclerItemClickListener{
         fun onRecyclerItemClick(position: Int)
+        fun onStatsClick(position: Int)
     }
 
 }

@@ -2,22 +2,16 @@ package com.example.gceolmcqs.roomDB
 
 import android.content.Context
 import androidx.room.Database
-//import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.gceolmcqs.datamodels.AppData
-
-import com.example.gceolmcqs.datamodels.SubjectPackageData
+import com.example.gceolmcqs.datamodels.ExamScoreEntity
 import com.example.gceolmcqs.datamodels.UserData
 
-
-@Database(entities = [UserData::class], version = 1)
-//@TypeConverters(ScoresTypeConverter::class)
+@Database(entities = [UserData::class, ExamScoreEntity::class], version = 3)
 abstract class GceOLMcqDatabase: RoomDatabase() {
 
-//    abstract fun subjectPackageDao(): SubjectPackageDao
-//    abstract fun appDataDao(): AppDataDoa
     abstract fun userDataDao(): UserDataDao
+    abstract fun examScoreDao(): ExamScoreDao
 
     companion object {
 
@@ -36,7 +30,9 @@ abstract class GceOLMcqDatabase: RoomDatabase() {
                     context.applicationContext,
                     GceOLMcqDatabase::class.java,
                     "app_database12"
-                ).build()
+                )
+                .fallbackToDestructiveMigration()
+                .build()
                 INSTANCE = instance
                 return instance
             }

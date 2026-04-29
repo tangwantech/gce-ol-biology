@@ -153,6 +153,15 @@ tr:nth-child(even) {
     border-left: 4px solid #1976d2;
 }
 
+/* Objective */
+.objectives {
+    background-color: #fff3cd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #ffc107;
+}
+
 /* Mobile Adjustments */
 @media (max-width: 600px) {
     body {
