@@ -22,6 +22,7 @@ class RestRepository {
         const val GET_CAMPAY_CREDENTIALS = "getCampayCredentials"
 //        const val GET_SUBSCRIPTION = "getSubscription"
 //        const val GET_USER_DATA = "getUserData"
+        const val UPDATE_SCORES_STATS = "updateScoresStats"
         const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"
         const val CLIENT_KEY = "wPNTqR18DRbZr7UK8jfaIQItw7t7q9xiUX96AWMe"
     }
@@ -32,6 +33,7 @@ class RestRepository {
             SIGN_UP -> "https://parseapi.back4app.com/functions/signup"
             GET_APP_DATA -> "https://parseapi.back4app.com/functions/getAppData"
             UPDATE_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/updateSubscription"
+            UPDATE_SCORES_STATS -> "https://parseapi.back4app.com/functions/updateUserScoresStats"
             GET_PACKAGE_TYPES -> "https://parseapi.back4app.com/functions/getPackageTypes"
             GET_CAMPAY_CREDENTIALS -> "https://parseapi.back4app.com/functions/getCampayCredentials"
             else -> "https://parseapi.back4app.com/functions/getAppVersion"

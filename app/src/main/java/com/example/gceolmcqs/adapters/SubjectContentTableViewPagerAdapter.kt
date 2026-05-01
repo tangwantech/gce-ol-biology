@@ -2,13 +2,13 @@ package com.example.gceolmcqs.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 
 class SubjectContentTableViewPagerAdapter(
-    private val supportFragmentManager: FragmentManager,
+    supportFragmentManager: FragmentManager,
     private val tabFragments: ArrayList<Fragment>,
     private val tabTitles: List<String?>
-) : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+) : FragmentStatePagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
 
     override fun getCount(): Int {
@@ -21,5 +21,9 @@ class SubjectContentTableViewPagerAdapter(
 
     override fun getPageTitle(position: Int): CharSequence? {
         return if (position in tabTitles.indices) tabTitles[position] else null
+    }
+
+    override fun getItemPosition(`object`: Any): Int {
+        return POSITION_NONE
     }
 }

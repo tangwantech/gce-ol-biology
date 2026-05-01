@@ -4,84 +4,81 @@ import android.os.CountDownTimer
 import android.text.format.Time
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.datamodels.*
 import com.example.gceolmcqs.repository.PaperRepository
 
-
-class SectionFragmentViewModel : ViewModel() {
-//    private var originalSectionData: SectionData? = null
-    private var sectionData: SectionData? = null
-    private var userSelections = ArrayList<UserSelection>()
-    private val letters: Array<String> = Array(4) { "" }
-    private val indexPreviousAndCurrentSelectedOptionOfQuestion =
-        IndexPreviousAndCurrentSelectedOptionOfQuestion()
-    private val _numberOfQuestionsAnswered: MutableLiveData<Int> = MutableLiveData()
-    val numberOfQuestionsAnswered: LiveData<Int> = _numberOfQuestionsAnswered
-    private val isQuestionAnswered = MutableLiveData<Boolean>()
-    private val sectionQuestionsScores: ArrayList<QuestionScore> = ArrayList()
-    private var sectionScore: Int = 0
-    private var sectionDuration: Long = 0L
-    private lateinit var timer: CountDownTimer
-    private val questionIndex = MutableLiveData<Int>()
-    private val userMarkedAnswerSheet: ArrayList<QuestionWithUserAnswerMarkedData> = ArrayList()
-
-    private var sectionIndex: Int? = null
-
-    private val isTimeOut = MutableLiveData<Boolean>()
-
-    private val timeRemaining = MutableLiveData<Time>()
-
-    private val isTimeAlmostOut = MutableLiveData<Boolean>()
-    private val isTimeAlmostOutStartTime = 20000L
-
-    init {
-        letters[0] = "A"
-        letters[1] = "B"
-        letters[2] = "C"
-        letters[3] = "D"
-        _numberOfQuestionsAnswered.value = 0
-        questionIndex.value = 0
-        val t = Time().apply {
-            set(0)
-        }
-        timeRemaining.value = t
-        isQuestionAnswered.value = false
-        isTimeOut.value = false
-        isTimeAlmostOut.value = false
-
-
+class SectionFragmentViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    
+    companion object {
+        private const val KEY_SECTION_INDEX = "sectionIndex"
     }
 
-    fun setSectionIndex(index:Int){
+    private var sectionData: SectionData? = null
+    private var userSelections = ArrayList<UserSelection>()
+    private val letters: Array<String> = arrayOf("A", "B", "C", "D")
+    private val indexPreviousAndCurrentSelectedOptionOfQuestion = IndexPreviousAndCurrentSelectedOptionOfQuestion()
+    
+    private val _numberOfQuestionsAnswered = MutableLiveData(0)
+    val numberOfQuestionsAnswered: LiveData<Int> = _numberOfQuestionsAnswered
+    
+    private val isQuestionAnswered = MutableLiveData(false)
+    private val sectionQuestionsScores = ArrayList<QuestionScore>()
+    private var sectionScore: Int = 0
+    private var sectionDuration: Long = 0L
+    private var timer: CountDownTimer? = null
+    private val questionIndex = MutableLiveData(0)
+    private val userMarkedAnswerSheet = ArrayList<QuestionWithUserAnswerMarkedData>()
+
+    private var sectionIndex: Int?
+        get() = savedStateHandle[KEY_SECTION_INDEX]
+        set(value) { savedStateHandle[KEY_SECTION_INDEX] = value }
+
+    private val isTimeOut = MutableLiveData(false)
+    private val timeRemaining = MutableLiveData<Time>().apply {
+        value = Time().apply { set(0) }
+    }
+    private val isTimeAlmostOut = MutableLiveData(false)
+
+    fun setSectionIndex(index: Int) {
+        if (sectionIndex == index && sectionData != null) return
+        
         sectionIndex = index
-        initSectionData(index)
+        initializeData()
+    }
+
+    /**
+     * Attempts to initialize data from the repository. 
+     * Can be called multiple times if the repository wasn't ready initially.
+     */
+    fun initializeData(): Boolean {
+        val index = sectionIndex ?: return false
+        val data = PaperRepository.getSectionDataAt(index) ?: return false
+        
+        sectionData = data
         setSectionDuration()
         shuffleSectionQuestions()
         initUserMarkedAnswerSheet()
         updateUserMarkedAnswerSheet()
+        return true
     }
 
-    private fun initSectionData(sectionIndex: Int){
-        sectionData = PaperRepository.getSectionDataAt(sectionIndex)
-    }
+    fun getLetters(): Array<String> = letters
 
-    fun getLetters():Array<String>{
-        return letters
-    }
-
-    private fun shuffleSectionQuestions(){
+    private fun shuffleSectionQuestions() {
         sectionData?.questions?.shuffle()
-
     }
 
     private fun setSectionDuration() {
-//        sectionDuration = sectionData!!.numberOfQuestions * MCQConstants.MILLI_SEC_PER_QUESTION
         sectionDuration = getNumberOfQuestionsInSection() * MCQConstants.MILLI_SEC_PER_QUESTION
     }
 
     fun startTimer() {
+        timer?.cancel()
+        if (sectionDuration <= 0) return
+        
         timer = object : CountDownTimer(sectionDuration, MCQConstants.COUNT_DOWN_INTERVAL) {
             override fun onTick(p0: Long) {
                 val t = Time()
@@ -93,201 +90,172 @@ class SectionFragmentViewModel : ViewModel() {
             override fun onFinish() {
                 isTimeOut.value = true
             }
-
         }.start()
     }
 
-    fun getTimeRemaining(): LiveData<Time> {
-        return timeRemaining
-    }
+    fun getTimeRemaining(): LiveData<Time> = timeRemaining
 
-    fun updateIsTimeAlmostOut(timeLeft: Long){
-        if(timeLeft < MCQConstants.TIME_TO_ANIMATE_TIMER){
+    fun updateIsTimeAlmostOut(timeLeft: Long) {
+        if (timeLeft < MCQConstants.TIME_TO_ANIMATE_TIMER) {
             isTimeAlmostOut.value = true
         }
     }
 
-    fun getIsTimeAlmostOut(): LiveData<Boolean>{
-        return isTimeAlmostOut
-    }
+    fun getIsTimeAlmostOut(): LiveData<Boolean> = isTimeAlmostOut
 
-    fun getIsTimeOut(): LiveData<Boolean> {
-        return isTimeOut
-    }
+    fun getIsTimeOut(): LiveData<Boolean> = isTimeOut
 
     fun getNumberOfQuestionsInSection(): Int {
-        return sectionData!!.numberOfQuestions
+        return sectionData?.numberOfQuestions ?: 0
     }
-
 
     private fun updateNumberOfQuestionsAnswered() {
-        _numberOfQuestionsAnswered.value = _numberOfQuestionsAnswered.value!! + 1
+        _numberOfQuestionsAnswered.value = (_numberOfQuestionsAnswered.value ?: 0) + 1
     }
-
-    private fun resetIsQuestionAnswered() {
-        isQuestionAnswered.value = false
-    }
-
 
     private fun initUserMarkedAnswerSheet() {
+        val numQuestions = getNumberOfQuestionsInSection()
         initUserSelections()
         initSectionQuestionsScores()
         userMarkedAnswerSheet.clear()
-        for (index in 0..< getNumberOfQuestionsInSection()){
+        for (index in 0 until numQuestions) {
             userMarkedAnswerSheet.add(QuestionWithUserAnswerMarkedData((index + 1).toString()))
         }
-
-
     }
 
     private fun initUserSelections() {
         userSelections.clear()
-        for (index in 0..< getNumberOfQuestionsInSection()){
+        for (index in 0 until getNumberOfQuestionsInSection()) {
             userSelections.add(UserSelection())
         }
-
     }
 
     private fun initSectionQuestionsScores() {
         sectionQuestionsScores.clear()
-        for (index in 0..< getNumberOfQuestionsInSection()){
+        for (index in 0 until getNumberOfQuestionsInSection()) {
             sectionQuestionsScores.add(QuestionScore())
         }
-
     }
 
-    fun getSectionQuestions(): ArrayList<QuestionData>{
-        when(sectionData!!.sectionType){
-            MCQConstants.FOUR_ALTS ->{
-                for (index in 0..< getNumberOfQuestionsInSection()){
-                    sectionData!!.questions[index].selectableOptions.shuffle()
-                }
+    fun getSectionQuestions(): ArrayList<QuestionData> {
+        val data = sectionData ?: return arrayListOf()
+        if (data.sectionType == MCQConstants.FOUR_ALTS) {
+            for (index in 0 until getNumberOfQuestionsInSection()) {
+                data.questions.getOrNull(index)?.selectableOptions?.shuffle()
             }
         }
-        return sectionData!!.questions
+        return data.questions
     }
 
     private fun updateUserMarkedAnswerSheet() {
-        sectionData!!.questions.forEachIndexed { index, questionDataModel ->
-            userMarkedAnswerSheet[index].questionNumber = (index + 1).toString()
-            userMarkedAnswerSheet[index].question = questionDataModel.question
-            userMarkedAnswerSheet[index].image = questionDataModel.image
-            userMarkedAnswerSheet[index].twoStatements = questionDataModel.twoStatements
-            userMarkedAnswerSheet[index].nonSelectableOptions =
-                questionDataModel.nonSelectableOptions
-//            userMarkedAnswerSheet[index].fourOptions = questionDataModel.selectableOptions.toString()
-            userMarkedAnswerSheet[index].explanation = questionDataModel.explanation
-
-        }
-    }
-    private fun setQuestionsCorrectAnswers(){
-        sectionData!!.questions.forEachIndexed { index, questionDataModel ->
-            questionDataModel.selectableOptions.forEachIndexed { optionIndex, s ->
-                if (s == questionDataModel.wordAnswer) {
-                    userMarkedAnswerSheet[index].correctAnswer =
-                        "${letters[optionIndex]}. ${questionDataModel.wordAnswer}"
+        sectionData?.questions?.forEachIndexed { index, questionDataModel ->
+            if (index < userMarkedAnswerSheet.size) {
+                userMarkedAnswerSheet[index].apply {
+                    questionNumber = (index + 1).toString()
+                    question = questionDataModel.question
+                    image = questionDataModel.image
+                    twoStatements = questionDataModel.twoStatements
+                    nonSelectableOptions = questionDataModel.nonSelectableOptions
+                    explanation = questionDataModel.explanation
                 }
             }
         }
+    }
 
+    private fun setQuestionsCorrectAnswers() {
+        sectionData?.questions?.forEachIndexed { index, questionDataModel ->
+            if (index < userMarkedAnswerSheet.size) {
+                questionDataModel.selectableOptions.forEachIndexed { optionIndex, s ->
+                    if (s == questionDataModel.wordAnswer) {
+                        userMarkedAnswerSheet[index].correctAnswer =
+                            "${letters.getOrNull(optionIndex) ?: ""}. ${questionDataModel.wordAnswer}"
+                    }
+                }
+            }
+        }
     }
 
     fun getSectionTitle(): String {
-        return sectionData!!.title
+        return sectionData?.title ?: ""
     }
 
     fun updateUserSelection(questionIndex: Int, optionSelectedIndex: Int) {
+        val data = sectionData ?: return
+        val questions = data.questions
+        if (questionIndex >= questions.size || optionSelectedIndex >= letters.size) return
+        
+        val selectedOption = questions[questionIndex].selectableOptions.getOrNull(optionSelectedIndex) ?: return
+        
         val userSelection = UserSelection(
             letters[optionSelectedIndex],
-            sectionData!!.questions[questionIndex].selectableOptions[optionSelectedIndex]
+            selectedOption
         )
-        userSelections[questionIndex] = userSelection
-
-        appendLetterToFourOptions(questionIndex)
-
-        userMarkedAnswerSheet[questionIndex].userSelection = userSelection
-        updateNumberOfQuestionsAnswered()
-        evaluateUserSelections(questionIndex)
+        
+        if (questionIndex < userSelections.size) {
+            userSelections[questionIndex] = userSelection
+            appendLetterToFourOptions(questionIndex)
+            if (questionIndex < userMarkedAnswerSheet.size) {
+                userMarkedAnswerSheet[questionIndex].userSelection = userSelection
+            }
+            updateNumberOfQuestionsAnswered()
+            evaluateUserSelections(questionIndex)
+        }
     }
 
-    private fun appendLetterToFourOptions(questionIndex: Int){
+    private fun appendLetterToFourOptions(questionIndex: Int) {
+        val data = sectionData ?: return
+        val question = data.questions.getOrNull(questionIndex) ?: return
         var optionsWithLetterPrepended = ""
-        sectionData!!.questions[questionIndex].selectableOptions.forEachIndexed { index, s ->
-            optionsWithLetterPrepended += "${letters[index]}. $s\n"
+        question.selectableOptions.forEachIndexed { index, s ->
+            optionsWithLetterPrepended += "${letters.getOrNull(index) ?: ""}. $s\n"
         }
-        userMarkedAnswerSheet[questionIndex].fourOptions = optionsWithLetterPrepended
-//        userMarkedAnswerSheet[questionIndex.value!!].fourOptions = sectionDataModel!!.questions[questionIndex.value!!].selectableOptions.joinToString("\n")
+        if (questionIndex < userMarkedAnswerSheet.size) {
+            userMarkedAnswerSheet[questionIndex].fourOptions = optionsWithLetterPrepended
+        }
     }
 
     private fun evaluateUserSelections(questionIndex: Int) {
-        if (userSelections[questionIndex].optionSelected == sectionData!!.questions[questionIndex].wordAnswer) {
-            sectionQuestionsScores[questionIndex].score = 1
-            userMarkedAnswerSheet[questionIndex].userSelection!!.remark = true
-
+        val data = sectionData ?: return
+        if (questionIndex >= data.questions.size || questionIndex >= userSelections.size) return
+        
+        if (userSelections[questionIndex].optionSelected == data.questions[questionIndex].wordAnswer) {
+            if (questionIndex < sectionQuestionsScores.size) {
+                sectionQuestionsScores[questionIndex].score = 1
+            }
+            userMarkedAnswerSheet.getOrNull(questionIndex)?.userSelection?.remark = true
         } else {
-            sectionQuestionsScores[questionIndex].score = 0
-            userMarkedAnswerSheet[questionIndex].userSelection!!.remark = false
+            if (questionIndex < sectionQuestionsScores.size) {
+                sectionQuestionsScores[questionIndex].score = 0
+            }
+            userMarkedAnswerSheet.getOrNull(questionIndex)?.userSelection?.remark = false
         }
-
         sumSectionQuestionScores()
-
-
     }
-
 
     private fun sumSectionQuestionScores() {
         sectionScore = sectionQuestionsScores.count { it.score == 1 }
     }
 
-    private fun updateIndexQuestionOptionSelected(indexOptionSelected: Int) {
-
-        if (indexPreviousAndCurrentSelectedOptionOfQuestion.indexCurrentItem == null) {
-            indexPreviousAndCurrentSelectedOptionOfQuestion.indexCurrentItem = indexOptionSelected
-        }
-
-        indexPreviousAndCurrentSelectedOptionOfQuestion.indexCurrentItem?.let {
-            if (indexOptionSelected != it) {
-                indexPreviousAndCurrentSelectedOptionOfQuestion.indexPreviousItem = it
-                indexPreviousAndCurrentSelectedOptionOfQuestion.indexCurrentItem =
-                    indexOptionSelected
-
-            }
-        }
-
-    }
-
-
-    fun getIndexPreviousAndCurrentItemOfQuestion(): IndexPreviousAndCurrentSelectedOptionOfQuestion {
-        return indexPreviousAndCurrentSelectedOptionOfQuestion
-    }
-
-    private fun resetIndexPreviousAndCurrentItemOfQuestion() {
-        indexPreviousAndCurrentSelectedOptionOfQuestion.indexCurrentItem = null
-        indexPreviousAndCurrentSelectedOptionOfQuestion.indexPreviousItem = null
-    }
-
-    fun getSectionResultData():SectionResultData{
+    fun getSectionResultData(): SectionResultData {
         setQuestionsCorrectAnswers()
-        val percentage = ((sectionScore.toDouble() / getNumberOfQuestionsInSection().toDouble()) * 100).toInt()
-        val scoreData = ScoreData(sectionScore, getNumberOfQuestionsInSection(), percentage)
+        val numQuestions = getNumberOfQuestionsInSection()
+        val divisor = if (numQuestions > 0) numQuestions.toDouble() else 1.0
+        val percentage = ((sectionScore.toDouble() / divisor) * 100).toInt()
+        val scoreData = ScoreData(sectionScore, numQuestions, percentage)
         val userMarkedAnswersSheetData = UserMarkedAnswersSheetData(userMarkedAnswerSheet)
-        return SectionResultData(sectionIndex!!, scoreData, userMarkedAnswersSheetData)
+        return SectionResultData(sectionIndex ?: 0, scoreData, userMarkedAnswersSheetData)
     }
 
     fun getSectionDirections(): String {
-
-        return sectionData?.directions!!
+        return sectionData?.directions ?: ""
     }
 
     fun getSectionIndex(): String {
-        return sectionIndex.toString()
+        return sectionIndex?.toString() ?: ""
     }
-
-//    fun isPackageActive(subjectIndex: Int): Boolean{
-//        val activatedOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).activatedOn
-//        val expiresOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).expiresOn
-//        return ActivationExpiryDatesGenerator().checkExpiry(activatedOn!!, expiresOn!!)
-//    }
-
-
+    
+    override fun onCleared() {
+        super.onCleared()
+        timer?.cancel()
+    }
 }

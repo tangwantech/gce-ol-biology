@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.gceolmcqs.adapters.SectionRecyclerAdapter
 import com.example.gceolmcqs.datamodels.QuestionWithUserAnswerMarkedData
+import com.example.gceolmcqs.datamodels.SectionData
 import com.example.gceolmcqs.datamodels.SectionResultData
 import com.example.gceolmcqs.datamodels.UserMarkedAnswersSheetData
 import com.example.gceolmcqs.fragments.*
@@ -19,7 +20,6 @@ import com.example.gceolmcqs.viewmodels.PaperActivityViewModel
 private const val SHOW_INSTRUCTION = "showInstruction"
 
 class PaperActivity : AppCompatActivity(),
-//    SectionNavigationRecyclerViewAdapter.OnRecyclerItemClickListener,
     OnCheckPackageExpiredListener,
     OnRetrySectionListener,
     OnNextSectionListener,
@@ -30,7 +30,6 @@ class PaperActivity : AppCompatActivity(),
     OnIsSectionAnsweredListener,
     SectionRecyclerAdapter.OnExplanationClickListener,
     SectionNavigationFragment.OnSectionNAvFragmentRecyclerItemClickListener
-//    SectionNavigationFragment.OnShowPackageExpiredDialogListener
 {
 
     private lateinit var _viewModel: PaperActivityViewModel
@@ -40,39 +39,40 @@ class PaperActivity : AppCompatActivity(),
     private lateinit var tvInstruction: TextView
 
     private var currentSectionFragment: Fragment? = null
-//    private var subjectName: String? = null
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_paper)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setupViewModel()
-        updateIndexes()
+        
+        // Only set initial state if this is a fresh start (not process death)
+        updateIndexes(savedInstanceState == null)
         setSubjectName()
+        
+        // Wait for data to be ready before showing fragments
         beginSetup()
-
-//        displayPaperInstructionDialog()
-
-
     }
 
-    private fun updateIndexes(){
+    private fun updateIndexes(isFirstLaunch: Boolean){
         _viewModel.updateSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
         _viewModel.updateExamTypeIndex(intent.getIntExtra(MCQConstants.EXAM_TYPE_INDEX, 0))
         _viewModel.updateExamItemIndex(intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0))
-        _viewModel.setCurrentFragmentIndex(0)
-
+        
+        // If it's a first launch and we don't have a saved index, start at navigation
+        if (isFirstLaunch && _viewModel.getCurrentFragmentIndex() == null) {
+            _viewModel.setCurrentFragmentIndex(0)
+        }
     }
 
     private fun setupViewModel(){
-
         _viewModel = ViewModelProvider(this)[PaperActivityViewModel::class.java]
     }
 
     private fun setSubjectName(){
-        _viewModel.setSubjectName(intent.getStringExtra(MCQConstants.SUBJECT_NAME)!!)
+        intent.getStringExtra(MCQConstants.SUBJECT_NAME)?.let {
+            _viewModel.setSubjectName(it)
+        }
     }
 
     private fun setActivityTitle(){
@@ -89,24 +89,27 @@ class PaperActivity : AppCompatActivity(),
         if(currentSectionFragment != null){
             replaceFragment(currentSectionFragment!!, 1)
         }else{
-            val sectionFragment =
-                SectionFragment.newInstance(
-                    sectionIndex,
-                    _viewModel.getSectionData(sectionIndex)
-                )
-            replaceFragment(sectionFragment, 1)
+            val sectionData = _viewModel.getSectionData(sectionIndex)
+            if (sectionData != null) {
+                val sectionFragment =
+                    SectionFragment.newInstance(
+                        sectionIndex,
+                        sectionData
+                    )
+                replaceFragment(sectionFragment, 1)
+            } else {
+                gotoSectionNavigationFragment()
+            }
         }
     }
 
     private fun gotoResult(sectionResultData: SectionResultData) {
-
         _viewModel.setSectionResultData(sectionResultData)
         val sectionResultFragment = SectionResultFragment.newInstance(
             sectionResultData,
-            intent.getStringExtra(MCQConstants.EXPIRES_ON)!!
+            intent.getStringExtra(MCQConstants.EXPIRES_ON) ?: ""
         )
         replaceFragment(sectionResultFragment, 2)
-
     }
 
     private fun gotoSectionCorrection(
@@ -117,48 +120,43 @@ class PaperActivity : AppCompatActivity(),
         val sectionCorrectionFragment = CorrectionFragment.newInstance(
             sectionIndex,
             userMarkedAnswersSheetData,
-            intent.getStringExtra(MCQConstants.EXPIRES_ON)!!
+            intent.getStringExtra(MCQConstants.EXPIRES_ON) ?: ""
         )
         replaceFragment(sectionCorrectionFragment, 3)
-
     }
 
     private fun replaceFragment(fragment: Fragment, fragmentIndex: Int) {
         _viewModel.setCurrentFragmentIndex(fragmentIndex)
 
         val transaction = supportFragmentManager.beginTransaction()
-
         transaction.apply {
             replace(R.id.sectionNavigationFragmentHolder, fragment)
-            commit()
+            // Use commitNow or commitAllowingStateLoss to avoid issues during rapid transitions or recreation
+            commitAllowingStateLoss()
         }
     }
 
     override fun onResume() {
         super.onResume()
-//        beginSetup()
         setActivityTitle()
-
-
     }
-
-    override fun onPause() {
-        super.onPause()
-
-    }
-
 
     private fun loadFragment(){
-        when(_viewModel.getCurrentFragmentIndex()){
+        val index = _viewModel.getCurrentFragmentIndex() ?: 0
+        when(index){
             0 -> gotoSectionNavigationFragment()
             1 -> {
                 gotoSection(_viewModel.getCurrentSectionIndex())
             }
             2 -> {
-                gotoResult(_viewModel.getSectionResultData())
+                _viewModel.getSectionResultData()?.let {
+                    gotoResult(it)
+                } ?: gotoSectionNavigationFragment()
             }
             3 -> {
-                gotoSectionCorrection(_viewModel.getCurrentSectionIndex(), _viewModel.getUserMarkedAnswerSheet())
+                _viewModel.getUserMarkedAnswerSheet()?.let {
+                    gotoSectionCorrection(_viewModel.getCurrentSectionIndex(), it)
+                } ?: gotoSectionNavigationFragment()
             }
         }
     }
@@ -166,10 +164,6 @@ class PaperActivity : AppCompatActivity(),
     private fun resetCurrentSectionFragment(){
         currentSectionFragment = null
     }
-
-//    override fun onRecyclerItemClick(position: Int) {
-//        checkPackageExpiry(position)
-//    }
 
     private fun checkPackageExpiry(position: Int){
         resetCurrentSectionFragment()
@@ -185,27 +179,17 @@ class PaperActivity : AppCompatActivity(),
                 gotoSection(position)
             }
         }
-
-//        if (!isActive) {
-//            showPackageExpiredDialog()
-//        }else{
-//            gotoSection(position)
-//        }
-//        gotoSection(position)
     }
 
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-
         if (_viewModel.getCurrentFragmentIndex() == 0) {
             super.onBackPressed()
             finish()
-
         } else {
             gotoSectionNavigationFragment()
         }
-
     }
 
 
@@ -217,14 +201,12 @@ class PaperActivity : AppCompatActivity(),
     private fun resetPaperRepository(){
         _viewModel.resetPaperRepository()
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-//                finish()
             }
-
         }
         return super.onOptionsItemSelected(item)
     }
@@ -242,12 +224,6 @@ class PaperActivity : AppCompatActivity(),
                 gotoResult(sectionResultData)
             }
         }
-//        if (!isActive) {
-//            showPackageExpiredDialog()
-//        }else{
-//            gotoResult(sectionResultData)
-//        }
-
     }
 
     override fun onRetrySection(sectionIndex: Int) {
@@ -369,7 +345,6 @@ class PaperActivity : AppCompatActivity(),
     }
 
     private fun gotoSubscriptionActivity(){
-//        val subjectIndex = intent.getBundleExtra("paperData")!!.getInt(MCQConstants.SUBJECT_INDEX)
         val subjectIndex = _viewModel.getSubjectIndex()
         val subjectName = _viewModel.getSubjectName()
 
@@ -381,7 +356,6 @@ class PaperActivity : AppCompatActivity(),
     }
 
     override fun onSectionNavFragmentRecyclerItemClick(position: Int) {
-//        checkPackageExpiry(position)
         gotoSection(position)
     }
 
@@ -392,9 +366,8 @@ class PaperActivity : AppCompatActivity(),
                 override fun onSuccess() {
                     runOnUiThread {
                         _viewModel.initRepositories()
+                        // Ensure we restore the correct fragment after repositories are initialized
                         loadFragment()
-//                        setActivityTitle()
-
                     }
                 }
 
@@ -403,7 +376,6 @@ class PaperActivity : AppCompatActivity(),
                 }
             })
         }else{
-//            println("setupSuccessful()")
             _viewModel.initRepositories()
             loadFragment()
         }
@@ -441,7 +413,6 @@ interface OnGotoSectionCorrectionListener {
 
 interface OnPaperScoreListener {
     fun onUpdatePaperScore(sectionIndex: Int, numberOfCorrectAnswers: Int)
-//    fun onGetPaperScore(): Int
 }
 
 interface OnIsSectionAnsweredListener {

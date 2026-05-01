@@ -3,44 +3,60 @@ package com.example.gceolmcqs
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.datamodels.ActivationExpiryDates
 import com.example.gceolmcqs.datamodels.SubjectPackageData
 import com.example.gceolmcqs.repository.Paper1DataRepository
 
-class SubjectContentTableViewModel : ViewModel() {
+class SubjectContentTableViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    
+    companion object {
+        private const val KEY_SUBJECT_INDEX = "subjectIndex"
+        private const val KEY_TAB_INDEX = "currentTabIndex"
+    }
+
     private val isSubjectPackageActive = MutableLiveData<Boolean>()
-    private var subjectIndex: Int = 0
-    private var currentTabIndex: Int = 0
+    
+    private var _subjectIndex: Int
+        get() = savedStateHandle[KEY_SUBJECT_INDEX] ?: 0
+        set(value) { savedStateHandle[KEY_SUBJECT_INDEX] = value }
+
+    private var _currentTabIndex: Int
+        get() = savedStateHandle[KEY_TAB_INDEX] ?: 0
+        set(value) { savedStateHandle[KEY_TAB_INDEX] = value }
 
     private val _subjectPackageData = MutableLiveData<SubjectPackageData?>()
     val subjectPackageData: LiveData<SubjectPackageData?> = _subjectPackageData
 
     private val userDataManager = UserDataManager()
+    private val userScoresStatsTracker = UserScoresStatsTracker()
 
-    fun getCurrentTabIndex(): Int = currentTabIndex
+    fun getCurrentTabIndex(): Int = _currentTabIndex
 
     fun updateCurrentTabIndex(index: Int) {
-        currentTabIndex = index
+        _currentTabIndex = index
     }
 
     fun loadSubjectPackageDataFromUserDataRepository() {
-        _subjectPackageData.value = userDataManager.getSubjectPackageAt(subjectIndex)
+        _subjectPackageData.value = userDataManager.getSubjectPackageAt(_subjectIndex)
     }
 
-    fun getExamTitles(): List<String?> = Paper1DataRepository.getExamTitles(subjectIndex)
+    fun getExamTitles(): List<String?> = Paper1DataRepository.getExamTitles(_subjectIndex)
 
-    fun getExamTypesCount(): Int = Paper1DataRepository.getExamTitles(subjectIndex).size
+    fun getExamTypesCount(): Int = Paper1DataRepository.getExamTitles(_subjectIndex).size
 
     fun getIsPackageActive(): LiveData<Boolean> = isSubjectPackageActive
 
-    fun getPackageStatus(): Boolean = userDataManager.isSubscriptionActiveAt(subjectIndex)
+    fun getPackageStatus(): Boolean = userDataManager.isSubscriptionActiveAt(_subjectIndex)
 
     fun setSubjectIndex(index: Int) {
-        subjectIndex = index
+        _subjectIndex = index
     }
 
-    fun getSubjectName(): String = Paper1DataRepository.getSubjectName(subjectIndex)
+    fun getSubjectIndex(): Int = _subjectIndex
+
+    fun getSubjectName(): String = Paper1DataRepository.getSubjectName(_subjectIndex)
 
     fun getGraceExtension(): ActivationExpiryDates? {
         val data = _subjectPackageData.value ?: return null
@@ -65,5 +81,9 @@ class SubjectContentTableViewModel : ViewModel() {
             initID(id)
             start(listener)
         }
+    }
+
+    fun updateScoresStatsInRemoteServer(id: String){
+        userScoresStatsTracker.updateUserScoreStatsInServer(id)
     }
 }

@@ -7,35 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gceolmcqs.R
-//import com.example.gceolmcq.fragments.OnSectionAnsweredListener
 
 class SectionNavigationRecyclerViewAdapter(
     private val context: Context,
     private val listSections: Array<Bundle>,
     private val listener: OnRecyclerItemClickListener,
-    private val sectionsAnswered: List<Boolean>
+    private val sectionsAnswered: List<Boolean>,
+    private var sectionScores: List<Int> = emptyList()
 ) :
     RecyclerView.Adapter<SectionNavigationRecyclerViewAdapter.ViewHolder>() {
-
-    private var sectionScores: ArrayList<Int>? = null
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val tvSectionNavItem: TextView = view.findViewById(R.id.tvSectionNavItem)
         val tvSectionNumberOfQuestions: TextView = view.findViewById(R.id.tvSectionNumberOfQuestions)
         val sectionNavItemLayout: LinearLayout = view.findViewById(R.id.sectionNavItemLayout)
-//        val imgSectionAnsweredCheck: ImageView = view.findViewById(R.id.imgSectionAnsweredCheck)
         val scoreLo: LinearLayout = view.findViewById(R.id.scoreLo)
         val tvSectionScore: TextView = view.findViewById(R.id.tvSectionScore)
 
         init{
             sectionNavItemLayout.setOnClickListener{
-                listener.onRecyclerItemClick(this.adapterPosition)
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onRecyclerItemClick(position)
+                }
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,40 +42,36 @@ class SectionNavigationRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvSectionNavItem.text = listSections[position].getString("sectionName")
-        holder.tvSectionNumberOfQuestions.text = "Number of questions: ${listSections[position].getString("numberOfQuestions")}"
+        val section = listSections[position]
+        holder.tvSectionNavItem.text = section.getString("sectionName")
+        val numQuestions = section.getString("numberOfQuestions") ?: "0"
+        holder.tvSectionNumberOfQuestions.text = "Number of questions: $numQuestions"
 
-        if(sectionsAnswered[position]){
-            val numberOfQuestionsInSection = listSections[position].getString("numberOfQuestions")?.toInt()
-            val sectionScore = sectionScores!![position]
-            val scorePercentage =(( sectionScore.toDouble() / numberOfQuestionsInSection!!.toDouble()) * 100).toInt()
+        if(position < sectionsAnswered.size && sectionsAnswered[position]){
+            val numberOfQuestionsInSection = numQuestions.toIntOrNull() ?: 1
+            val sectionScore = sectionScores.getOrNull(position) ?: 0
+            val scorePercentage = ((sectionScore.toDouble() / numberOfQuestionsInSection.toDouble()) * 100).toInt()
 
             holder.scoreLo.visibility = View.VISIBLE
-//            holder.tvSectionScore.visibility = View.VISIBLE
             holder.tvSectionScore.text = "$sectionScore/$numberOfQuestionsInSection"
 
-            if (scorePercentage > 50){
+            if (scorePercentage >= 50){
                 holder.tvSectionScore.setTextColor(context.resources.getColor(R.color.color_green))
             }else{
                 holder.tvSectionScore.setTextColor(context.resources.getColor(R.color.color_red))
             }
-//            holder.sectionNavItemLayout.isEnabled = false
-
-
-
-        }else{
+        } else {
             holder.scoreLo.visibility = View.GONE
         }
-
-
     }
 
     override fun getItemCount(): Int {
         return listSections.size
     }
 
-    fun updateSectionScore(sectionScores: ArrayList<Int>){
-        this.sectionScores = sectionScores
+    fun updateSectionScore(newScores: List<Int>){
+        this.sectionScores = newScores
+        notifyDataSetChanged()
     }
 
     interface OnRecyclerItemClickListener{

@@ -62,9 +62,7 @@ class SectionNavigationFragmentViewModel : ViewModel() {
 
     fun updateExamScore(examItemTitle: String) {
 
-        println("updating exam score.............")
         val sectionAnsweredCount = getNumberOfSectionsAnswered().value ?: 0
-        println("sectionAnsweredCount: $sectionAnsweredCount")
         if (sectionAnsweredCount > 0) {
             ExamScoreDataRepository.getScoreByTitle(examItemTitle, object : ExamScoreDataRepository.OnScoreLoadedListener {
                 override fun onScoreLoaded(examScore: ExamScoreEntity?) {

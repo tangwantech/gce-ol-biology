@@ -111,7 +111,7 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
     private fun setupAdapters(){
 
         println("setting up section navigation fragment adapter")
-        val sectionNameBundleList = viewModel.getSectionNameBundleList()
+        val sectionNameBundleList = viewModel.getSectionNameBundleList() ?: return
         val rvLayoutMan = LinearLayoutManager(requireContext())
         rvLayoutMan.orientation = LinearLayoutManager.VERTICAL
         rvSectionNav.addItemDecoration(
@@ -125,7 +125,7 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
         sectionNavigationRecyclerViewAdapter =
             SectionNavigationRecyclerViewAdapter(
                 requireContext(),
-                sectionNameBundleList!!,
+                sectionNameBundleList,
                 this,
                 viewModel.getSectionsAnswered()
             )
@@ -193,8 +193,10 @@ class SectionNavigationFragment : Fragment(), SectionNavigationRecyclerViewAdapt
 
     override fun onResume() {
         super.onResume()
-        sectionNavigationRecyclerViewAdapter.updateSectionScore(viewModel.getSectionsScores())
-        sectionNavigationRecyclerViewAdapter.notifyDataSetChanged()
+        if (::sectionNavigationRecyclerViewAdapter.isInitialized) {
+            sectionNavigationRecyclerViewAdapter.updateSectionScore(viewModel.getSectionsScores())
+            sectionNavigationRecyclerViewAdapter.notifyDataSetChanged()
+        }
         viewModel.updateExamScore(requireActivity().title.toString())
     }
 

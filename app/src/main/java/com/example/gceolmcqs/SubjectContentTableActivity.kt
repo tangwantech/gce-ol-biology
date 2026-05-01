@@ -3,6 +3,7 @@ package com.example.gceolmcqs
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,13 +29,15 @@ class SubjectContentTableActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_subject_content_table)
-//        pref = getSharedPreferences(SUBJECT_CONTENT_TABLE, MODE_PRIVATE)
         initActivityViews()
         initViewModel()
         setupActivityViewListeners()
         setupViewObservers()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        
+        // Initial setup trigger
+        start()
     }
 
     private fun setTitle() {
@@ -48,7 +51,10 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[SubjectContentTableViewModel::class.java]
-        viewModel.setSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
+        // Only set if not already restored
+        if (intent.hasExtra(MCQConstants.SUBJECT_INDEX)) {
+            viewModel.setSubjectIndex(intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0))
+        }
     }
 
     private fun setupViewObservers() {
@@ -82,11 +88,16 @@ class SubjectContentTableActivity : AppCompatActivity(),
     private fun setUpSubjectContentTab(subjectPackageData: SubjectPackageData?) {
         if (subjectPackageData == null) return
         
-        val subjectIndex = intent.getIntExtra(MCQConstants.SUBJECT_INDEX, 0)
+        val subjectIndex = viewModel.getSubjectIndex()
         val tabIndex = viewModel.getCurrentTabIndex()
         val tabFragments: ArrayList<Fragment> = ArrayList()
 
-        for (fragmentIndex in 0 until viewModel.getExamTypesCount()) {
+        val count = viewModel.getExamTypesCount()
+        if (count == 0) {
+            return
+        }
+
+        for (fragmentIndex in 0 until count) {
             val fragment =
                 ExamTypeFragment.newInstance(
                     fragmentIndex,
@@ -140,13 +151,16 @@ class SubjectContentTableActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        // Ensure state is ready when returning to activity
         start()
+        updateUsersStats()
     }
 
     private fun start() {
         if (!viewModel.isPaper1DataInitialised() && !viewModel.isUserDataInitialised()) {
             beginSetup()
         } else {
+            // Already initialized, ensure UI is updated
             viewModel.initPaper1DataRepository()
             setTitle()
             viewModel.loadSubjectPackageDataFromUserDataRepository()
@@ -171,17 +185,13 @@ class SubjectContentTableActivity : AppCompatActivity(),
         }.create().show()
     }
 
-    companion object {
-        private const val SUBJECT_CONTENT_TABLE = "subject content table"
-        private const val TAB_INDEX = "tab index"
-    }
-
     private fun beginSetup() {
         val id = UtilityFunctions().getDeviceId(this)
         viewModel.beginSetup(id, this, object : UserDataManager.UserDataManagerListener {
             override fun onSuccess() {
                 runOnUiThread {
-                    title = viewModel.getSubjectName()
+                    viewModel.initPaper1DataRepository()
+                    setTitle()
                     viewModel.loadSubjectPackageDataFromUserDataRepository()
                 }
             }
@@ -193,13 +203,26 @@ class SubjectContentTableActivity : AppCompatActivity(),
         val examItemIndex = intent.getIntExtra(MCQConstants.EXAM_ITEM_INDEX, 0)
         if (examItemIndex == 0) {
             startActivity(intent)
-        }else{
+        } else {
             if (!viewModel.getPackageStatus()) {
                 showAlertDialog()
             } else {
                 startActivity(intent)
             }
         }
+    }
 
+    fun updateUsersStats(){
+        val params = hashMapOf("test" to "test")
+        val id = UtilityFunctions().getDeviceId(this)
+        ConnectivityTester.checkConnection(this, params, object: ConnectivityTester.OnTestConnectionListener{
+            override fun onConnectionAvailable() {
+                viewModel.updateScoresStatsInRemoteServer(id)
+            }
+
+            override fun onConnectionUnavailable() {
+                Log.i("ConnectivityTester", "onConnectionUnavailable")
+            }
+        })
     }
 }

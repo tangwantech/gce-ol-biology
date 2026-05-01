@@ -27,12 +27,16 @@ class PaperRepository {
         private val areAllSectionsAnswered = MutableLiveData(false)
 
         fun initPaperData(subjectIndex: Int, examTypeIndex: Int, examItemIndex: Int, paperData: PaperData?) {
-//            println("PaperData within initPaperData: $paperData")
             this.paperData = paperData
             paperData?.let {
                 sectionsScores.value = MutableList(it.numberOfSections) { 0 }
                 sectionsAnsweredData.clear()
                 sectionsAnsweredData.addAll(List(it.numberOfSections) { false })
+                
+                unAnsweredSectionIndexes.clear()
+                for (i in 0 until it.numberOfSections) {
+                    unAnsweredSectionIndexes.add(i)
+                }
             }
         }
 
@@ -56,6 +60,11 @@ class PaperRepository {
             sectionsAnsweredCount.value = 0
             currentSectionRetryCount.value = MCQConstants.SECTION_RETRY_LIMIT
             unAnsweredSectionIndexes.clear()
+            paperData?.let {
+                for (i in 0 until it.numberOfSections) {
+                    unAnsweredSectionIndexes.add(i)
+                }
+            }
             userMarkedAnswersSheetData = null
             sectionResultData = null
             paperGrade.value = null
@@ -63,22 +72,24 @@ class PaperRepository {
             areAllSectionsAnswered.value = false
         }
 
-        fun getSectionDataAt(position: Int): SectionData {
-            return paperData?.sections?.get(position)?.copy()?.apply {
+        fun getSectionDataAt(position: Int): SectionData? {
+            return paperData?.sections?.getOrNull(position)?.copy()?.apply {
                 repeat(2) { questions.shuffle() }
                 if (questions.size > numberOfQuestions) {
                     questions = ArrayList(questions.take(numberOfQuestions))
                 }
-            } ?: throw IllegalStateException("Paper data is not initialized")
+            }
         }
 
         fun getNumberOfSections(): Int = paperData?.numberOfSections ?: 0
 
         fun updateSectionScoreAt(sectionIndex: Int, score: Int) {
             sectionsScores.value?.let {
-                it[sectionIndex] = score
-                paperScore.value = it.sum()
-                updateGrade()
+                if (sectionIndex < it.size) {
+                    it[sectionIndex] = score
+                    paperScore.value = it.sum()
+                    updateGrade()
+                }
             }
         }
 
@@ -91,9 +102,12 @@ class PaperRepository {
         fun getPaperScore(): LiveData<Int> = paperScore
 
         fun updateSectionsAnsweredAt(sectionIndex: Int) {
-            sectionsAnsweredData[sectionIndex] = true
-            sectionsAnsweredCount.value = sectionsAnsweredData.count { it }
-            updateGrade()
+            if (sectionIndex < sectionsAnsweredData.size) {
+                sectionsAnsweredData[sectionIndex] = true
+                sectionsAnsweredCount.value = sectionsAnsweredData.count { it }
+                unAnsweredSectionIndexes.remove(sectionIndex)
+                updateGrade()
+            }
         }
 
         fun getSectionsAnswered(): List<Boolean> = sectionsAnsweredData
@@ -116,15 +130,13 @@ class PaperRepository {
             this.userMarkedAnswersSheetData = userMarkedAnswersSheetData
         }
 
-        fun getUserMarkedAnswerSheet(): UserMarkedAnswersSheetData =
-            userMarkedAnswersSheetData ?: throw IllegalStateException("User answers not set")
+        fun getUserMarkedAnswerSheet(): UserMarkedAnswersSheetData? = userMarkedAnswersSheetData
 
         fun setSectionResultData(sectionResultData: SectionResultData) {
             this.sectionResultData = sectionResultData
         }
 
-        fun getSectionResultData(): SectionResultData =
-            sectionResultData ?: throw IllegalStateException("Section results not set")
+        fun getSectionResultData(): SectionResultData? = sectionResultData
 
         fun getTotalNumberOfQuestions(): Int = paperData?.numberOfQuestions ?: 0
 
@@ -133,7 +145,6 @@ class PaperRepository {
         fun getSectionNames(): Array<String>? = paperData?.sections?.map { it.title }?.toTypedArray()
 
         fun getSectionNameBundleList(): Array<Bundle>? {
-            println("Within getSectionNameBundleList: ${paperData?.sections}")
             return paperData?.sections?.map { section ->
                 Bundle().apply {
                     putString("sectionName", section.title)
@@ -143,8 +154,9 @@ class PaperRepository {
         }
 
         private fun updateGrade() {
-            if (sectionsAnsweredCount.value ?: 0 > 0) {
-                paperPercentage.value = ((paperScore.value ?: 0).toDouble() / getTotalNumberOfQuestions() * 100).toInt()
+            val totalQuestions = getTotalNumberOfQuestions()
+            if (totalQuestions > 0 && (sectionsAnsweredCount.value ?: 0) > 0) {
+                paperPercentage.value = ((paperScore.value ?: 0).toDouble() / totalQuestions * 100).toInt()
 
                 paperGrade.value = when (paperPercentage.value ?: 0) {
                     in 75..100 -> "A Grade"
@@ -156,7 +168,8 @@ class PaperRepository {
                 }
             }
             
-            if (sectionsAnsweredCount.value == getNumberOfSections()) {
+            val numSections = getNumberOfSections()
+            if (numSections > 0 && sectionsAnsweredCount.value == numSections) {
                 areAllSectionsAnswered.value = true
             }
         }

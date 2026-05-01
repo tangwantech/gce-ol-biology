@@ -2,63 +2,87 @@ package com.example.gceolmcqs.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.gceolmcqs.UserDataManager
 import com.example.gceolmcqs.UsageTimer
 import com.example.gceolmcqs.datamodels.*
 import com.example.gceolmcqs.repository.Paper1DataRepository
 import com.example.gceolmcqs.repository.PaperRepository
-import com.example.gceolmcqs.roomDB.GceOLMcqDatabase
 
-//import com.example.gceolmcqs.repository.RemoteRepoManager
+class PaperActivityViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    
+    companion object {
+        private const val KEY_FRAGMENT_INDEX = "currentFragmentIndex"
+        private const val KEY_SUBJECT_NAME = "subjectName"
+        private const val KEY_SUBJECT_INDEX = "subjectIndex"
+        private const val KEY_EXAM_TYPE_INDEX = "examTypeIndex"
+        private const val KEY_EXAM_ITEM_INDEX = "examItemIndex"
+        private const val KEY_SECTION_INDEX = "currentSectionIndex"
+        private const val KEY_RESULT_DATA = "sectionResultData"
+        private const val KEY_USER_ANSWERS = "userMarkedAnswers"
+    }
 
-class PaperActivityViewModel:ViewModel() {
-    private var currentFragmentIndex: Int? = null
-    private lateinit var subjectName: String
-    private var subjectIndex = 0
-    private var examTypeIndex = 0
-    private var examItemIndex = 0
+    private var currentFragmentIndexProp: Int?
+        get() = savedStateHandle[KEY_FRAGMENT_INDEX]
+        set(value) { savedStateHandle[KEY_FRAGMENT_INDEX] = value }
+
+    private var subjectNameProp: String?
+        get() = savedStateHandle[KEY_SUBJECT_NAME]
+        set(value) { savedStateHandle[KEY_SUBJECT_NAME] = value }
+
+    private var subjectIndexProp: Int
+        get() = savedStateHandle[KEY_SUBJECT_INDEX] ?: 0
+        set(value) { savedStateHandle[KEY_SUBJECT_INDEX] = value }
+
+    private var examTypeIndexProp: Int
+        get() = savedStateHandle[KEY_EXAM_TYPE_INDEX] ?: 0
+        set(value) { savedStateHandle[KEY_EXAM_TYPE_INDEX] = value }
+
+    private var examItemIndexProp: Int
+        get() = savedStateHandle[KEY_EXAM_ITEM_INDEX] ?: 0
+        set(value) { savedStateHandle[KEY_EXAM_ITEM_INDEX] = value }
 
     private val userDataManager = UserDataManager()
 
     fun updateSubjectIndex(index: Int){
-        subjectIndex = index
+        subjectIndexProp = index
     }
 
     fun getSubjectName(): String{
-        return subjectName
+        return subjectNameProp ?: ""
     }
 
     fun getSubjectIndex(): Int{
-        return subjectIndex
+        return subjectIndexProp
     }
 
     fun updateExamTypeIndex(index: Int){
-        examTypeIndex = index
+        examTypeIndexProp = index
     }
 
     fun updateExamItemIndex(index: Int){
-        examItemIndex = index
+        examItemIndexProp = index
     }
 
     fun getExamItemIndex(): Int {
-        return examItemIndex
+        return examItemIndexProp
     }
 
     fun getExamItemTitle(): String{
-        return Paper1DataRepository.getExamItemTitle(subjectIndex, examTypeIndex, examItemIndex)
+        return Paper1DataRepository.getExamItemTitle(subjectIndexProp, examTypeIndexProp, examItemIndexProp)
     }
 
     fun setCurrentFragmentIndex(index: Int){
-        currentFragmentIndex = index
+        currentFragmentIndexProp = index
     }
 
-    fun getCurrentFragmentIndex():Int?{
-        return currentFragmentIndex
+    fun getCurrentFragmentIndex(): Int? {
+        return currentFragmentIndexProp
     }
 
     fun setSubjectName(subjectName: String) {
-        this.subjectName = subjectName
+        this.subjectNameProp = subjectName
     }
 
     fun getUnAnsweredSectionIndexes(): List<Int>{
@@ -66,18 +90,19 @@ class PaperActivityViewModel:ViewModel() {
     }
 
     fun setCurrentSectionIndex(sectionIndex: Int){
+        savedStateHandle[KEY_SECTION_INDEX] = sectionIndex
         PaperRepository.setCurrentSectionIndex(sectionIndex)
     }
 
     fun getCurrentSectionIndex(): Int {
-        return PaperRepository.getCurrentSectionIndex()
+        return savedStateHandle[KEY_SECTION_INDEX] ?: PaperRepository.getCurrentSectionIndex()
     }
 
     fun getTotalNumberOfQuestions():Int{
         return PaperRepository.getTotalNumberOfQuestions()
     }
 
-    fun getSectionData(position: Int):SectionData{
+    fun getSectionData(position: Int):SectionData?{
         return PaperRepository.getSectionDataAt(position)
     }
 
@@ -87,7 +112,6 @@ class PaperActivityViewModel:ViewModel() {
 
     fun updateSectionsScore(sectionIndex: Int, score: Int){
         PaperRepository.updateSectionScoreAt(sectionIndex, score)
-
     }
 
     fun resetSectionScore(sectionIndex: Int){
@@ -104,7 +128,6 @@ class PaperActivityViewModel:ViewModel() {
 
     fun decrementCurrentSectionRetryCount(){
         PaperRepository.decrementCurrentSectionRetryCount()
-
     }
 
     fun resetCurrentSectionRetryCount(){
@@ -116,34 +139,31 @@ class PaperActivityViewModel:ViewModel() {
     }
 
     fun setUserMarkedAnswerSheet(userMarkedAnswersSheetData: UserMarkedAnswersSheetData){
+        savedStateHandle[KEY_USER_ANSWERS] = userMarkedAnswersSheetData
         PaperRepository.setUserMarkedAnswerSheet(userMarkedAnswersSheetData)
     }
 
-    fun getUserMarkedAnswerSheet(): UserMarkedAnswersSheetData {
-        return PaperRepository.getUserMarkedAnswerSheet()
+    fun getUserMarkedAnswerSheet(): UserMarkedAnswersSheetData? {
+        return savedStateHandle[KEY_USER_ANSWERS] ?: PaperRepository.getUserMarkedAnswerSheet()
     }
 
     fun setSectionResultData(sectionResultData: SectionResultData){
+        savedStateHandle[KEY_RESULT_DATA] = sectionResultData
         PaperRepository.setSectionResultData(sectionResultData)
     }
 
-    fun getSectionResultData(): SectionResultData {
-        return PaperRepository.getSectionResultData()
+    fun getSectionResultData(): SectionResultData? {
+        return savedStateHandle[KEY_RESULT_DATA] ?: PaperRepository.getSectionResultData()
     }
 
     fun resetPaperRepository(){
+        savedStateHandle.remove<Int>(KEY_SECTION_INDEX)
+        savedStateHandle.remove<SectionResultData>(KEY_RESULT_DATA)
+        savedStateHandle.remove<UserMarkedAnswersSheetData>(KEY_USER_ANSWERS)
         PaperRepository.resetPaperRepo()
     }
 
-//    fun isPackageActive(subjectIndex: Int): Boolean{
-//
-//        val activatedOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).activatedOn
-//        val expiresOn = RemoteRepoManager.getSubjectPackageDataAtIndex(subjectIndex).expiresOn
-//        return ActivationExpiryDatesGenerator().checkExpiry(activatedOn!!, expiresOn!!)
-//    }
-
     fun startUsageTime(subjectIndex: Int) {
-
         val timeRemaining = userDataManager.getSubscriptionTimeRemainingAt(subjectIndex)
         UsageTimer.startUsageTimer(timeRemaining)
     }
@@ -165,9 +185,24 @@ class PaperActivityViewModel:ViewModel() {
     }
 
     private fun initPaperData(){
-        val paperData = Paper1DataRepository.getPaperData(subjectIndex, examTypeIndex, examItemIndex)
-        PaperRepository.initPaperData(subjectIndex, examTypeIndex, examItemIndex, paperData)
-
+        val paperData = Paper1DataRepository.getPaperData(subjectIndexProp, examTypeIndexProp, examItemIndexProp)
+        PaperRepository.initPaperData(subjectIndexProp, examTypeIndexProp, examItemIndexProp, paperData)
+        
+        // Restore session state into repository if it was stored in ViewModel
+        val restoredSectionIndex = savedStateHandle.get<Int>(KEY_SECTION_INDEX)
+        if (restoredSectionIndex != null) {
+            PaperRepository.setCurrentSectionIndex(restoredSectionIndex)
+        }
+        
+        val restoredResultData = savedStateHandle.get<SectionResultData>(KEY_RESULT_DATA)
+        if (restoredResultData != null) {
+            PaperRepository.setSectionResultData(restoredResultData)
+        }
+        
+        val restoredAnswers = savedStateHandle.get<UserMarkedAnswersSheetData>(KEY_USER_ANSWERS)
+        if (restoredAnswers != null) {
+            PaperRepository.setUserMarkedAnswerSheet(restoredAnswers)
+        }
     }
 
     fun isPaperDataInitialised(): Boolean{
@@ -188,12 +223,10 @@ class PaperActivityViewModel:ViewModel() {
             initID(id)
             start(listener)
         }
-
     }
 
     fun initRepositories(){
         initPaper1DataRepository()
         initPaperData()
     }
-
 }
