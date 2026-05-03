@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
 import androidx.activity.setViewTreeOnBackPressedDispatcherOwner
@@ -80,18 +81,43 @@ class Paper2QuestionsSolutionFragment : Fragment() {
         requireActivity().title = viewModel.getPaper2ExamItemTitleAt(subjectIndex!!, examTypeIndex!!, examTypeItemIndex!!)
     }
 
-    private fun setupWebView(){
+//    private fun setupWebView(){
+//
+//        binding.webView.settings.javaScriptEnabled = true
+//        binding.webView.settings.domStorageEnabled = true
+//
+//        binding.webView.addJavascriptInterface(WebAppInterface(this), "Android")
+//        // To load from assets:
+//
+//
+//        val fileName = viewModel.getPaper2FilePath(subjectIndex!!, examTypeIndex!!, examTypeItemIndex!!)
+//        val filePath = "file:///android_asset/$fileName"
+//
+//        binding.webView.loadUrl(filePath)
+//
+//
+//    }
 
-        binding.webView.settings.javaScriptEnabled = true
-        binding.webView.settings.domStorageEnabled = true
+    private fun setupWebView() {
+        binding.webView.apply {
+            webViewClient = WebViewClient()
+            settings.javaScriptEnabled = true
+            settings.allowFileAccess = true
 
-        binding.webView.addJavascriptInterface(WebAppInterface(this), "Android")
-        // To load from assets:
+            // Enable zoom features
+            settings.setSupportZoom(true)
+            settings.builtInZoomControls = true
+            settings.displayZoomControls = false
 
-        val path = viewModel.getPaper2FilePath(subjectIndex!!, examTypeIndex!!, examTypeItemIndex!!)
-        binding.webView.loadUrl(path)
+            addJavascriptInterface(WebAppInterface(this@Paper2QuestionsSolutionFragment), "Android")
 
-
+            val fileName = viewModel.getPaper2FilePath(subjectIndex!!, examTypeIndex!!, examTypeItemIndex!!)
+            val filePath = "file:///android_asset/$fileName"
+            fileName?.let {
+                val url = filePath
+                loadUrl(url)
+            }
+        }
     }
 
     fun onNavigateBack(){

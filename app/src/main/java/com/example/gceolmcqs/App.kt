@@ -5,6 +5,7 @@ import android.os.Build
 import android.provider.Settings
 import com.example.gceolmcqs.repository.ExamScoreDataRepository
 import com.example.gceolmcqs.repository.LocalUserDataRepository
+import com.example.gceolmcqs.repository.Paper2DataRepository
 import java.util.UUID
 
 class App: Application() {
@@ -13,6 +14,7 @@ class App: Application() {
         
         // Initialize Repositories
         LocalUserDataRepository.initUserDataDao(this)
+//        Paper2DataRepository.initPaper2(this, "paper2.json")
         ExamScoreDataRepository.init(this)
     }
 

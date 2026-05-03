@@ -47,9 +47,9 @@ class Paper2ActivityViewModel: ViewModel() {
         return userDataManager.getIsPaper2DataInitialised()
     }
 
-    fun initPaper2DataRepository(){
+    fun initPaper2DataRepository(context: Context){
         userDataManager.initDictionaryRepository()
-        userDataManager.initPaper2DataRepository()
+        userDataManager.initPaper2DataRepository(context)
     }
 
     fun beginSetup(id: String, context: Context, listener: UserDataManager.UserDataManagerListener){

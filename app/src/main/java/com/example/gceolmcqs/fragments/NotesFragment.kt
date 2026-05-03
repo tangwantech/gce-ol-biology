@@ -64,7 +64,7 @@ class NotesFragment : Fragment() {
         // To load from assets:
 
         val path = viewModel.getFilePath(requireArguments().getInt(CHAPTER_INDEX))
-        println("File path: $path")
+//        println("File path: $path")
         binding.webView.loadUrl(path)
 
     }

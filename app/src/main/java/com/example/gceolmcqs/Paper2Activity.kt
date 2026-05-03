@@ -70,7 +70,7 @@ class Paper2Activity : AppCompatActivity(),
 
     private fun displayTabFragment(){
         viewModel.updateSubjectIndex(intent.getIntExtra(SUBJECT_INDEX, 0))
-        viewModel.initPaper2DataRepository()
+        viewModel.initPaper2DataRepository(this)
         gotoExamTypesTabFragment()
     }
 

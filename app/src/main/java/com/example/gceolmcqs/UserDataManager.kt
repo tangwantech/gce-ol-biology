@@ -192,8 +192,8 @@ class UserDataManager {
 
 
 
-    fun initPaper2DataRepository(){
-        LocalUserDataRepository.initPaper2DataRepository()
+    fun initPaper2DataRepository(context: Context){
+        LocalUserDataRepository.initPaper2DataRepository(context)
     }
 
     fun getPaper2SubjectNames(): List<String>{

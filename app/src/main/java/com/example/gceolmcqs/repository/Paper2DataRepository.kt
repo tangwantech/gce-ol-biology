@@ -1,11 +1,18 @@
 package com.example.gceolmcqs.repository
 
+import android.content.Context
+import com.example.gceolmcqs.AssertReader
 import com.example.gceolmcqs.datamodels.Paper2Data
+import com.google.gson.Gson
 
 
 class Paper2DataRepository {
     companion object{
         private var paper2Data: Paper2Data? = null
+        fun initPaper2(context: Context, path: String){
+            val test = AssertReader.getJsonFromAssets(context, path)
+            paper2Data = Gson().fromJson(test, Paper2Data::class.java)
+        }
 
         fun initPaper2Data(paper2Data: Paper2Data){
             Paper2DataRepository.paper2Data = paper2Data
@@ -45,7 +52,7 @@ class Paper2DataRepository {
         }
 
         fun getPaper2FilePath(subjectIndex: Int, contentIndex: Int, examItemIndex: Int): String {
-            return "file:///android_asset/paper2/biology/html/${paper2Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].fileName}"
+            return paper2Data?.subjects!![subjectIndex].examTypes[contentIndex].examItems[examItemIndex].fileName
         }
 
         fun isPaper2DataInitialised(): Boolean{

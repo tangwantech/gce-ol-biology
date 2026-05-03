@@ -2,6 +2,8 @@ package com.example.gceolmcqs.repository
 
 import android.content.Context
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
+import com.example.gceolmcqs.AssertReader
+import com.example.gceolmcqs.UtilityFunctions
 import com.example.gceolmcqs.datamodels.AppData
 import com.example.gceolmcqs.datamodels.DictionaryData
 import com.example.gceolmcqs.datamodels.NotesData
@@ -165,9 +167,10 @@ class LocalUserDataRepository{
             return SubjectsPackagesDataRepository.isSubscriptionActiveAt(subjectIndex)
         }
 
-        fun initPaper2DataRepository(){
-            val appData = getAppData() ?: return
-            val paper2Data = Gson().fromJson(appData.paper2Data, Paper2Data::class.java)
+        fun initPaper2DataRepository(context: Context){
+//            val appData = getAppData() ?: return
+            val file = AssertReader.getJsonFromAssets(context, "paper2.json")
+            val paper2Data = Gson().fromJson(file, Paper2Data::class.java)
             Paper2DataRepository.initPaper2Data(paper2Data)
 
         }
