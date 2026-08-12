@@ -129,15 +129,17 @@
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
           "lessons": [
-            { "lesson": "Notion of need for a transport system in multicellular organism", "filename": "" },
-            { "lesson": "Mechanism of uptake of uptake and ascend of water and mineral salts", "filename": "" },
-            { "lesson": "Translocation of organic food in the phloem", "filename": "" },
-            { "lesson": "Transpiration and wilting", "filename": "" },
-            { "lesson": "Internal structure of stem and roots", "filename": "" },
-            { "lesson": "Experiment to demonstrate transpiration and wilting", "filename": "" },
-            { "lesson": "Observing the cross section of stem and roots", "filename": "" },
-            { "lesson": "Experiment to demonstrate that xylem transport water and mineral salts", "filename": "" },
-            { "lesson": "Experiment to demonstrate that phloem translocate organic food", "filename": "" }
+            { "lesson": "Need for a transport system in multicellular organism", "filename": "Transport in plants/need_for_transport.html" },
+            { "lesson": "Internal structure of roots", "filename": "Transport in plants/internal_structure_of_roots.html" },
+            { "lesson": "Internal structure of stems", "filename": "Transport in plants/internal_structure_of_stems.html" },
+            { "lesson": "Mechanism of uptake of uptake and ascend of water and mineral salts", "filename": "Transport in plants/mechanism_of_uptake_and_ascend_of_water.html" },
+            { "lesson": "Translocation of organic food in the phloem", "filename": "Transport in plants/translocation_of_organic_food.html" },
+            { "lesson": "Transpiration and wilting", "filename": "Transport in plants/transpiration_and_wilting.html" },
+
+            { "lesson": "Experiment to demonstrate transpiration and wilting", "filename": "Transport in plants/experiment_transpiration_and_wilting.html" },
+            { "lesson": "Experiment to demonstrate that xylem transport water and mineral salts", "filename": "Transport in plants/experiment_transport_in_xylem.html" },
+            { "lesson": "Experiment to demonstrate that phloem translocate organic food", "filename": "Transport in plants/experiment_translocation_in_phloem.html",
+            }
           ]
         },
         {
@@ -202,7 +204,7 @@
             { "lesson": "Differences between blood and tissue fluid", "filename": "" },
             { "lesson": "Differences between blood and lymph", "filename": "" },
             { "lesson": "Importance of the lymphatic system", "filename": "" },
-            { "lesson": "Diseases and disorders of the circulatory system (Hypertension, Aterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)", "filename": "" }
+            { "lesson": "Diseases and disorders of the circulatory system (Hypertension, Arterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)", "filename": "" }
           ]
         },
         {
@@ -333,17 +335,17 @@
           "lessons": [
             { "lesson": "Irritability", "filename": "human nervous system/irritability.html" },
             { "lesson": "Types of neurons", "filename": "human nervous system/neuron.html" },
-            { "lesson": "Structure of a motor neurone", "filename": "human nervous system/structure_of_motor_neuron.html" },
-            { "lesson": "Impulse transmission along a neurone", "filename": "human nervous system/impulse_transmission_along_a_neuron.html" },
-            { "lesson": "Impulse transmission across a synapse", "filename": "human nervous system/impulse_transmission_across_a_synapse.html" },
-            { "lesson": "Structure and function of the human brain and spinal cord", "filename": "human nervous system/brain_and_spinal_cord.html" },
-            { "lesson": "Division of the nervous system",  "filename": "human nervous system/divisions_of_nervous_system.html" },
-            { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "human nervous system/reflex_action_reflex_arc.html" },
+            { "lesson": "Structure of a motor neurone", "filename": "Human nervous system/structure_of_motor_neuron.html" },
+            { "lesson": "Impulse transmission along a neurone", "filename": "Human nervous system/impulse_transmission_along_a_neuron.html" },
+            { "lesson": "Impulse transmission across a synapse", "filename": "Human nervous system/impulse_transmission_across_a_synapse.html" },
+            { "lesson": "Structure and function of the human brain and spinal cord", "filename": "Human nervous system/brain_and_spinal_cord.html" },
+            { "lesson": "Division of the nervous system",  "filename": "Human nervous system/divisions_of_nervous_system.html" },
+            { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "Human nervous system/reflex_action_reflex_arc.html" },
             { "lesson": "Conditioned reflex", "filename": "" },
-            { "lesson": "Sense organs and their functions", "filename": "human nervous system/sense_organs.html" },
-            { "lesson": "Structure and function of the human eye", "filename": "human nervous system/human_eye.html" },
-            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "human nervous system/functions_of_eye.html" },
-            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "human nervous system/eye_defects.html" }
+            { "lesson": "Sense organs and their functions", "filename": "Human nervous system/sense_organs.html" },
+            { "lesson": "Structure and function of the human eye", "filename": "Human nervous system/human_eye.html" },
+            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "Human nervous system/functions_of_eye.html" },
+            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "Human nervous system/eye_defects.html" }
           ]
         },
         {

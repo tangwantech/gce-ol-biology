@@ -9,27 +9,27 @@
           "examItems": [
             {
               "title": "GCE June 2020",
-              "fileName": "paper2/html/past_gce/gce_2020.html"
+              "fileName": "web/paper2/html/past_gce/gce_2020.html"
             },
             {
               "title": "GCE June 2021",
-              "fileName": "paper2/html/past_gce/gce_2021.html"
+              "fileName": "web/paper2/html/past_gce/gce_2021.html"
             },
             {
               "title": "GCE June 2022",
-              "fileName": "paper2/html/past_gce/gce_2022.html"
+              "fileName": "web/paper2/html/past_gce/gce_2022.html"
             },
             {
               "title": "GCE June 2023",
-              "fileName": "paper2/html/past_gce/gce_2023.html"
+              "fileName": "web/paper2/html/past_gce/gce_2023.html"
             },
             {
               "title": "GCE June 2024",
-              "fileName": "paper2/html/past_gce/gce_2024.html"
+              "fileName": "web/paper2/html/past_gce/gce_2024.html"
             },
             {
               "title": "GCE June 2025",
-              "fileName": "paper2/html/past_gce/gce_2025.html"
+              "fileName": "web/paper2/html/past_gce/gce_2025.html"
             }
           ]
         },
@@ -38,12 +38,17 @@
           "examItems": [
             {
               "title": "Northwest Mock 2026",
-              "fileName": "paper2/html/past_mock/nw_mock_2026.html"
+              "fileName": "web/paper2/html/past_mock/nw_mock_2026.html"
             },
             {
               "title": "West Mock 2026",
-              "fileName": "paper2/html/past_mock/west_mock_2026.html"
+              "fileName": "web/paper2/html/past_mock/west_mock_2026.html"
+            },
+            {
+              "title": "Miscellaneous",
+              "fileName": "web/paper2/html/past_mock/miscellaneous.html"
             }
+
           ]
         }
       ]
