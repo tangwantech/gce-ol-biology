@@ -132,14 +132,38 @@
             { "lesson": "Need for a transport system in multicellular organism", "filename": "Transport in plants/need_for_transport.html" },
             { "lesson": "Internal structure of roots", "filename": "Transport in plants/internal_structure_of_roots.html" },
             { "lesson": "Internal structure of stems", "filename": "Transport in plants/internal_structure_of_stems.html" },
-            { "lesson": "Mechanism of uptake of uptake and ascend of water and mineral salts", "filename": "Transport in plants/mechanism_of_uptake_and_ascend_of_water.html" },
+            { "lesson": "Mechanism of uptake and ascend of water and mineral salts", "filename": "Transport in plants/mechanism_of_uptake_and_ascend_of_water.html" },
             { "lesson": "Translocation of organic food in the phloem", "filename": "Transport in plants/translocation_of_organic_food.html" },
             { "lesson": "Transpiration and wilting", "filename": "Transport in plants/transpiration_and_wilting.html" },
 
-            { "lesson": "Experiment to demonstrate transpiration and wilting", "filename": "Transport in plants/experiment_transpiration_and_wilting.html" },
-            { "lesson": "Experiment to demonstrate that xylem transport water and mineral salts", "filename": "Transport in plants/experiment_transport_in_xylem.html" },
-            { "lesson": "Experiment to demonstrate that phloem translocate organic food", "filename": "Transport in plants/experiment_translocation_in_phloem.html",
-            }
+            { "lesson": "Experiments on transport in plants", "filename": "Transport in plants/experiments_transport_in_plants.html" }
+          ]
+        },
+        {
+          "chapter": "Transport in mammals",
+          "module": "Health education",
+          "categoryOfActions": "Prevention of cardiovascular accidents and diseases",
+          "lessons": [
+            { "lesson": "Review of how substances move in and out of cells (diffusion, osmosis and active transport)", "filename": "" },
+            { "lesson": "Importance of circulatory system", "filename": "" },
+            { "lesson": "composition of circulatory system", "filename": "" },
+            { "lesson": "Composition of blood", "filename": "" },
+            { "lesson": "Structure and functions of blood cells", "filename": "" },
+            { "lesson": "Blood vessels", "filename": "" },
+            { "lesson": "Comparing arteries, veins and capillaries", "filename": "" },
+            { "lesson": "Structure and function of the heart", "filename": "" },
+            { "lesson": "Pulmonary and systemic circulation", "filename": "" },
+            { "lesson": "Cardiac cycle", "filename": "" },
+            { "lesson": "Myogenic stimulation of heart beat", "filename": "" },
+            { "lesson": "Regulation of heart rate", "filename": "" },
+            { "lesson": "Blood pressure", "filename": "" },
+            { "lesson": "ABO blood group", "filename": "" },
+            { "lesson": "Antigens/Antibody reactions", "filename": "" },
+            { "lesson": "Tissue fluid formation", "filename": "" },
+            { "lesson": "Differences between blood and tissue fluid", "filename": "" },
+            { "lesson": "Differences between blood and lymph", "filename": "" },
+            { "lesson": "Importance of the lymphatic system", "filename": "" },
+            { "lesson": "Diseases and disorders of the circulatory system (Hypertension, Arterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)", "filename": "" }
           ]
         },
         {
@@ -180,33 +204,7 @@
             { "lesson": "Other forms of animal nutrition-Saprotrophism and parasitism", "filename": "" }
           ]
         },
-        {
-          "chapter": "Transport in mammals",
-          "module": "Health education",
-          "categoryOfActions": "Prevention of cardiovascular accidents and diseases",
-          "lessons": [
-            { "lesson": "Review of how substances move in and out of cells (diffusion, osmosis and active transport)", "filename": "" },
-            { "lesson": "Importance of circulatory system", "filename": "" },
-            { "lesson": "composition of circulatory system", "filename": "" },
-            { "lesson": "Composition of blood", "filename": "" },
-            { "lesson": "Structure and functions of blood cells", "filename": "" },
-            { "lesson": "Blood vessels", "filename": "" },
-            { "lesson": "Comparing arteries, veins and capillaries", "filename": "" },
-            { "lesson": "Structure and function of the heart", "filename": "" },
-            { "lesson": "Pulmonary and systemic circulation", "filename": "" },
-            { "lesson": "Cardiac cycle", "filename": "" },
-            { "lesson": "Myogenic stimulation of heart beat", "filename": "" },
-            { "lesson": "Regulation of heart rate", "filename": "" },
-            { "lesson": "Blood pressure", "filename": "" },
-            { "lesson": "ABO blood group", "filename": "" },
-            { "lesson": "Antigens/Antibody reactions", "filename": "" },
-            { "lesson": "Tissue fluid formation", "filename": "" },
-            { "lesson": "Differences between blood and tissue fluid", "filename": "" },
-            { "lesson": "Differences between blood and lymph", "filename": "" },
-            { "lesson": "Importance of the lymphatic system", "filename": "" },
-            { "lesson": "Diseases and disorders of the circulatory system (Hypertension, Arterosclerosis, Anaemia, Stroke, Heart attack, Thrombosis, their causes and prevention)", "filename": "" }
-          ]
-        },
+
         {
           "chapter": "Breathing, gaseous exchange and respiration",
           "module": "Health education",
@@ -291,9 +289,10 @@
           "module": "The living world",
           "categoryOfActions": "Improving food production by constructing and appropriating knowledge of mechanisms of functioning of living things",
           "lessons": [
-            { "lesson": "Notion of chromosomes, genes, DNA, Haploid and diploid cells", "filename": "" },
-            { "lesson": "Mitosis and meiosis", "filename": "" },
-            { "lesson": "Comparing mitosis and meiosis", "filename": "" }
+            { "lesson": "Notion of chromosomes, genes, DNA, Haploid and diploid cells", "filename": "Nuclear and cell division/notion_chromosomes.html" },
+            {"lesson": "Mitosis", "filename":  "Nuclear and cell division/mitosis.html"},
+            { "lesson": "Meiosis", "filename": "Nuclear and cell division/meiosis.html" },
+            { "lesson": "Comparing mitosis and meiosis", "filename": "Nuclear and cell division/comparing_mitosis_meiosis.html" }
           ]
         },
         {
@@ -335,17 +334,17 @@
           "lessons": [
             { "lesson": "Irritability", "filename": "human nervous system/irritability.html" },
             { "lesson": "Types of neurons", "filename": "human nervous system/neuron.html" },
-            { "lesson": "Structure of a motor neurone", "filename": "Human nervous system/structure_of_motor_neuron.html" },
-            { "lesson": "Impulse transmission along a neurone", "filename": "Human nervous system/impulse_transmission_along_a_neuron.html" },
-            { "lesson": "Impulse transmission across a synapse", "filename": "Human nervous system/impulse_transmission_across_a_synapse.html" },
-            { "lesson": "Structure and function of the human brain and spinal cord", "filename": "Human nervous system/brain_and_spinal_cord.html" },
-            { "lesson": "Division of the nervous system",  "filename": "Human nervous system/divisions_of_nervous_system.html" },
-            { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "Human nervous system/reflex_action_reflex_arc.html" },
-            { "lesson": "Conditioned reflex", "filename": "" },
-            { "lesson": "Sense organs and their functions", "filename": "Human nervous system/sense_organs.html" },
-            { "lesson": "Structure and function of the human eye", "filename": "Human nervous system/human_eye.html" },
-            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "Human nervous system/functions_of_eye.html" },
-            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "Human nervous system/eye_defects.html" }
+            { "lesson": "Structure of a motor neurone", "filename": "human nervous system/structure_of_motor_neuron.html" },
+            { "lesson": "Impulse transmission along a neurone", "filename": "human nervous system/impulse_transmission_along_a_neuron.html" },
+            { "lesson": "Impulse transmission across a synapse", "filename": "human nervous system/impulse_transmission_across_a_synapse.html" },
+            { "lesson": "Structure and function of the human brain and spinal cord", "filename": "human nervous system/brain_and_spinal_cord.html" },
+            { "lesson": "Division of the nervous system",  "filename": "human nervous system/divisions_of_nervous_system.html" },
+            { "lesson": "Voluntary and involuntary actions-reflex action and reflex arc", "filename": "human nervous system/reflex_action_reflex_arc.html" },
+            { "lesson": "Conditioned reflex", "filename": "human nervous system/conditioned_reflex.html" },
+            { "lesson": "Sense organs and their functions", "filename": "human nervous system/sense_organs.html" },
+            { "lesson": "Structure and function of the human eye", "filename": "human nervous system/human_eye.html" },
+            { "lesson": "Function of the human eye (Image formation, accomodation, color vision)", "filename": "human nervous system/functions_of_eye.html" },
+            { "lesson": "Eye defects (Long sightedness, short sightedness, presbyopia, conjunctivitis, glaucoma, cataract, astigmatism)", "filename": "human nervous system/eye_defects.html" }
           ]
         },
         {
@@ -415,15 +414,15 @@
             { "lesson": "Effects of abiotic factors (Light, temperature, water, edaphic and topograhic factors)", "filename": "Ecology/abiotic_factors.html" },
             { "lesson": "Adaptations of plants to dry habitat", "filename": "Ecology/plant_adaptations_to_dry_habitats.html" },
             { "lesson": "Adaption of plants to aquatic habitat", "filename": "Ecology/plant_adaptations_to_aquatic_habitat.html" },
-            { "lesson": "Biotic interactions", "filename": "" },
-            { "lesson": "Human impacts on the ecosystem", "filename": "" },
-            { "lesson": "Feeding relationships (Food chains and food webs)", "filename": "" },
-            { "lesson": "Trophic levels", "filename": "" },
-            { "lesson": "Bioaccumulation and biomagnification", "filename": "" },
-            { "lesson": "Ecological pyramids", "filename": "" },
-            { "lesson": "Examples and components of an ecosystem", "filename": "" },
-            { "lesson": "Energy flow in an ecosystem", "filename": "" },
-            { "lesson": "Biogeochemical cycles (Water cycle, Carbon cycle and Nitrogen cycle)", "filename": "" }
+            { "lesson": "Biotic interactions", "filename": "Ecology/biotic_interactions.html" },
+            { "lesson": "Human impacts on the ecosystem", "filename": "Ecology/human_impacts.html" },
+            { "lesson": "Feeding relationships (Food chains and food webs)", "filename": "Ecology/feeding_relationships.html" },
+            { "lesson": "Trophic levels", "filename": "Ecology/trophic_levels.html" },
+            { "lesson": "Bioaccumulation and biomagnification", "filename": "Ecology/bioaccumulation.html" },
+            { "lesson": "Ecological pyramids", "filename": "Ecology/ecological_pyramids.html" },
+            { "lesson": "Examples and components of an ecosystem", "filename": "Ecology/ecosystem_components.html" },
+            { "lesson": "Energy flow in an ecosystem", "filename": "Ecology/energy_flow.html" },
+            { "lesson": "Biogeochemical cycles (Water cycle, Carbon cycle and Nitrogen cycle)", "filename": "Ecology/biogeochemical_cycles.html" }
           ]
         }
       ]

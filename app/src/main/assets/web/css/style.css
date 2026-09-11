@@ -6,7 +6,10 @@
     --accent-color: #a8892a;
     --link-color: #1976D2;
     --objectives-color: #e7dfc8;
-    --questions-color: #1e1e1e;
+    --questions-color: #c0bdbd;
+    --important-color: #838382;
+    --calculation: #cadbec;
+    --assignment-color: #f07731;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +22,9 @@
         --link-color: #7c99cf;
         --objectives-color: #535351;
         --questions-color: #1e1e1e;
+        --important-color: #535351;
+        --calculation: #1a2025;
+        --assignment-color: #f07731;
     }
 }
 
@@ -131,7 +137,7 @@ tr:nth-child(even) {
 }
 
 .important {
-    background-color: #eef5f2;
+    background-color: var(--important-color);
     padding: 0.35em 0.75em;
     border-radius: 6px;
     display: inline-block;
@@ -222,6 +228,7 @@ a {
 
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     }
+    
     /* a {
         text-decoration: none;
         color: var(--link-color);
@@ -231,6 +238,14 @@ a {
         color: var(--link-color);
     } */
 }
+
+.important {
+    background-color: var(--important-color);
+    padding: 0.35em 0.75em;
+    border-radius: 6px;
+    
+}
+
 .marks {
         float: right;
     }
@@ -270,4 +285,22 @@ a {
  
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
     float: right;
-    }
+}
+
+.calculation {
+    background-color: var(--calculation);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #385879;
+    color: var(--text-color); 
+}
+
+.assignment {
+    /* background-color: var(--assignment-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #f07731; */
+    color: var(--assignment-color); 
+}
