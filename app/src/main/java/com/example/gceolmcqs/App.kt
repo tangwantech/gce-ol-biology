@@ -12,6 +12,9 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         
+        // Fix CursorWindow size limit for large SQLite rows
+        LocalUserDataRepository.fixCursorWindowSize()
+
         // Initialize Repositories
         LocalUserDataRepository.initUserDataDao(this)
 //        Paper2DataRepository.initPaper2(this, "paper2.json")

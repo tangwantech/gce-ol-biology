@@ -1,6 +1,7 @@
 package com.example.gceolmcqs.repository
 
 import android.content.Context
+import android.database.CursorWindow
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
 import com.example.gceolmcqs.AssertReader
 import com.example.gceolmcqs.UtilityFunctions
@@ -21,17 +22,69 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.File
 
 class LocalUserDataRepository{
     companion object{
         private var userData: UserData? = null
         private var userDataDao: UserDataDao? = null
-        fun initUserDataDao(context: Context){
-            this.userDataDao = GceOLMcqDatabase.getDatabase(context).userDataDao()
+        private var appContext: Context? = null
+        private const val APP_DATA_FILE_NAME = "app_data_storage.json"
+
+        fun fixCursorWindowSize() {
+            try {
+                val field = CursorWindow::class.java.getDeclaredField("sCursorWindowSize")
+                field.isAccessible = true
+                field.set(null, 100 * 1024 * 1024) // 100 MB limit
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
+        fun initUserDataDao(context: Context){
+            this.appContext = context.applicationContext
+            fixCursorWindowSize()
+            if (userDataDao == null) {
+                userDataDao = GceOLMcqDatabase.getDatabase(context.applicationContext).userDataDao()
+            }
+        }
+
+        private fun saveAppDataToFile(appDataString: String) {
+            appContext?.let { context ->
+                try {
+                    val file = File(context.filesDir, APP_DATA_FILE_NAME)
+                    file.writeText(appDataString)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        private fun loadAppDataFromFile(): String? {
+            return appContext?.let { context ->
+                try {
+                    val file = File(context.filesDir, APP_DATA_FILE_NAME)
+                    if (file.exists()) {
+                        file.readText()
+                    } else {
+                        null
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
+        }
+
         fun insertUserDataToLocaldb(userData: UserData, listener: OnInsertUserDataListener){
+            fixCursorWindowSize()
             CoroutineScope(Dispatchers.IO).launch{
-                userDataDao?.insertUserData(userData)
+                this@Companion.userData = userData
+                if (userData.appData.isNotBlank()) {
+                    saveAppDataToFile(userData.appData)
+                }
+                val lightweightUserData = userData.copy(appData = "")
+                userDataDao?.insertUserData(lightweightUserData)
                 withContext(Dispatchers.Main){
                     listener.onInsertSuccessful()
                 }
@@ -39,9 +92,14 @@ class LocalUserDataRepository{
         }
 
         private fun updateUserDataInLocaldb(listener: OnUpdateUserDataListener){
+            fixCursorWindowSize()
             CoroutineScope(Dispatchers.IO).launch {
-                userData?.let {
-                    userDataDao?.update(it)
+                userData?.let { currentData ->
+                    if (currentData.appData.isNotBlank()) {
+                        saveAppDataToFile(currentData.appData)
+                    }
+                    val lightweightUserData = currentData.copy(appData = "")
+                    userDataDao?.update(lightweightUserData)
                     withContext(Dispatchers.Main){
                         listener.onUpdateSuccessful()
                     }
@@ -50,12 +108,24 @@ class LocalUserDataRepository{
         }
 
         fun loadUserDataFromLocaldb(listener: OnLoadUserDataListener){
+            fixCursorWindowSize()
             CoroutineScope(Dispatchers.IO).launch{
                 val tempList = userDataDao?.getUserData()
                 withContext(Dispatchers.Main){
-                    tempList?.let {
-                        if (it.isNotEmpty()){
-                            userData = tempList[0]
+                    tempList?.let { list ->
+                        if (list.isNotEmpty()){
+                            val dbUserData = list[0]
+                            val fullAppData = if (dbUserData.appData.isNotBlank()) {
+                                saveAppDataToFile(dbUserData.appData)
+                                val appDataContent = dbUserData.appData
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    userDataDao?.update(dbUserData.copy(appData = ""))
+                                }
+                                appDataContent
+                            } else {
+                                loadAppDataFromFile() ?: ""
+                            }
+                            userData = dbUserData.copy(appData = fullAppData)
                             initSubjectsPackagesDataRepository()
                             listener.onUserDataLoaded()
                         }else{
@@ -72,15 +142,13 @@ class LocalUserDataRepository{
             subjectPackageData.subjectIndex?.let { updateSubjectPackageAt(it, subjectPackageData) }
             userData?.subscription = Gson().toJson(getSubjectsPackages())
             updateUserDataInLocaldb(listener)
-
-
         }
 
-
         fun updateAppData(appData: AppData, listener: OnUpdateUserDataListener){
-            userData?.appData = Gson().toJson(appData)
+            val jsonString = Gson().toJson(appData)
+            userData?.appData = jsonString
+            saveAppDataToFile(jsonString)
             updateUserDataInLocaldb(listener)
-
         }
 
         private fun getAppData(): AppData?{

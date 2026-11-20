@@ -30,7 +30,7 @@ class RestRepository {
     fun query(queryType:String, params: HashMap<String, String>, listener: OnQueryListener){
         val client: OkHttpClient = OkHttpClient.Builder().build()
         val url = when (queryType){
-            SIGN_UP -> "https://parseapi.back4app.com/functions/signup"
+            SIGN_UP -> "https://parseapi.back4app.com/functions/signupV1"
             GET_APP_DATA -> "https://parseapi.back4app.com/functions/getAppData"
             UPDATE_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/updateSubscription"
             UPDATE_SCORES_STATS -> "https://parseapi.back4app.com/functions/updateUserScoresStats"

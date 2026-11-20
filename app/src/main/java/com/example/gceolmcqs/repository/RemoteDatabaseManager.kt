@@ -1,5 +1,6 @@
 package com.example.gceolmcqs.repository
 
+import android.util.Log
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.SubjectPackageActivator
 import com.example.gceolmcqs.datamodels.AppData
@@ -19,10 +20,23 @@ class RemoteDatabaseManager {
                 object : RestRepository.OnQueryListener {
                     override fun onSuccess(result: String) {
 
-                        val appData = JSONObject(result).getString("appData")
+//                        var appData = JSONObject(result).getString("appData")
+
                         val subscriptionData = JSONObject(result).getString("subscription")
-                        val userData = UserData(0, subscriptionData, appData)
-                        listener.onSignupSuccessful(userData)
+                        getAppDataFromRemoteDatabase(params, object : OnQueryAppDataListener{
+                            override fun onQueryAppDataSuccessful(result: String) {
+                                val appData = result
+                                val userData = UserData(0, subscriptionData, appData)
+                                listener.onSignupSuccessful(userData)
+                            }
+
+                            override fun onError(error: String?) {
+                                listener.onError(error)
+                            }
+
+                        })
+
+
                     }
 
                     override fun onError(error: String?) {
@@ -61,8 +75,7 @@ class RemoteDatabaseManager {
                 params,
                 object : RestRepository.OnQueryListener {
                     override fun onSuccess(result: String) {
-                        val temp = JSONObject(result).getString("result").toString()
-                        println("AppData: $temp")
+                        listener.onQueryAppDataSuccessful(result)
                     }
 
                     override fun onError(error: String?) {
@@ -82,7 +95,7 @@ class RemoteDatabaseManager {
                 object : RestRepository.OnQueryListener {
                     override fun onSuccess(result: String) {
                         val temp = JSONObject(result).getBoolean("newVersionAvailable")
-                        println("AppData: $temp")
+
                     }
 
                     override fun onError(error: String?) {
@@ -134,7 +147,7 @@ class RemoteDatabaseManager {
     }
 
     interface OnQueryAppDataListener {
-        fun onQueryAppDataSuccessful(appData: AppData)
+        fun onQueryAppDataSuccessful(result: String)
         fun onError(error: String?)
     }
 

@@ -1,6 +1,7 @@
 package com.example.gceolmcqs.repository
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.gceolmcqs.MCQConstants
@@ -74,9 +75,16 @@ class PaperRepository {
 
         fun getSectionDataAt(position: Int): SectionData? {
             return paperData?.sections?.getOrNull(position)?.copy()?.apply {
+//                Log.d("Section", questions.toString())
+                val numQuestions = questions.size
                 repeat(2) { questions.shuffle() }
-                if (questions.size > numberOfQuestions) {
-                    questions = ArrayList(questions.take(numberOfQuestions))
+//                if (questions.size > numberOfQuestions) {
+//                    questions = ArrayList(questions.take(numberOfQuestions))
+//                }
+                questions = if (questions.size > numberOfQuestions) {
+                    ArrayList(questions.take(numberOfQuestions))
+                }else{
+                    ArrayList(questions.take(numQuestions))
                 }
             }
         }
