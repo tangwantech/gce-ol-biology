@@ -151,6 +151,64 @@ class LocalUserDataRepository{
             updateUserDataInLocaldb(listener)
         }
 
+        fun syncRemoteAppDataSilently(userId: String?) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val id = userId ?: ""
+                    val params = hashMapOf(
+                        com.example.gceolmcqs.MCQConstants.USER_NAME to id,
+                        com.example.gceolmcqs.MCQConstants.PASS_WORD to id
+                    )
+                    RemoteDatabaseManager.getAppDataFromRemoteDatabase(params, object : RemoteDatabaseManager.OnQueryAppDataListener {
+                        override fun onQueryAppDataSuccessful(result: String) {
+                            if (result.isNotBlank()) {
+                                syncRawAppData(result)
+                            }
+                        }
+
+                        override fun onError(error: String?) {
+                            // Offline or network error - do nothing silently
+                        }
+                    })
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        fun syncRawAppData(remoteAppDataString: String) {
+            if (remoteAppDataString.isBlank()) return
+            try {
+                val parsedRemoteData = Gson().fromJson(remoteAppDataString, AppData::class.java)
+                if (parsedRemoteData != null) {
+                    val currentAppDataString = userData?.appData ?: ""
+                    if (currentAppDataString.trim() != remoteAppDataString.trim()) {
+                        userData?.appData = remoteAppDataString
+                        saveAppDataToFile(remoteAppDataString)
+                        updateUserDataInLocaldb(object : OnUpdateUserDataListener {
+                            override fun onUpdateSuccessful() {
+                                try {
+                                    getPaper1Data()?.let {
+                                        Paper1DataRepository.initPaper1Data(it)
+                                    }
+                                    if (DictionaryRepository.getKeys().isNotEmpty()) {
+                                        initDictionaryRepository()
+                                    }
+                                    if (NotesDataRepository.isNotesInitialised()) {
+                                        initNotesDataRepository()
+                                    }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        })
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         private fun getAppData(): AppData?{
             return if (userData != null){
                 Gson().fromJson(userData!!.appData, AppData::class.java)

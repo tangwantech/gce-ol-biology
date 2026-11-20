@@ -200,13 +200,12 @@ class SectionRecyclerAdapter(
 
         }
 
-        if (questionData.image == null) {
+        val imageResId = ImageResourceManager.images[questionData.image]
+        if (imageResId == null) {
             holder.imageLo.visibility = View.GONE
         } else {
             holder.imageLo.visibility = View.VISIBLE
-            holder.imageView.setImageResource(ImageResourceManager.images[questionData.image]!!)
-//            println(questionData.image!!)
-
+            holder.imageView.setImageResource(imageResId)
         }
 
         if (questionData.twoStatements == null) {

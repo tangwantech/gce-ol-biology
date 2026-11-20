@@ -74,13 +74,12 @@ class SectionQuestionsRecyclerAdapter(private val context: Context, val title: S
             binding.questionLayout.tvQuestion.text = context.getString(R.string.question_value, (adapterPosition + 1).toString(), questions[adapterPosition].question)
         }
 
-        if (questions[adapterPosition].image == null) {
+        val imageResId = ImageResourceManager.images[questions[adapterPosition].image]
+        if (imageResId == null) {
             binding.imageCardLayout.root.visibility = View.GONE
         } else {
             binding.imageCardLayout.root.visibility = View.VISIBLE
-            println("image: ${ImageResourceManager.images[questions[adapterPosition].image]}")
-            binding.imageCardLayout.imgView.setImageResource(ImageResourceManager.images[questions[adapterPosition].image]!!)
-
+            binding.imageCardLayout.imgView.setImageResource(imageResId)
         }
 
         if (questions[adapterPosition].twoStatements == null) {

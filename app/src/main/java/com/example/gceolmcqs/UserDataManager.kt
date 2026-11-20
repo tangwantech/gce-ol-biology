@@ -41,6 +41,7 @@ class UserDataManager {
         LocalUserDataRepository.loadUserDataFromLocaldb(object: LocalUserDataRepository.OnLoadUserDataListener{
             override fun onUserDataLoaded() {
                listener.onSuccess()
+               LocalUserDataRepository.syncRemoteAppDataSilently(id)
             }
 
             override fun onUserDataUnavailable(error: String) {
