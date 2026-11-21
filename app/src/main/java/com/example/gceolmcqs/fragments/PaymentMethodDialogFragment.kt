@@ -65,34 +65,28 @@ class PaymentMethodDialogFragment : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         val view = initViews()
-        setUpViewListeners()
-        return setUpAlertDialog(view)
-    }
-    private fun setUpAlertDialog(view: View): Dialog{
-        val builder = AlertDialog.Builder(requireContext()).apply {
-            setTitle(requireContext().resources.getString(R.string.select_payment_method))
-//            setMessage()
-            setView(view)
-            setPositiveButton(requireContext().resources.getString(R.string.next)){ btn, _ ->
-                onPaymentMethodDialogListeners.onPaymentMethodNextButtonClicked()
-                btn.dismiss()
-            }
-            setNegativeButton(requireContext().resources.getString(R.string.cancel)) { btn, _ ->
-                onPaymentMethodDialogListeners.onPaymentMethodCancelButtonClicked()
-            }
-        }.create()
+        val btnNext: Button = view.findViewById(R.id.btnNext)
+        val btnCancel: Button = view.findViewById(R.id.btnCancel)
 
-        builder.setOnShowListener {
-            positiveBtn = builder.getButton(AlertDialog.BUTTON_POSITIVE)
-//            val positiveBtn = (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
-            positiveBtn?.isEnabled = false
+        btnNext.isEnabled = false
+        positiveBtn = btnNext
 
-
-
+        btnNext.setOnClickListener {
+            onPaymentMethodDialogListeners.onPaymentMethodNextButtonClicked()
+            dismiss()
         }
-        return builder
+
+        btnCancel.setOnClickListener {
+            onPaymentMethodDialogListeners.onPaymentMethodCancelButtonClicked()
+            dismiss()
+        }
+
+        setUpViewListeners()
+
+        return AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).apply {
+            setView(view)
+        }.create()
     }
 
     companion object {

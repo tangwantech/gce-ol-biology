@@ -227,7 +227,7 @@ class SubscriptionActivity: AppCompatActivity(),
             dialog?.dismiss()
         }
 
-        dialog = AlertDialog.Builder(this).apply {
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
             setView(dialogView)
             setCancelable(false)
         }.create()
@@ -243,39 +243,41 @@ class SubscriptionActivity: AppCompatActivity(),
         )
         val tvPackageActivationSuccessful: TextView =
             view.findViewById(R.id.tvPackageActivationSuccessful)
+        val btnOk: View? = view.findViewById(R.id.btnOk)
         tvPackageActivationSuccessful.text =
             "${viewModel.getSubjectPackageType()} ${resources.getString(R.string.activated_successfully)}"
 
         if (dialog != null){
             dialog?.dismiss()
         }
-        dialog = AlertDialog.Builder(this).apply {
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
             setView(view)
-            setPositiveButton("Ok"){ _, _ ->
-            exitActivity()
-            }
             setCancelable(false)
         }.create()
+        btnOk?.setOnClickListener {
+            dialog?.dismiss()
+            exitActivity()
+        }
         dialog?.show()
     }
 
     private fun showTransactionFailedDialog() {
         val view = layoutInflater.inflate(R.layout.package_activation_failed_dialog, null)
         val tvFailedMessage: TextView = view.findViewById(R.id.tvPackageActivationFailed)
+        val btnOk: View? = view.findViewById(R.id.btnOk)
         tvFailedMessage.text =
             "${resources.getString(R.string.failed_to_activate_package)} ${viewModel.getSubjectPackageType()} "
 
         if (dialog != null){
             dialog?.dismiss()
         }
-        dialog = AlertDialog.Builder(this).apply {
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
             setView(view)
             setCancelable(false)
         }.create()
-
-        dialog?.setButton(AlertDialog.BUTTON_POSITIVE, "Ok") { _, _ ->
+        btnOk?.setOnClickListener {
+            dialog?.dismiss()
             exitActivity()
-
         }
 
         dialog?.show()
@@ -315,6 +317,8 @@ class SubscriptionActivity: AppCompatActivity(),
         val packageName: TextView = view.findViewById(R.id.invoicePackageNameTv)
         val packagePrice: TextView = view.findViewById(R.id.invoicePackagePriceTv)
         val momoNumber: TextView = view.findViewById(R.id.invoiceMomoNumberTv)
+        val btnPay: View? = view.findViewById(R.id.btnPay)
+        val btnCancel: View? = view.findViewById(R.id.btnCancel)
 
         subjectName.text = "${viewModel.getSubjectName()}"
         packageName.text = "${viewModel.getSubjectPackageType()}"
@@ -326,19 +330,20 @@ class SubscriptionActivity: AppCompatActivity(),
             dialog?.dismiss()
         }
 
-        dialog = AlertDialog.Builder(this).apply{
-            setMessage(resources.getString(R.string.verify_payment_info))
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply{
             setView(view)
             setCancelable(false)
-            setPositiveButton(resources.getString(R.string.pay)  ){_, _ ->
-                showProcessingRequestDialog()
-//                viewModel.initiatePayment()
-                queryCampayCredentials()
-            }
-            setNegativeButton(resources.getString(R.string.cancel)){_, _ ->
-                exitActivity()
-            }
         }.create()
+
+        btnPay?.setOnClickListener {
+            dialog?.dismiss()
+            showProcessingRequestDialog()
+            queryCampayCredentials()
+        }
+        btnCancel?.setOnClickListener {
+            dialog?.dismiss()
+            exitActivity()
+        }
         dialog?.show()
     }
 
@@ -377,35 +382,38 @@ class SubscriptionActivity: AppCompatActivity(),
     private fun displayEnterMomoNumberDialog(){
         val view = layoutInflater.inflate(R.layout.momo_number_dialog, null)
         val etMoMoNumber: TextInputEditText = view.findViewById(R.id.etMomoNumber)
+        val btnNext: View? = view.findViewById(R.id.btnNext)
+        val btnCancel: View? = view.findViewById(R.id.btnCancel)
 
         if (dialog != null){
             dialog?.dismiss()
         }
-        dialog = AlertDialog.Builder(this).apply {
-            setTitle(resources.getString(R.string.enter_number))
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
             setView(view)
             setCancelable(false)
-            setPositiveButton( resources.getString(R.string.next)){ _, _ ->
-                displayInvoice()
-            }
-            setNegativeButton(resources.getString(R.string.cancel)){ _, _ ->
-                exitActivity()
-            }
         }.create()
+
+        btnNext?.isEnabled = false
+
+        btnNext?.setOnClickListener {
+            dialog?.dismiss()
+            displayInvoice()
+        }
+
+        btnCancel?.setOnClickListener {
+            dialog?.dismiss()
+            exitActivity()
+        }
 
         dialog?.show()
 
-        val btnPositive = dialog?.getButton(AlertDialog.BUTTON_POSITIVE)
-        btnPositive?.isEnabled = false
-
         etMoMoNumber.doOnTextChanged { text, _, _, _ ->
             if(text.toString().isNotEmpty() && text.toString().length == 9){
-//                subscriptionFormData.momoNumber = text.toString()
                 viewModel.updateMomoNumber(text.toString())
-                btnPositive?.isEnabled = true
+                btnNext?.isEnabled = true
 
             }else{
-                btnPositive?.isEnabled = false
+                btnNext?.isEnabled = false
             }
         }
     }

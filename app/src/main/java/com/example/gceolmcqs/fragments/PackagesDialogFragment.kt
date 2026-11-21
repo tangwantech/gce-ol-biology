@@ -51,30 +51,30 @@ class PackagesDialogFragment : DialogFragment(), PackagesDialogRecyclerAdapter.I
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogView = requireActivity().layoutInflater.inflate(R.layout.fragment_packages_dialog, null)
         val rv: RecyclerView = dialogView.findViewById(R.id.packageRecyclerView)
+        val btnNext: Button = dialogView.findViewById(R.id.btnNext)
+        val btnCancel: Button = dialogView.findViewById(R.id.btnCancel)
 
         setupRecyclerView(rv)
-        val dialog = AlertDialog.Builder(requireActivity()).apply {
-            setTitle("Select a package")
 
-            setPositiveButton(requireContext().resources.getString(R.string.next)){_, _ ->
+        btnNext.isEnabled = false
+        btnNext.setOnClickListener {
+            packageDialogListener.onPackageDialogNextButtonClicked()
+            viewModel.clearPackages()
+            dismiss()
+        }
 
-                packageDialogListener.onPackageDialogNextButtonClicked()
-                viewModel.clearPackages()
-                dismiss()
+        btnCancel.setOnClickListener {
+            viewModel.clearPackages()
+            packageDialogListener.onPackageDialogCancelButtonClicked()
+            dismiss()
+        }
 
-            }
-            setNegativeButton(requireContext().resources.getString(R.string.cancel)){_, _ ->
-                viewModel.clearPackages()
-                packageDialogListener.onPackageDialogCancelButtonClicked()
-            }
+        val dialog = AlertDialog.Builder(requireActivity(), R.style.CustomAlertDialog).apply {
+            setView(dialogView)
             isCancelable = false
         }.create()
-        dialog.setView(dialogView)
-        dialog.setOnShowListener {
-            btnNext = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            btnNext?.isEnabled = false
 
-        }
+        this.btnNext = btnNext
 
         return dialog
     }
