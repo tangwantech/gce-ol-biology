@@ -83,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_explanation_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                >
 
                 <TextView
                     android:id="@+id/explanationTv"
@@ -91,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:lineSpacingExtra="4dp"
-                    android:textColor="@color/primary_text_color"
+                    android:text="Explanation"
                     android:textSize="15sp" />
             </LinearLayout>
         </ScrollView>
