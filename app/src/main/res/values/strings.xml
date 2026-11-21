@@ -129,6 +129,8 @@
     <string name="restart">Restart</string>
     <string name="subscription">subscription</string>
     <string name="see_explanation">See Explanation</string>
+    <string name="answer_explanation">Answer Explanation</string>
+    <string name="got_it">Got It</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="company">Tangwan Tech</string>

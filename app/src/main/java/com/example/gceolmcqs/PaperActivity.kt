@@ -3,6 +3,7 @@ package com.example.gceolmcqs
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -310,14 +311,19 @@ class PaperActivity : AppCompatActivity(),
         val view = layoutInflater.inflate(R.layout.explanation_layout, null)
         val qnTv: TextView = view.findViewById(R.id.questionNumTv)
         val explanationTv: TextView = view.findViewById(R.id.explanationTv)
+        val btnClose: View? = view.findViewById(R.id.btnCloseExplanation)
+
         qnTv.text = "Question ${questionData.questionNumber}"
         explanationTv.text = questionData.explanation
-        val dialog = AlertDialog.Builder(this).apply {
-            setView(view)
-            setTitle("Explanation")
-            setPositiveButton("OK"){_, _ ->}
 
+        val dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
+            setView(view)
         }.create()
+
+        btnClose?.setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 
