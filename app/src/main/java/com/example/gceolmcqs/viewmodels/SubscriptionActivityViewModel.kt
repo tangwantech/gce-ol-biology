@@ -3,6 +3,8 @@ package com.example.gceolmcqs.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.gceolmcqs.CustomPaySystem
+import com.example.gceolmcqs.CustomPaySystem.CreateTransactionListener
 import com.example.gceolmcqs.UserDataManager
 import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.MomoPayService
@@ -15,6 +17,10 @@ import com.example.gceolmcqs.datamodels.SubscriptionFormData
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
 import com.example.gceolmcqs.repository.RemoteDatabaseManager.OnQueryCampayCredentialsListener
 import com.example.gceolmcqs.repository.RestRepository
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 //import com.example.gceolmcqs.repository.RemoteRepoManager
@@ -40,9 +46,12 @@ class SubscriptionActivityViewModel: ViewModel() {
 
     private var packageTypes: String? = null
 
+    private lateinit var customPaySystem: CustomPaySystem
+
     fun initSubscriptionFormData(subjectIndex: Int, subjectName: String){
         _subscriptionData.subjectPosition = subjectIndex
         _subscriptionData.subject = subjectName
+        initCustomPaySystem()
     }
 
     fun updateSubscriptionPackageTypePriceAndDuration(packageFormData: PackageFormData){
@@ -64,6 +73,7 @@ class SubscriptionActivityViewModel: ViewModel() {
         momoPay = momoPayService
 
     }
+
 
     fun activateSubjectPackage(id:String, listener: RemoteDatabaseManager.OnUpdateListener) {
         val subjectIndex = _subscriptionData.subjectPosition!!
@@ -213,5 +223,56 @@ class SubscriptionActivityViewModel: ViewModel() {
         return packageTypes!!
     }
 
+    fun initCustomPaySystem(){
+        customPaySystem = CustomPaySystem()
+    }
 
+    fun initiateNewTransaction(params: HashMap<String, String>, listener: CreateTransactionListener){
+        params["subjectName"] = _subscriptionData.subject!!
+        params["subjectIndex"] = _subscriptionData.subjectPosition!!.toString()
+        params["packageType"] = _subscriptionData.packageType!!
+        params["momoNumber"] = _subscriptionData.momoNumber!!
+        params["momoPartner"] = _subscriptionData.momoPartner!!
+        params["amountToPay"] = _subscriptionData.packagePrice!!
+
+
+        customPaySystem.initiateNewTransaction(params, _subscriptionData, listener)
+    }
+
+    fun checkForTransactionStatusChange(status: String, params: HashMap<String, String>, listener: CustomPaySystem.TransactionStatusChangeListener){
+        viewModelScope.launch(Dispatchers.IO) {
+            var tempStatus = status
+            while (tempStatus == status) {
+                customPaySystem.getTransactionStatus(params, object : CustomPaySystem.TransactionStatusChangeListener {
+                    override fun onTransactionPending() {
+                        tempStatus = MCQConstants.PENDING
+                        listener.onTransactionPending()
+                    }
+
+                    override fun onTransactionFailed() {
+                        tempStatus = MCQConstants.FAILED
+                        listener.onTransactionFailed()
+                    }
+
+                    override fun onTransactionSuccessful() {
+                        tempStatus = MCQConstants.SUCCESSFUL
+                        listener.onTransactionSuccessful()
+                    }
+                })
+                if (tempStatus != status) {
+                    break
+                }
+                delay(5000L)
+            }
+        }
+    }
+
+    fun syncSubscriptionDataFromRemote(context: android.content.Context, onUpdated: (() -> Unit)? = null) {
+        val id = com.example.gceolmcqs.UtilityFunctions().getDeviceId(context)
+        userDataManager.syncSubscriptionDataFromRemote(id, object : com.example.gceolmcqs.repository.LocalUserDataRepository.OnUpdateUserDataListener {
+            override fun onUpdateSuccessful() {
+                onUpdated?.invoke()
+            }
+        })
+    }
 }

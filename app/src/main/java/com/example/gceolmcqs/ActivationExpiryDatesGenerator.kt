@@ -26,16 +26,42 @@ class ActivationExpiryDatesGenerator {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
 
         /**
-         * Parses a date string, ensuring it's always in the correct format.
+         * Parses a date string, supporting standard local format, ISO-8601 formats, and epoch timestamps.
          */
-        private fun parseDate(dateString: String): Date {
-            return try {
-                dateFormat.parse(dateString) ?: Date()
-            } catch (e: Exception) {
-                // If parsing fails, return the current date
-                e.printStackTrace()
-                Date()
+        private fun parseDate(dateString: String?): Date {
+            if (dateString.isNullOrBlank()) return Date()
+
+            dateString.toLongOrNull()?.let { timestamp ->
+                return Date(timestamp)
             }
+
+            val patterns = arrayOf(
+                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                "yyyy-MM-dd'T'HH:mm:ssXXX",
+                "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                "yyyy-MM-dd'T'HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd"
+            )
+
+            for (pattern in patterns) {
+                try {
+                    val sdf = SimpleDateFormat(pattern, Locale.ENGLISH)
+                    if (pattern.endsWith("'Z'") || pattern.endsWith("XXX")) {
+                        sdf.timeZone = TimeZone.getTimeZone("UTC")
+                    }
+                    val date = sdf.parse(dateString)
+                    if (date != null) {
+                        return date
+                    }
+                } catch (_: Exception) {
+                    // Try next pattern
+                }
+            }
+
+            return Date()
         }
 
         /**

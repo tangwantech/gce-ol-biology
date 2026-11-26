@@ -16,6 +16,7 @@ import com.example.gceolmcqs.datamodels.SubjectPackageData
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null
     private lateinit var listener: OnHomeFragmentListener
+    private var countDownTimer: SubscriptionCountDownTimer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,39 +39,55 @@ class HomeFragment : Fragment() {
     }
 
     fun setSubscriptionPackage(subjectPackageData: SubjectPackageData){
-//        println("withing HomeFragment...... $subjectPackageData")
         setupListeners(subjectPackageData)
         binding?.subscriptionPackageCard?.subjectTitleTv?.text = subjectPackageData.subjectName
         binding?.subscriptionPackageCard?.tvPackageType?.text = getString(R.string.package_info, subjectPackageData.packageName)
 
-        if(subjectPackageData.isPackageActive != null){
-            binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.VISIBLE
-            val timeLeft = ActivationExpiryDatesGenerator.getTimeRemaining(subjectPackageData.activatedOn!!, subjectPackageData.expiresOn!!)
-            setupExpiryCountDown(timeLeft, subjectPackageData)
-        }else{
+        val activatedOn = subjectPackageData.activatedOn
+        val expiresOn = subjectPackageData.expiresOn
+
+        if (!activatedOn.isNullOrBlank() && !expiresOn.isNullOrBlank() && activatedOn != MCQConstants.NA && expiresOn != MCQConstants.NA) {
+            val isActive = ActivationExpiryDatesGenerator().checkExpiry(activatedOn, expiresOn)
+            val timeLeft = ActivationExpiryDatesGenerator.getTimeRemaining(activatedOn, expiresOn)
+
+            if (isActive && timeLeft > 0) {
+                binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.VISIBLE
+                setupExpiryCountDown(timeLeft, subjectPackageData)
+            } else {
+                setPackageExpiredState(subjectPackageData)
+            }
+        } else {
+            countDownTimer?.cancelTimer()
+            countDownTimer = null
+            binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.GONE
             binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, MCQConstants.NA)
             binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = false
         }
+    }
 
+    private fun setPackageExpiredState(subjectPackageData: SubjectPackageData) {
+        countDownTimer?.cancelTimer()
+        countDownTimer = null
+        binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.GONE
+        binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, getString(R.string.expired))
+        binding?.subscriptionPackageCard?.tvSubjectStatus?.setTextColor(requireContext().resources.getColor(R.color.color_red))
+        binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = true
+        subjectPackageData.isPackageActive = false
+        listener.onPackageExpired(subjectPackageData)
     }
 
     private fun setupExpiryCountDown(timeLeft: Long, subjectPackageData: SubjectPackageData){
-        SubscriptionCountDownTimer(0).apply {
+        countDownTimer?.cancelTimer()
+        countDownTimer = SubscriptionCountDownTimer(0).apply {
             startTimer(timeLeft, object : SubscriptionCountDownTimer.OnTimeRemainingListener{
                 override fun onTimeRemaining(expiresIn: String) {
                     binding?.subscriptionPackageCard?.expiresInTv?.text = getString(R.string.expires_in, expiresIn)
                     binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, getString(R.string.active))
                     binding?.subscriptionPackageCard?.tvSubjectStatus?.setTextColor(requireContext().resources.getColor(R.color.color_green))
                     binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = false
-
                 }
                 override fun onExpired() {
-                    binding?.subscriptionPackageCard?.expiresInTv?.visibility = View.GONE
-                    binding?.subscriptionPackageCard?.tvSubjectStatus?.text = getString(R.string.status_info, getString(R.string.expired))
-                    binding?.subscriptionPackageCard?.tvSubjectStatus?.setTextColor(requireContext().resources.getColor(R.color.color_red))
-                    binding?.subscriptionPackageCard?.btnSubscribe?.isEnabled = true
-                    subjectPackageData.isPackageActive = false
-                    listener.onPackageExpired(subjectPackageData)
+                    setPackageExpiredState(subjectPackageData)
                 }
             })
         }
@@ -88,10 +105,7 @@ class HomeFragment : Fragment() {
         binding?.tvPaper2?.setOnClickListener {
             listener.onPaper2ButtonClick(subjectPackageData.subjectIndex!!, subjectPackageData.isPackageActive!!, subjectPackageData.packageName!!)
         }
-//
-//        binding?.tvNotes?.setOnClickListener {
-//            listener.onNotesButtonClicked()
-//        }
+
         binding?.subscriptionPackageCard?.tvDictionary?.setOnClickListener {
             listener.onDictionaryButtonClick()
         }
@@ -101,8 +115,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
+        countDownTimer?.cancelTimer()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        countDownTimer?.cancelTimer()
+        countDownTimer = null
         binding = null
     }
 
@@ -120,7 +141,6 @@ class HomeFragment : Fragment() {
     interface OnHomeFragmentListener{
         fun onSubscribeButtonClicked(position: Int, subjectName: String)
         fun onPackageExpired(subjectPackageData: SubjectPackageData)
-//        fun onNotesButtonClicked()
         fun onPaper1ButtonClicked(position: Int, isPackageActive: Boolean?, packageName: String?)
         fun onPaper2ButtonClick(position: Int, isPackageActive: Boolean?, packageName: String?)
         fun onDictionaryButtonClick()

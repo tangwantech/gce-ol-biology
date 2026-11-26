@@ -20,22 +20,29 @@ class RestRepository {
         const val UPDATE_SUBSCRIPTION = "updateSubscription"
         const val GET_PACKAGE_TYPES = "getPackageTypes"
         const val GET_CAMPAY_CREDENTIALS = "getCampayCredentials"
-//        const val GET_SUBSCRIPTION = "getSubscription"
+
 //        const val GET_USER_DATA = "getUserData"
         const val UPDATE_SCORES_STATS = "updateScoresStats"
         const val APPLICATION_ID = "9W3lYkeIpf3JWrjroH4bE9mL5HPC9ZFybVdLgOLn"
         const val CLIENT_KEY = "wPNTqR18DRbZr7UK8jfaIQItw7t7q9xiUX96AWMe"
+        const val CREATE_TRANSACTION = "createTransaction"
+        const val GET_TRANSACTION_STATUS = "checkTransactionStatus"
+        const val GET_SUBSCRIPTION = "getSubscription"
+
     }
 
     fun query(queryType:String, params: HashMap<String, String>, listener: OnQueryListener){
         val client: OkHttpClient = OkHttpClient.Builder().build()
         val url = when (queryType){
-            SIGN_UP -> "https://parseapi.back4app.com/functions/signupV1"
+            SIGN_UP -> "https://parseapi.back4app.com/functions/signupV2"
             GET_APP_DATA -> "https://parseapi.back4app.com/functions/getAppData"
             UPDATE_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/updateSubscription"
             UPDATE_SCORES_STATS -> "https://parseapi.back4app.com/functions/updateUserScoresStats"
-            GET_PACKAGE_TYPES -> "https://parseapi.back4app.com/functions/getPackageTypes"
+            GET_PACKAGE_TYPES -> "https://parseapi.back4app.com/functions/getPackageTypesV1"
             GET_CAMPAY_CREDENTIALS -> "https://parseapi.back4app.com/functions/getCampayCredentials"
+            CREATE_TRANSACTION -> "https://parseapi.back4app.com/functions/createTransaction"
+            GET_TRANSACTION_STATUS -> "https://parseapi.back4app.com/functions/getTransactionStatus"
+            GET_SUBSCRIPTION -> "https://parseapi.back4app.com/functions/getSubscription"
             else -> "https://parseapi.back4app.com/functions/getAppVersion"
         }
 

@@ -197,6 +197,11 @@
     <string name="notes">Notes</string>
     <string name="orange_money">Orange Money</string>
     <string name="mtn_mobile_money">MTN Mobile Money</string>
+    <string name="please_paste_the_transaction_unique_id">Please paste the Transaction Unique ID above as the reference message or reason when completing your transaction.</string>
+    <string name="copy">Copy</string>
+    <string name="transaction_reference_id">Transaction Unique ID</string>
+    <string name="payment_details">Payment Instruction</string>
+    <string name="important_if_you_fail_to_include_the_reference_message">⚠️ IMPORTANT: If you fail to include the reference message or send an incorrect amount, the sent amount will NOT be refunded.</string>
 
 
     <string-array name="paper_instruction">

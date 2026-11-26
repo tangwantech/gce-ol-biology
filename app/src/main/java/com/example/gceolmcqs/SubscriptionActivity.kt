@@ -1,12 +1,16 @@
 package com.example.gceolmcqs
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -17,11 +21,13 @@ import com.example.gceolmcqs.databinding.ActivitySubscriptionBinding
 import com.example.gceolmcqs.datamodels.CampayCredentials
 
 import com.example.gceolmcqs.datamodels.PackageFormData
+import com.example.gceolmcqs.datamodels.TransactionInfo
 
 import com.example.gceolmcqs.fragments.PackagesDialogFragment
 import com.example.gceolmcqs.fragments.PaymentMethodDialogFragment
 import com.example.gceolmcqs.repository.RemoteDatabaseManager
 import com.example.gceolmcqs.viewmodels.SubscriptionActivityViewModel
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -131,7 +137,7 @@ class SubscriptionActivity: AppCompatActivity(),
         }
 
 
-        setMomoPayFlow()
+//        setMomoPayFlow()
 
     }
 
@@ -152,7 +158,7 @@ class SubscriptionActivity: AppCompatActivity(),
                             delay(2000)
                             withContext(Dispatchers.Main){
                                 showActivatingPackageDialog()
-                                activateUserPackage()
+//                                activateUserPackage()
                             }
                         }
                     }
@@ -337,8 +343,10 @@ class SubscriptionActivity: AppCompatActivity(),
 
         btnPay?.setOnClickListener {
             dialog?.dismiss()
-            showProcessingRequestDialog()
-            queryCampayCredentials()
+//            showProcessingRequestDialog()
+//            queryCampayCredentials()
+
+            initiateNewTransaction()
         }
         btnCancel?.setOnClickListener {
             dialog?.dismiss()
@@ -349,7 +357,7 @@ class SubscriptionActivity: AppCompatActivity(),
 
     private fun queryCampayCredentials(){
         val id = UtilityFunctions().getDeviceId(this)
-        val params = hashMapOf("username" to id, "password" to id)
+        val params = hashMapOf("id" to id)
         viewModel.queryCampayCredentials(params, object: RemoteDatabaseManager.OnQueryCampayCredentialsListener{
             override fun onSuccess(campayCredentials: CampayCredentials) {
                 println(campayCredentials)
@@ -418,21 +426,21 @@ class SubscriptionActivity: AppCompatActivity(),
         }
     }
 
-    private fun activateUserPackage() {
-        viewModel.activateSubjectPackage(UtilityFunctions().getDeviceId(this), object: RemoteDatabaseManager.OnUpdateListener{
-            override fun onUpdateSuccessful() {
-                runOnUiThread {
-                    showPackageActivatedDialog()
-                }
-            }
-
-            override fun onError(error: String?) {
-
-            }
-
-
-        })
-    }
+//    private fun activateUserPackage() {
+//        viewModel.activateSubjectPackage(UtilityFunctions().getDeviceId(this), object: RemoteDatabaseManager.OnUpdateListener{
+//            override fun onUpdateSuccessful() {
+//                runOnUiThread {
+//                    showPackageActivatedDialog()
+//                }
+//            }
+//
+//            override fun onError(error: String?) {
+//
+//            }
+//
+//
+//        })
+//    }
 
     override fun onPackageDialogNextButtonClicked() {
         showPaymentMethodDialog()
@@ -450,14 +458,7 @@ class SubscriptionActivity: AppCompatActivity(),
         finish()
     }
 
-    companion object{
-        fun getIntent(context: Context, subjectIndex: Int, subjectName: String): Intent {
-            val intent = Intent(context, SubscriptionActivity::class.java)
-            intent.putExtra(MCQConstants.SUBJECT_INDEX, subjectIndex)
-            intent.putExtra(MCQConstants.SUBJECT_NAME, subjectName)
-            return intent
-        }
-    }
+
 
     override fun onPaymentMethodNextButtonClicked() {
         displayEnterMomoNumberDialog()
@@ -471,4 +472,121 @@ class SubscriptionActivity: AppCompatActivity(),
         exitActivity()
     }
 
+    private fun initiateNewTransaction(){
+        val id = UtilityFunctions().getDeviceId(this)
+        val params = hashMapOf("id" to id)
+        viewModel.initiateNewTransaction(params, object: CustomPaySystem.CreateTransactionListener{
+            override fun onTransactionCreated(result: TransactionInfo) {
+                runOnUiThread {
+                    showPendingTransactionDialog(result)
+                    params["transactionUUid"] = result.transactionUUid
+                    checkForTransactionStatusChange(result.transactionStatus, params)
+                }
+            }
+
+            override fun onCreateTransactionFailed(error: String) {
+                runOnUiThread {
+                    showTransactionFailedDialog()
+                }
+            }
+
+        })
+
+    }
+
+    private fun showPendingTransactionDialog(transactionInfo: TransactionInfo) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_pending_transaction, null)
+
+        val tvPendingTransactionTitle: TextView = dialogView.findViewById(R.id.tvPendingTransactionTitle)
+        val tvPendingTransactionStatus: TextView = dialogView.findViewById(R.id.tvPendingTransactionStatus)
+        val tvPaymentMessage: TextView = dialogView.findViewById(R.id.tvPaymentMessage)
+        val tvTransactionUuid: TextView = dialogView.findViewById(R.id.tvTransactionUuid)
+        val btnCopyUuid: MaterialButton = dialogView.findViewById(R.id.btnCopyUuid)
+        val btnOk: MaterialButton = dialogView.findViewById(R.id.btnOk)
+
+        tvPendingTransactionTitle.text = "${transactionInfo.transactionStatus} TRANSACTION"
+        tvPendingTransactionStatus.text = "Selected Package: ${transactionInfo.packageName}"
+
+        val userMomoNumber = viewModel.getMomoNumber() ?: ""
+
+        val htmlInstruction = "Send <b>${transactionInfo.amountToPay} FCFA</b> from <b>$userMomoNumber</b> to <b>${transactionInfo.depositAccountNumber}</b> (<b>${transactionInfo.depositAccountName}</b>)."
+        tvPaymentMessage.text = Html.fromHtml(htmlInstruction, Html.FROM_HTML_MODE_LEGACY)
+
+        tvTransactionUuid.text = transactionInfo.transactionUUid
+
+        btnCopyUuid.setOnClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Transaction Unique ID", transactionInfo.transactionUUid)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(this, "Transaction Unique ID copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+
+        if (dialog != null) {
+            dialog?.dismiss()
+        }
+
+        dialog = AlertDialog.Builder(this, R.style.CustomAlertDialog).apply {
+            setView(dialogView)
+            setCancelable(false)
+        }.create()
+
+        dialog?.setCanceledOnTouchOutside(false)
+
+        btnOk.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
+    }
+
+    private fun checkForTransactionStatusChange(status: String, params: HashMap<String, String>){
+        viewModel.checkForTransactionStatusChange(status, params, object: CustomPaySystem.TransactionStatusChangeListener{
+            override fun onTransactionPending() {
+
+            }
+
+            override fun onTransactionFailed() {
+                runOnUiThread {
+                    showTransactionFailedDialog()
+                }
+            }
+
+            override fun onTransactionSuccessful() {
+                runOnUiThread {
+//                    showPaymentReceivedDialog()
+                    showPaymentReceivedDialog()
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(2000)
+                        withContext(Dispatchers.Main){
+                            showActivatingPackageDialog()
+                            viewModel.syncSubscriptionDataFromRemote(this@SubscriptionActivity) {
+                                runOnUiThread {
+                                    showPackageActivatedDialog()
+                                }
+                            }
+//                                activateUserPackage()
+                        }
+                    }
+
+//                    showActivatingPackageDialog()
+//                    viewModel.syncSubscriptionDataFromRemote(this@SubscriptionActivity) {
+//                        runOnUiThread {
+//                            showPackageActivatedDialog()
+//                        }
+//                    }
+                }
+            }
+
+        })
+    }
+
+    companion object{
+        fun getIntent(context: Context, subjectIndex: Int, subjectName: String): Intent {
+            val intent = Intent(context, SubscriptionActivity::class.java)
+            intent.putExtra(MCQConstants.SUBJECT_INDEX, subjectIndex)
+            intent.putExtra(MCQConstants.SUBJECT_NAME, subjectName)
+            return intent
+        }
+    }
 }

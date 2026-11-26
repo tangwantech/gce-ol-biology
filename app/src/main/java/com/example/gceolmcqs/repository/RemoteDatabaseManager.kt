@@ -23,6 +23,7 @@ class RemoteDatabaseManager {
 //                        var appData = JSONObject(result).getString("appData")
 
                         val subscriptionData = JSONObject(result).getString("subscription")
+
                         getAppDataFromRemoteDatabase(params, object : OnQueryAppDataListener{
                             override fun onQueryAppDataSuccessful(result: String) {
                                 val appData = result
@@ -123,7 +124,24 @@ class RemoteDatabaseManager {
                 })
         }
 
+        fun getSubscriptionFromRemoteDatabase(
+            params: HashMap<String, String>,
+            listener: OnQuerySubscriptionListener
+        ) {
+            restRepository.query(
+                RestRepository.GET_SUBSCRIPTION,
+                params,
+                object : RestRepository.OnQueryListener {
+                    override fun onSuccess(result: String) {
+                        Log.d("Result", result)
+                        listener.onQuerySubscriptionSuccessful(result)
+                    }
 
+                    override fun onError(error: String?) {
+                        listener.onError(error)
+                    }
+                })
+        }
 
     }
     interface OnSignupListener {
@@ -148,6 +166,11 @@ class RemoteDatabaseManager {
 
     interface OnQueryAppDataListener {
         fun onQueryAppDataSuccessful(result: String)
+        fun onError(error: String?)
+    }
+
+    interface OnQuerySubscriptionListener {
+        fun onQuerySubscriptionSuccessful(result: String)
         fun onError(error: String?)
     }
 

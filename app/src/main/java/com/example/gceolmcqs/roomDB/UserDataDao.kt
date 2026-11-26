@@ -12,13 +12,16 @@ interface UserDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUserData(userData: UserData)
 
-    @Query("SELECT * FROM user_data_table")
+    @Query("SELECT `index`, subscription, '' AS app_data FROM user_data_table")
     fun getUserData(): List<UserData>
+
+    @Query("UPDATE user_data_table SET app_data = ''")
+    fun clearBlobAppData()
 
     @Query("DELETE FROM user_data_table")
     fun deleteAll()
 
-    @Update()
+    @Update
     fun update(userData: UserData)
 
 }

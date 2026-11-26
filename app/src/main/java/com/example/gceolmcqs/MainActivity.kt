@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -50,13 +51,14 @@ class MainActivity : AppCompatActivity(),
     }
 
 
-    private  fun checkInternetConnectivity(){
+    private fun checkInternetConnectivity(){
 //        val internetAvailable = CheckInternetConnectivity().isInternetAvailable(this)
         val params = hashMapOf("" to "")
         ConnectivityTester.checkConnection(this, params, object : ConnectivityTester.OnTestConnectionListener{
             override fun onConnectionAvailable() {
                 runOnUiThread{
                     checkForLatestAppVersion()
+                    syncSubscriptionDataFromRemote()
                 }
             }
 
@@ -76,6 +78,14 @@ class MainActivity : AppCompatActivity(),
         })
 
 
+    }
+
+    private fun syncSubscriptionDataFromRemote() {
+        viewModel.syncSubscriptionDataFromRemote(this) {
+            runOnUiThread {
+                setupSubscriptionFragmentStatusView()
+            }
+        }
     }
 
     private fun checkForLatestAppVersion(){
@@ -417,13 +427,18 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupSubscriptionFragmentStatusView(){
         val subjectsPackages = viewModel.getSubjectsPackages()
-        val fragmentContainer1 = supportFragmentManager.findFragmentById(R.id.fragmentContainer1) as HomeFragment
-        fragmentContainer1.setSubscriptionPackage(subjectsPackages[0])
+        if (subjectsPackages.isNotEmpty()) {
+            val fragmentContainer1 = supportFragmentManager.findFragmentById(R.id.fragmentContainer1) as? HomeFragment
+            fragmentContainer1?.setSubscriptionPackage(subjectsPackages[0])
+        }
 
-        val fragmentContainer2 = supportFragmentManager.findFragmentById(R.id.fragmentContainer2) as HomeFragment
-        fragmentContainer2.setSubscriptionPackage(subjectsPackages[1])
-
-
+        if (subjectsPackages.size > 1) {
+            binding.fragmentContainer2.visibility = View.VISIBLE
+            val fragmentContainer2 = supportFragmentManager.findFragmentById(R.id.fragmentContainer2) as? HomeFragment
+            fragmentContainer2?.setSubscriptionPackage(subjectsPackages[1])
+        } else {
+            binding.fragmentContainer2.visibility = View.GONE
+        }
     }
 
     private fun displayClassSelectionAlertDialog(){
