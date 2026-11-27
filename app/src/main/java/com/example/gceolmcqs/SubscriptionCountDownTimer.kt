@@ -6,13 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class SubscriptionCountDownTimer(private val position: Int ) {
-    private lateinit var timer: CountDownTimer
+    private var timer: CountDownTimer? = null
     private val isTimeOut = MutableLiveData<Boolean>()
 
     private val timeRemaining = MutableLiveData<Time>()
     private val isTimeAlmostOut = MutableLiveData<Boolean>()
 
     fun startTimer(duration:Long, onTimeRemainingListener: OnTimeRemainingListener) {
+        cancelTimer()
         timer = object : CountDownTimer(duration, MCQConstants.COUNT_DOWN_INTERVAL) {
             override fun onTick(p0: Long) {
                 val t = Time()
@@ -30,6 +31,11 @@ class SubscriptionCountDownTimer(private val position: Int ) {
             }
 
         }.start()
+    }
+
+    fun cancelTimer() {
+        timer?.cancel()
+        timer = null
     }
 
     fun getExpiresIn(timeLeft: Time): String {

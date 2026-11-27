@@ -119,7 +119,7 @@ class MCQConstants{
         const val EXAM_TYPE_INDEX = "examTypeIndex"
         const val EXAM_ITEM_INDEX = "examItemIndex"
 
-        val SUBJECTS_AVAILABLE = arrayListOf("Biology", "Human Biology")
+        val SUBJECTS_AVAILABLE = arrayListOf("Biology")
         const val MCQ_DAY = "MCQ DAY"
         const val MCQ_WEEK = "MCQ 7 DAYS"
         const val MCQ_MONTH = "MCQ 30 DAYS"
@@ -127,6 +127,7 @@ class MCQConstants{
         const val APP_USAGE_PREFS = "AppUsagePrefs"
         const val APP_PACKAGE_NAME = "com.example.gceolmcqs"
         const val LAST_USED = "last_used_gceolmcqs"
+        const val ID = "id"
 
 
     }

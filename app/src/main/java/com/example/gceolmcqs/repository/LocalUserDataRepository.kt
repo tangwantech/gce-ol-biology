@@ -2,8 +2,10 @@ package com.example.gceolmcqs.repository
 
 import android.content.Context
 import android.database.CursorWindow
+import android.util.Log
 import com.example.gceolmcqs.ActivationExpiryDatesGenerator
 import com.example.gceolmcqs.AssertReader
+import com.example.gceolmcqs.MCQConstants
 import com.example.gceolmcqs.UtilityFunctions
 import com.example.gceolmcqs.datamodels.AppData
 import com.example.gceolmcqs.datamodels.DictionaryData
@@ -84,6 +86,7 @@ class LocalUserDataRepository{
                     saveAppDataToFile(userData.appData)
                 }
                 val lightweightUserData = userData.copy(appData = "")
+                userDataDao?.clearBlobAppData()
                 userDataDao?.insertUserData(lightweightUserData)
                 withContext(Dispatchers.Main){
                     listener.onInsertSuccessful()
@@ -99,6 +102,7 @@ class LocalUserDataRepository{
                         saveAppDataToFile(currentData.appData)
                     }
                     val lightweightUserData = currentData.copy(appData = "")
+                    userDataDao?.clearBlobAppData()
                     userDataDao?.update(lightweightUserData)
                     withContext(Dispatchers.Main){
                         listener.onUpdateSuccessful()
@@ -110,21 +114,22 @@ class LocalUserDataRepository{
         fun loadUserDataFromLocaldb(listener: OnLoadUserDataListener){
             fixCursorWindowSize()
             CoroutineScope(Dispatchers.IO).launch{
-                val tempList = userDataDao?.getUserData()
+                try {
+                    userDataDao?.clearBlobAppData()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                val tempList = try {
+                    userDataDao?.getUserData()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
                 withContext(Dispatchers.Main){
                     tempList?.let { list ->
                         if (list.isNotEmpty()){
                             val dbUserData = list[0]
-                            val fullAppData = if (dbUserData.appData.isNotBlank()) {
-                                saveAppDataToFile(dbUserData.appData)
-                                val appDataContent = dbUserData.appData
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    userDataDao?.update(dbUserData.copy(appData = ""))
-                                }
-                                appDataContent
-                            } else {
-                                loadAppDataFromFile() ?: ""
-                            }
+                            val fullAppData = loadAppDataFromFile() ?: ""
                             userData = dbUserData.copy(appData = fullAppData)
                             initSubjectsPackagesDataRepository()
                             listener.onUserDataLoaded()
@@ -209,6 +214,81 @@ class LocalUserDataRepository{
             }
         }
 
+        fun syncRemoteSubscriptionDataSilently(userId: String?, listener: OnUpdateUserDataListener? = null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val id = userId ?: ""
+                    if (id.isBlank()) {
+                        listener?.onUpdateSuccessful()
+                        return@launch
+                    }
+                    val params = hashMapOf(
+                        MCQConstants.USER_NAME to id,
+                        MCQConstants.PASS_WORD to id,
+                        "id" to id
+                    )
+                    RemoteDatabaseManager.getSubscriptionFromRemoteDatabase(params, object : RemoteDatabaseManager.OnQuerySubscriptionListener {
+                        override fun onQuerySubscriptionSuccessful(result: String) {
+                            if (result.isNotBlank()) {
+                                syncRawSubscriptionData(result, listener)
+                            } else {
+                                listener?.onUpdateSuccessful()
+                            }
+                        }
+
+                        override fun onError(error: String?) {
+                            listener?.onUpdateSuccessful()
+                        }
+                    })
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    listener?.onUpdateSuccessful()
+                }
+            }
+        }
+
+        fun syncRawSubscriptionData(remoteSubscriptionString: String, listener: OnUpdateUserDataListener? = null) {
+            if (remoteSubscriptionString.isBlank()) {
+                listener?.onUpdateSuccessful()
+                return
+            }
+            try {
+                var rawSubscription = remoteSubscriptionString.trim()
+                if (rawSubscription.startsWith("{")) {
+                    try {
+                        val jsonObj = JSONObject(rawSubscription)
+                        if (jsonObj.has("subscription")) {
+                            rawSubscription = jsonObj.getString("subscription")
+                        }
+                    } catch (e: Exception) {
+                        // ignore and use rawSubscription as is
+                    }
+                }
+
+                val parsedPackages = Gson().fromJson(rawSubscription, SubjectsPackages::class.java)
+                if (parsedPackages != null && !parsedPackages.subjectsPackages.isNullOrEmpty()) {
+                    val currentSubscription = userData?.subscription ?: ""
+                    if (currentSubscription.trim() != rawSubscription.trim()) {
+                        userData?.subscription = rawSubscription
+                        initSubjectsPackagesDataRepository()
+                        updateUserDataInLocaldb(object : OnUpdateUserDataListener {
+                            override fun onUpdateSuccessful() {
+                                listener?.onUpdateSuccessful()
+                            }
+                        })
+                    } else {
+                        initSubjectsPackagesDataRepository()
+                        listener?.onUpdateSuccessful()
+                    }
+                } else {
+                    listener?.onUpdateSuccessful()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                listener?.onUpdateSuccessful()
+            }
+        }
+
         private fun getAppData(): AppData?{
             return if (userData != null){
                 Gson().fromJson(userData!!.appData, AppData::class.java)
@@ -261,6 +341,7 @@ class LocalUserDataRepository{
 
         private fun initSubjectsPackagesDataRepository(){
             val subjectsPackages = Gson().fromJson(userData?.subscription, SubjectsPackages::class.java)
+            Log.d("SubscriptionPackages", subjectsPackages.toString())
             SubjectsPackagesDataRepository.initSubjectsPackages(subjectsPackages)
         }
 

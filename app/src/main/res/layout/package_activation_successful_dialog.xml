@@ -39,7 +39,8 @@
             android:fontFamily="sans-serif-medium"
             android:text="@string/transaction_successful"
             android:textColor="@color/color_green"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tvPackageActivationSuccessful"
@@ -50,8 +51,8 @@
             android:gravity="center"
             android:lineSpacingExtra="2dp"
             android:text="@string/activated_successfully"
-            android:textColor="@color/primary_text_color"
-            android:textSize="15sp" />
+            android:textColor="@color/color_green"
+            android:textSize="20sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnOk"

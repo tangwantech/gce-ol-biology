@@ -78,5 +78,12 @@ class MainActivityViewModel : ViewModel() {
         return isPaperAvailable
     }
 
-
+    fun syncSubscriptionDataFromRemote(context: Context, onUpdated: (() -> Unit)? = null) {
+        val id = com.example.gceolmcqs.UtilityFunctions().getDeviceId(context)
+        userDataManager.syncSubscriptionDataFromRemote(id, object : LocalUserDataRepository.OnUpdateUserDataListener {
+            override fun onUpdateSuccessful() {
+                onUpdated?.invoke()
+            }
+        })
+    }
 }

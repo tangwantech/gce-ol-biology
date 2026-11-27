@@ -84,7 +84,7 @@
                    android:layout_height="match_parent"
                    android:text="@string/retry"
                    android:visibility="visible"
-                   android:textSize="@dimen/text_size_12" />
+                   android:textSize="@dimen/text_size_10" />
                <Button
                    android:id="@+id/btnNextSection"
                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -93,7 +93,7 @@
                    android:layout_height="match_parent"
                    android:enabled="false"
                    android:text="@string/next_section"
-                   android:textSize="@dimen/text_size_12"
+                   android:textSize="@dimen/text_size_10"
                    />
 
                <Button
@@ -103,7 +103,7 @@
                    android:layout_weight="0.45"
                    android:layout_height="match_parent"
                    android:text="@string/correction"
-                   android:textSize="@dimen/text_size_12" />
+                   android:textSize="@dimen/text_size_10" />
            </LinearLayout>
 
 

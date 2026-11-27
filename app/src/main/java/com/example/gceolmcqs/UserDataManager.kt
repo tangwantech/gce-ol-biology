@@ -42,6 +42,7 @@ class UserDataManager {
             override fun onUserDataLoaded() {
                listener.onSuccess()
                LocalUserDataRepository.syncRemoteAppDataSilently(id)
+               LocalUserDataRepository.syncRemoteSubscriptionDataSilently(id)
             }
 
             override fun onUserDataUnavailable(error: String) {
@@ -147,6 +148,10 @@ class UserDataManager {
 
             }
         })
+    }
+
+    fun syncSubscriptionDataFromRemote(id: String, listener: LocalUserDataRepository.OnUpdateUserDataListener? = null) {
+        LocalUserDataRepository.syncRemoteSubscriptionDataSilently(id, listener)
     }
 
 
