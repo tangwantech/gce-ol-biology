@@ -56,7 +56,7 @@ class SubscriptionActivity: AppCompatActivity(),
         setContentView(binding.root)
 
         val subjectName = intent.getStringExtra(MCQConstants.SUBJECT_NAME)
-        title = "$subjectName subscription"
+//        title = "$subjectName subscription"
         setupViewModel()
         setupViewObservers()
         checkInternetConnectivity()
@@ -559,7 +559,7 @@ class SubscriptionActivity: AppCompatActivity(),
                     CoroutineScope(Dispatchers.IO).launch {
                         delay(2000)
                         withContext(Dispatchers.Main){
-                            showActivatingPackageDialog()
+//                            showActivatingPackageDialog()
                             viewModel.syncSubscriptionDataFromRemote(this@SubscriptionActivity) {
                                 runOnUiThread {
                                     showPackageActivatedDialog()
